@@ -102,7 +102,7 @@ svg.ch .xh{stroke:var(--mut);stroke-width:1}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .grid2 .dcard{margin-bottom:0;padding:12px;min-width:0}
 .grid2 .dt{font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.grid2 .dh{flex-wrap:wrap;gap:0 8px;margin-bottom:6px}
+.grid2 .dh{flex-wrap:nowrap;align-items:center;gap:0 8px;margin-bottom:8px}
 .grid2 .exl{font-size:12px;padding:5px 0;gap:6px}
 .pl{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px}
 .pl .r1{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
@@ -168,9 +168,26 @@ body.hasnav{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
 .hrow{display:flex;align-items:center;gap:8px;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
 .hrow .hnum{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600}
 .hrow .delb{float:none;width:22px;padding:0}
-.hfoot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);text-align:center}
-.hfoot b{display:block;font-size:15px;font-variant-numeric:tabular-nums}
-.hfoot span{font-size:11px;color:var(--mut)}
+.hfoot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.hfoot div{display:flex;align-items:center;gap:8px;color:var(--mut)}
+.hfoot b{font-size:15px;font-weight:600;color:var(--tx);font-variant-numeric:tabular-nums}
+.hg{display:block;border-top:0;padding-top:4px}
+.hg .hh{display:flex;justify-content:space-between;font-size:16px;font-weight:700;color:var(--tx);text-transform:none;margin:6px 0 8px}
+.hg .hr{display:flex;justify-content:space-between;gap:14px;padding:5px 0;font-size:15px}
+.hg .hr.ss{border-left:4px solid var(--c);padding-left:14px;border-radius:3px}
+.hg .hn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;color:var(--tx)}
+.hg .hv{color:var(--tx);white-space:nowrap;font-variant-numeric:tabular-nums}
+.hact{margin-left:auto;display:flex;align-items:center;gap:4px}
+.ib{position:relative;background:none;border:0;color:var(--tx);padding:6px;border-radius:14px;display:flex}
+.ib.on{background:var(--acc);color:#10203a}
+.ib i{position:absolute;top:0;right:0;font-style:normal;font-size:10px;background:var(--acc);color:#10203a;border-radius:8px;padding:0 5px;font-weight:700}
+.sect{font-size:20px;font-weight:700;margin:8px 4px 12px}
+.tsum{font-size:14px;line-height:1.35;color:var(--tx);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:57px}
+.tft{display:flex;align-items:center;gap:8px;margin-top:12px;color:var(--mut);font-size:14px;min-height:20px}
+.dcard .ed{color:var(--acc);font-size:22px;line-height:1;padding:2px 6px;margin-left:auto}
+.pop{position:fixed;z-index:60;width:190px;background:#2b3044;border-radius:16px;box-shadow:0 12px 34px rgba(0,0,0,.45);padding:4px 0;overflow:hidden}
+.pop .pi{display:block;width:100%;text-align:left;background:none;border:0;color:var(--tx);font-size:16px;padding:14px 18px}
+.pop .pi.bad{color:#ff8a8a}
 .mh{display:flex;justify-content:space-between;align-items:baseline;margin:18px 4px 8px;font-weight:700;font-size:17px}
 .mh span:last-child{font-size:13px;font-weight:500;color:var(--mut)}
 .mh:first-child{margin-top:4px}
@@ -219,7 +236,7 @@ let cfg = store.get('cfg', null);
 let boot = store.get('boot', null);
 let queue = store.get('q', []);
 let sess = store.get('sess', null);
-let editing = false, showArch = false, arch = store.get('arch', {}), gone = store.get('gone', []), day = null, view = 'home', extra = store.get('extra', {}), xs = store.get('xs', {}), names = store.get('names', {}), links = store.get('links', {}), draft = {}, flushing = false, starting = false;
+let pop = null, tlist = store.get('tlist', []), editing = false, showArch = false, arch = store.get('arch', {}), gone = store.get('gone', []), day = null, view = 'home', extra = store.get('extra', {}), xs = store.get('xs', {}), names = store.get('names', {}), links = store.get('links', {}), draft = {}, flushing = false, starting = false;
 
 // ---- helpers
 const pad = n => String(n).padStart(2, '0');
@@ -335,6 +352,7 @@ function tmplRows(){
 }
 function allTmpls(){
   const out = DAYS.filter(d => !gone.includes(d));
+  tlist.forEach(d => { if (!out.includes(d) && !gone.includes(d)) out.push(d); });
   if (boot) tmplRows().forEach(t => { if (!out.includes(t.day) && !DAYS.includes(t.day) && !gone.includes(t.day)) out.push(t.day); });
   return out;
 }
@@ -531,24 +549,53 @@ function dupTemplate(d){
     boot.template.push({ day: n, order: k + 1, ex: r.ex, sets: r.sets, lo: r.lo, hi: r.hi, rest: r.rest });
     queue.push({ kind: 'tmpl', id: uid(), day: n, ex: r.ex, sets: r.sets, lo: r.lo, hi: r.hi, rest: r.rest });
   });
+  if (!rows.length) { tlist.push(n); store.set('tlist', tlist); }
   if (links[d]) { links[n] = Object.assign({}, links[d]); store.set('links', links); }
   store.set('boot', boot); store.set('q', queue); flush();
   toast(rows.length ? 'Duplicated as "' + n + '"' : 'Template is empty, nothing to copy');
 }
 function delTemplate(d){
   if (!confirm('Delete "' + label(d) + '"? Its exercises are removed from the sheet template. Logged history stays.')) return;
-  delete arch[d]; store.set('arch', arch);
+  delete arch[d]; store.set('arch', arch); tlist = tlist.filter(x => x !== d); store.set('tlist', tlist);
   if (!gone.includes(d)) { gone.push(d); store.set('gone', gone); }
   delete extra[d]; store.set('extra', extra);
   qop({ kind: 'tdel', day: d });
 }
+function closePop(){ pop = null; const e = $('pop'); if (e) e.remove(); }
+function openPop(btn, d){
+  closePop(); pop = { d };
+  const ar = !!arch[d];
+  const items = ar ? [['tunarch', 'Restore'], ['tdelete', 'Delete']] : [['tedit', 'Edit'], ['trename', 'Rename'], ['tarch', 'Archive'], ['tdup', 'Duplicate'], ['tdelete', 'Delete']];
+  const el = document.createElement('div'); el.id = 'pop'; el.className = 'pop';
+  el.innerHTML = items.map(([a, l]) => `<button class="pi ${a === 'tdelete' ? 'bad' : ''}" data-act="${a}" data-d="${esc(d)}">${l}</button>`).join('');
+  document.body.appendChild(el);
+  const r = btn.getBoundingClientRect(), h = items.length * 50 + 8, w = 190;
+  let top = r.bottom + 2; if (top + h > window.innerHeight - 20) top = Math.max(8, r.top - h - 2);
+  el.style.top = top + 'px'; el.style.left = Math.max(8, Math.min(r.right - w, window.innerWidth - w - 8)) + 'px';
+}
+function newTemplate(){
+  const n = (prompt('Template name') || '').trim(); if (!n) return;
+  if (allTmpls().concat(Object.keys(arch)).includes(n)) { toast('That name exists already'); return; }
+  gone = gone.filter(x => x !== n); store.set('gone', gone);
+  tlist.push(n); store.set('tlist', tlist); day = n; editing = true; view = 'plan'; render(); window.scrollTo(0, 0);
+}
+function lastDone(d){
+  const k = x => String(x.day || '').trim();
+  let best = '';
+  ((boot && boot.history) || []).concat(allWorkouts()).forEach(w => { if (k(w) === d && String(w.ts) > best) best = String(w.ts); });
+  if (!best) return '';
+  const m = best.match(/(\d{4})-(\d{2})-(\d{2})/); if (!m) return '';
+  const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+  const n = Math.round((t0 - new Date(+m[1], +m[2] - 1, +m[3])) / 864e5);
+  return n <= 0 ? 'Today' : n === 1 ? 'Yesterday' : n + ' days ago';
+}
 function tmenuAct(a, d){
-  sheet = null; renderSheet();
+  closePop();
   if (a === 'tedit') { if (running()) { toast('Finish the running workout first'); return; } day = d; editing = true; view = 'plan'; }
   else if (a === 'trename') { renameDay(d); return; }
   else if (a === 'tdup') dupTemplate(d);
-  else if (a === 'tarch') { arch[d] = true; store.set('arch', arch); toast('Archived. Find it at the bottom of Workout.'); }
-  else if (a === 'tunarch') { delete arch[d]; store.set('arch', arch); }
+  else if (a === 'tarch') { arch[d] = true; store.set('arch', arch); toast('Archived. Tap the folder to find it.'); }
+  else if (a === 'tunarch') { delete arch[d]; store.set('arch', arch); if (!allTmpls().some(x => arch[x])) showArch = false; }
   else if (a === 'tdelete') delTemplate(d);
   render(); window.scrollTo(0, 0);
 }
@@ -852,8 +899,6 @@ function renderSheet(){
       <input class="sq" id="bv" inputmode="decimal" placeholder="${has(last) ? esc(last) : ''}"><div class="muted" style="margin-bottom:6px">Date</div>
       <input class="sq" id="bd" type="date" value="${todayKey()}" max="${todayKey()}"><button class="startbtn" data-act="savebody">Save</button>`;
   }
-  else if (sheet.step === 'tmenu') { const d = sheet.d, ar = !!arch[d];
-    h = `<div class="ht">${esc(label(d))}</div>` + (ar ? `<button class="sopt" data-act="tunarch" data-d="${esc(d)}">Restore</button>` : `<button class="sopt" data-act="tedit" data-d="${esc(d)}">Edit<small>Add, remove, reorder via supersets</small></button><button class="sopt" data-act="trename" data-d="${esc(d)}">Rename</button><button class="sopt" data-act="tdup" data-d="${esc(d)}">Duplicate</button><button class="sopt" data-act="tarch" data-d="${esc(d)}">Archive</button>`) + `<button class="sopt" style="color:#ff8a8a" data-act="tdelete" data-d="${esc(d)}">Delete</button>`; }
   else if (sheet.step === 'pick') h = `<div class="ht">Add exercise</div><input class="sq" id="pq" placeholder="Search or type a new name" autocomplete="off"><div id="plist">${pickerList('')}</div>`;
   bg.innerHTML = `<div class="sheet">${h}</div>`;
   bg.classList.add('on');
@@ -895,31 +940,35 @@ function renderHist(){
       const vol = w.sets.reduce((a, x) => a + num(x[2]) * num(x[3]), 0);
       const dur = w.dur > 0 ? (w.dur >= 60 ? Math.floor(w.dur / 60) + 'h ' + pad(Math.round(w.dur % 60)) + 'm' : Math.round(w.dur) + ' min') : '–';
       const prs = w.prs == null ? '–' : w.prs;
+      const sm = ssMap(order.map(ex => ({ ex })), String(w.day).trim());
       return `<div class="hc"><div class="ht">${esc(label(w.day))}</div><div class="hdt">${esc(fmtWhen(w.ts))}</div>
-        <div class="hg"><div class="hh">Sets</div><div class="hh">Best set</div>${order.map(ex => `<div class="hn">${by[ex].length} × ${esc(ex)}</div><div class="hv">${esc(bestSet(by[ex]))}</div>`).join('')}</div>
-        <div class="hfoot"><div><b>${dur}</b><span>total time</span></div><div><b>${fmtVol(vol)} kg</b><span>lifted</span></div><div><b>${prs}</b><span>${prs === 1 ? 'PR' : 'PRs'}</span></div></div></div>`;
+        <div class="hg"><div class="hh"><span>Sets</span><span>Best set</span></div>${order.map((ex, i) => `<div class="hr ${sm[i] ? 'ss' : ''}" ${sm[i] ? `style="--c:${sm[i].color}"` : ''}><span class="hn">${by[ex].length} × ${esc(ex)}</span><span class="hv">${esc(bestSet(by[ex]))}</span></div>`).join('')}</div>
+        <div class="hfoot"><div>${IC.clock}<b>${dur}</b></div><div>${IC.weight}<b>${fmtVol(vol)} kg</b></div><div>${IC.trophy}<b>${prs} ${prs === 1 ? 'PR' : 'PRs'}</b></div></div></div>`;
     }).join('');
   }).join('');
 }
+const IC = {
+  clock: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 5v5.2l4.3 2.5-.8 1.3-5-3V7z"/></svg>',
+  weight: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 3a3 3 0 0 1 2.8 4H18l3 13H3L6 7h3.2A3 3 0 0 1 12 3zm0 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>',
+  trophy: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V17h3v3H8v-3h3v-2.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3V3zm-1 4v1a2 2 0 0 0 1.2 1.8A5 5 0 0 1 7 8V7H6zm12 0h-1v1c0 .6-.1 1.2-.2 1.8A2 2 0 0 0 18 8V7z"/></svg>',
+  plus: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7z"/></svg>',
+  folder: '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 5h7l2 2h9v12H3V5zm2 2v10h14V9h-8.8l-2-2H5z"/></svg>'
+};
 function renderHome(){
-  $('hd').innerHTML = `<div class="row"><div class="ttl">Lift Log</div><button class="sync" id="sync" data-act="sync"></button></div>`;
+  const nArch = boot ? allTmpls().filter(d => arch[d]).length : 0;
+  $('hd').innerHTML = `<div class="row"><div class="ttl">${showArch ? 'Archived' : 'Templates'}</div><span class="hact"><button class="sync" id="sync" data-act="sync"></button>${showArch ? '' : `<button class="ib" data-act="newt" aria-label="New template">${IC.plus}</button>`}<button class="ib ${showArch ? 'on' : ''}" data-act="showarch" aria-label="Archived templates">${IC.folder}${nArch ? `<i>${nArch}</i>` : ''}</button></span></div>`;
   if (!boot) { $('app').innerHTML = '<p class="muted">Loading your plan… (needs signal once)</p>'; return; }
   const todayDay = DAYS[new Date().getDay() - 1];
-  $('app').innerHTML = '<div class="grid2">' + allTmpls().filter(d => !arch[d]).map(d => {
-    const rows = plan(d), sm = ssMap(rows, d);
-    const list = rows.slice(0, 5).map((r, ri) => {
-      const sx = sm[ri] ? ` style="border-left:4px solid ${sm[ri].color};padding-left:8px"` : '';
-      const reps = r.target ? `${r.target.sets || r.sets}×${esc(r.target.reps)}` : `${r.sets}×${r.lo === r.hi ? r.lo : r.lo + '-' + r.hi}`;
-      return `<div class="exl"${sx}><span>${esc(r.ex)}</span><span>${reps}</span></div>`;
-    }).join('') || '<div class="muted">No exercises yet</div>';
-    return `<div class="dcard ${d === todayDay ? 'today' : ''}" data-act="openDay" data-d="${esc(d)}">
-      <div class="dh"><div class="dt">${esc(label(d))}</div><span class="dsub">${running() && sess.day === d ? '<b style="color:var(--ok)">● in progress</b>' : [label(d) !== d && DAYS.includes(d) ? d : '', d === todayDay ? 'today' : ''].filter(Boolean).join(' · ')}</span><button class="ed" data-act="tmenu" data-d="${esc(d)}" aria-label="Template options">⋯</button></div>
-      ${list}${rows.length > 5 ? `<div class="more">+${rows.length - 5} more</div>` : ''}</div>`;
-  }).join('') + '</div>' + (() => {
-    const ar = allTmpls().filter(d => arch[d]);
-    if (!ar.length) return '';
-    return `<button class="link" data-act="showarch">${showArch ? 'Hide' : 'Show'} archived (${ar.length})</button>` + (showArch ? ar.map(d => `<div class="dcard" style="margin-top:8px;opacity:.75"><div class="dh"><div class="dt">${esc(label(d))}</div><button class="ed" data-act="tmenu" data-d="${esc(d)}">⋯</button></div></div>`).join('') : '');
-  })();
+  const list = allTmpls().filter(d => showArch ? arch[d] : !arch[d]);
+  const card = d => {
+    const rows = plan(d), ld = lastDone(d);
+    const sum = rows.map(r => `${r.target ? (r.target.sets || r.sets) : r.sets} x ${esc(r.ex)}`).join(', ') || 'No exercises yet';
+    const foot = running() && sess.day === d ? '<b style="color:var(--ok)">● in progress</b>' : (ld ? IC.clock + '<span>' + ld + '</span>' : '');
+    return `<div class="dcard ${d === todayDay && !showArch ? 'today' : ''}" data-act="${showArch ? 'tmenu' : 'openDay'}" data-d="${esc(d)}">
+      <div class="dh"><div class="dt">${esc(label(d))}</div><button class="ed" data-act="tmenu" data-d="${esc(d)}" aria-label="Template options">⋯</button></div>
+      <div class="tsum">${sum}</div><div class="tft">${foot}</div></div>`;
+  };
+  $('app').innerHTML = `<div class="sect">${showArch ? 'Archived' : 'My Templates'} (${list.length})</div>` + (list.length ? '<div class="grid2">' + list.map(card).join('') + '</div>' : `<p class="muted">${showArch ? 'Nothing archived.' : 'No templates. Tap + to create one.'}</p>`);
 }
 function renderPlan(){
   const rows = plan(), sm = ssMap(rows, day);
@@ -980,6 +1029,7 @@ function renderDay(){
   $('app').innerHTML = out + `<div class="muted" style="padding:4px">Tap a set number to add effort / form / help tags. Tap the previous value to copy it. ⛓ links an exercise with the one below as a superset.</div><button class="link" data-act="add">+ add exercise</button> <button class="link" data-act="cfg">settings</button>${running() ? '<button class="cancelbtn" data-act="cancel">Cancel workout</button>' : ''}`;
 }
 document.addEventListener('click', e => {
+  if (pop && !e.target.closest('#pop')) { const tb = e.target.closest('[data-act="tmenu"]'), same = tb && tb.dataset.d === pop.d; closePop(); if (!tb || same) return; }
   const t = e.target.closest('[data-act]'); if (!t || t.disabled) return;
   captureInputs();
   const D = t.dataset, a = D.act, ei = +D.ei, si = +D.si;
@@ -1014,9 +1064,10 @@ document.addEventListener('click', e => {
   else if (a === 'sheetbg') { if (e.target === t) { sheet = null; renderSheet(); } }
   else if (a === 'pickex') { addExerciseTo(D.n); sheet = null; renderSheet(); render(); }
   else if (a === 'rename') renameDay(D.d);
-  else if (a === 'tmenu') openSheet('tmenu', { d: D.d });
+  else if (a === 'tmenu') openPop(t, D.d);
+  else if (a === 'newt') newTemplate();
   else if (a === 'tedit' || a === 'trename' || a === 'tdup' || a === 'tarch' || a === 'tunarch' || a === 'tdelete') tmenuAct(a, D.d);
-  else if (a === 'showarch') { showArch = !showArch; render(); }
+  else if (a === 'showarch') { showArch = !showArch; render(); window.scrollTo(0, 0); }
   else if (a === 'rmex') removeExercise(ei);
   else if (a === 'editdone') { editing = false; render(); window.scrollTo(0, 0); }
   else if (a === 'start') startWorkout();
