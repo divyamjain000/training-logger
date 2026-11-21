@@ -66,6 +66,34 @@ main{padding:10px 12px}
 .link{background:none;border:0;color:var(--mut);font-size:13px;padding:8px 4px}
 .addset{width:100%;margin-top:8px;height:36px;border:0;border-radius:8px;background:#222733;color:var(--tx);font-size:14px}
 .best{font-size:12px;color:var(--mut)}
+.ssg{position:relative;padding-left:13px;margin-bottom:12px}
+.ssg::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:3px;background:var(--c)}
+.ssg .ex{margin-bottom:8px}.ssg .ex:last-of-type{margin-bottom:0}
+.sstag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--c);margin:0 0 5px 2px}
+.exr{display:flex;gap:8px;margin-top:8px}.exr .addset{margin-top:0}
+.lk{flex:0 0 auto;padding:0 12px;height:36px;border:0;border-radius:8px;background:#222733;color:var(--mut);font-size:13px}
+.lk.on{background:var(--c);color:#0b0d12;font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.grid2 .dcard{margin-bottom:0;padding:12px;min-width:0}
+.grid2 .dt{font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grid2 .dh{flex-wrap:wrap;gap:0 8px;margin-bottom:6px}
+.grid2 .exl{font-size:12px;padding:5px 0;gap:6px}
+.pl{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.pl .r1{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.pl .t{font-weight:600}
+.pl .sr{color:var(--acc);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pl .s{font-size:12px;color:var(--mut);margin-top:3px}
+.ssg .pl{margin-bottom:8px}.ssg .pl:last-of-type{margin-bottom:0}
+.pbar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(transparent,var(--bg) 35%);padding:26px 14px calc(12px + env(safe-area-inset-bottom))}
+.tabs{display:flex;gap:8px;margin-top:8px}
+.tabs .chip{flex:1;text-align:center}
+.hc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.hc .ht{font-size:19px;font-weight:700}
+.hc .hdt{font-size:13px;color:var(--mut);margin:2px 0 10px}
+.hg{display:grid;grid-template-columns:1fr auto;gap:7px 14px;font-size:14px;border-top:1px solid var(--line);padding-top:10px}
+.hg .hh{font-size:11px;color:var(--mut);text-transform:uppercase}
+.hg .hh:nth-child(2),.hg .hv{text-align:right;color:var(--mut);white-space:nowrap;font-variant-numeric:tabular-nums}
+.hg .hn{overflow:hidden;text-overflow:ellipsis}
 .bar{position:fixed;left:0;right:0;bottom:0;background:#12151b;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;gap:12px;z-index:6}
 .bar.on{display:flex}
 .bar.go{background:#0f2a18;border-top-color:var(--ok)}
@@ -107,7 +135,7 @@ let cfg = store.get('cfg', null);
 let boot = store.get('boot', null);
 let queue = store.get('q', []);
 let sess = store.get('sess', null);
-let day = null, view = 'home', extra = store.get('extra', {}), xs = store.get('xs', {}), names = store.get('names', {}), draft = {}, flushing = false, starting = false;
+let day = null, view = 'home', extra = store.get('extra', {}), xs = store.get('xs', {}), names = store.get('names', {}), links = store.get('links', {}), draft = {}, flushing = false, starting = false;
 
 // ---- helpers
 const pad = n => String(n).padStart(2, '0');
@@ -161,6 +189,7 @@ async function flush(){
       const done = new Set(j.ids);
       queue = queue.filter(x => !done.has(x.id)); store.set('q', queue);
       if (sess) { sess.sets.forEach(s => { if (done.has(s.id)) s.synced = true; }); store.set('sess', sess); }
+      if (!queue.length && !running()) setTimeout(refreshBoot, 600);
     } else toast('Sync: ' + (j.error || 'failed'));
   } catch(e){ /* stay queued */ }
   flushing = false; updSync();
@@ -169,6 +198,24 @@ async function flush(){
 function updSync(){
   const el = $('sync'); if (!el) return;
   el.innerHTML = queue.length ? `<b>${queue.length} unsynced</b>` : (navigator.onLine ? 'synced' : 'offline');
+}
+
+// ---- supersets
+const PAL = ['#f472b6','#fbbf24','#34d399','#a78bfa','#fb923c','#22d3ee'];
+function ssMap(rows, d){
+  const L = links[d] || {}, out = rows.map(() => null); let g = 0, i = 0;
+  while (i < rows.length) {
+    let j = i; while (j < rows.length - 1 && L[rows[j].ex]) j++;
+    if (j > i) { for (let k = i; k <= j; k++) out[k] = { g, color: PAL[g % PAL.length], first: k === i, last: k === j }; g++; }
+    i = j + 1;
+  }
+  return out;
+}
+function toggleLink(ei){
+  const rows = plan(); if (ei >= rows.length - 1) return;
+  const L = links[day] || (links[day] = {}); const ex = rows[ei].ex;
+  if (L[ex]) delete L[ex]; else L[ex] = true;
+  store.set('links', links); render();
 }
 
 // ---- model
@@ -222,7 +269,7 @@ async function startWorkout(){
   if (running() || starting) return;
   starting = true; render();
   await Promise.race([refreshBoot(), new Promise(r => setTimeout(r, 3000))]);
-  newSess(boot && boot.bests); starting = false; render(); tick();
+  newSess(boot && boot.bests); starting = false; view = 'day'; render(); window.scrollTo(0, 0); tick();
 }
 function evalSession(){
   const by = {};
@@ -266,7 +313,7 @@ function cancelWorkout(){
   const ids = new Set(sess.sets.map(x => x.id)); ids.add(sess.id);
   queue = queue.filter(q => !ids.has(q.id)); store.set('q', queue);
   sess = null; store.set('sess', null); draft = {}; xs = {}; store.set('xs', xs);
-  $('bar').classList.remove('on'); toast('Workout cancelled'); render();
+  $('bar').classList.remove('on'); toast('Workout cancelled'); view = 'home'; render();
 }
 function showSummary(){
   if (!sess || !sess.summary) return;
@@ -359,9 +406,12 @@ function tick(){
   const bar = $('bar');
   if (run && sess.sets.length) {
     const last = sess.sets[sess.sets.length-1];
-    const el = (Date.now() - sess.lastT) / 1000, tg = restFor(last.ex);
+    const el = (Date.now() - sess.lastT) / 1000;
+    const srows = plan(sess.day), si0 = srows.findIndex(r => r.ex === last.ex);
+    const linked = si0 >= 0 && si0 < srows.length - 1 && (links[sess.day] || {})[last.ex];
+    const tg = linked ? Infinity : restFor(last.ex);
     bar.classList.add('on'); bar.classList.toggle('go', el >= tg);
-    $('barEx').textContent = `Rest · ${last.ex} · target ${fmtDur(tg)}`;
+    $('barEx').textContent = linked ? `Superset · next: ${srows[si0 + 1].ex}` : `Rest · ${last.ex} · target ${fmtDur(tg)}`;
     $('barT').textContent = fmtDur(el);
     if (el >= tg && !sess.alerted) { sess.alerted = true; store.set('sess', sess); if (navigator.vibrate) navigator.vibrate([200,100,200]); }
   } else bar.classList.remove('on');
@@ -376,32 +426,84 @@ function workoutBar(){
 function render(){
   if (!cfg) return renderSetup();
   if (running() && view === 'day' && sess.day !== day) day = sess.day;
-  if (view === 'day') renderDay(); else renderHome();
+  if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else renderHome();
   updSync(); tick();
 }
+function tabsHtml(active){
+  return `<div class="tabs"><button class="chip ${active === 'home' ? 'on' : ''}" data-act="tab" data-t="home">Workouts</button><button class="chip ${active === 'hist' ? 'on' : ''}" data-act="tab" data-t="hist">History</button></div>`;
+}
+function fmtWhen(ts){
+  const m = String(ts).match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/); if (!m) return ts;
+  const d = new Date(+m[1], +m[2]-1, +m[3], +m[4], +m[5]);
+  return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) + ' at ' + m[4] + ':' + m[5];
+}
+function bestSet(sets){
+  let b = null, key = -1;
+  sets.forEach(s => {
+    const w = num(s[2]), r = num(s[3]); if (r <= 0) return;
+    const k = e1rm(w, r) || (w > 0 ? w * r / 10 : r / 100);
+    if (k > key) { key = k; b = { w, r }; }
+  });
+  return b ? (b.w > 0 ? `${fmtW(b.w)} kg × ${b.r}` : `${b.r} reps`) : '–';
+}
+function renderHist(){
+  $('hd').innerHTML = `<div class="row"><div class="ttl">Lift Log</div><div class="sync" id="sync"></div></div>${tabsHtml('hist')}`;
+  const h = boot && boot.history;
+  if (!boot) { $('app').innerHTML = '<p class="muted">Loading… (needs signal once)</p>'; return; }
+  if (!h) { $('app').innerHTML = '<p class="muted">History needs the updated script. Redeploy Code.gs (v3) in Apps Script, then reopen the app.</p>'; return; }
+  if (!h.length) { $('app').innerHTML = '<p class="muted">No workouts yet.</p>'; return; }
+  $('app').innerHTML = h.map(w => {
+    const by = {}, order = [];
+    w.sets.forEach(s => { if (!by[s[0]]) { by[s[0]] = []; order.push(s[0]); } by[s[0]].push(s); });
+    return `<div class="hc"><div class="ht">${esc(label(w.day))}</div><div class="hdt">${esc(fmtWhen(w.ts))}</div>
+      <div class="hg"><div class="hh">Sets</div><div class="hh">Best set</div>${order.map(ex => `<div class="hn">${by[ex].length} × ${esc(ex)}</div><div class="hv">${esc(bestSet(by[ex]))}</div>`).join('')}</div></div>`;
+  }).join('');
+}
 function renderHome(){
-  $('hd').innerHTML = `<div class="row"><div class="ttl">Lift Log</div><div class="sync" id="sync"></div></div>`;
+  $('hd').innerHTML = `<div class="row"><div class="ttl">Lift Log</div><div class="sync" id="sync"></div></div>${tabsHtml('home')}`;
   if (!boot) { $('app').innerHTML = '<p class="muted">Loading your plan… (needs signal once)</p>'; return; }
   const todayDay = DAYS[new Date().getDay() - 1];
   let top = '';
   if (running()) top = `<div class="resume" data-act="openDay" data-d="${esc(sess.day)}"><div><div class="muted">Workout in progress · ${esc(label(sess.day))}</div><b id="hclock">0:00</b></div><span style="margin-left:auto;font-weight:700">Resume ›</span></div>`;
   else if (sess && sess.ended && sess.date === todayKey()) top = `<div class="resume" data-act="summary"><div><div class="muted">Done today · ${esc(label(sess.day))}</div><b>${fmtVol(sess.summary.vol)} kg</b></div><span style="margin-left:auto;font-weight:700">Summary ›</span></div>`;
-  $('app').innerHTML = top + DAYS.map(d => {
-    const rows = plan(d);
-    const list = rows.slice(0, 5).map(r => {
+  $('app').innerHTML = top + '<div class="grid2">' + DAYS.map(d => {
+    const rows = plan(d), sm = ssMap(rows, d);
+    const list = rows.slice(0, 5).map((r, ri) => {
+      const sx = sm[ri] ? ` style="border-left:4px solid ${sm[ri].color};padding-left:8px"` : '';
       const reps = r.target ? `${r.target.sets || r.sets}×${esc(r.target.reps)}` : `${r.sets}×${r.lo === r.hi ? r.lo : r.lo + '-' + r.hi}`;
-      return `<div class="exl"><span>${esc(r.ex)}</span><span>${reps}</span></div>`;
+      return `<div class="exl"${sx}><span>${esc(r.ex)}</span><span>${reps}</span></div>`;
     }).join('') || '<div class="muted">No exercises yet</div>';
     return `<div class="dcard ${d === todayDay ? 'today' : ''}" data-act="openDay" data-d="${d}">
       <div class="dh"><div class="dt">${esc(label(d))}</div><span class="dsub">${d.slice(0,3)}${d === todayDay ? ' · today' : ''}</span><button class="ed" data-act="rename" data-d="${d}">✎</button></div>
       ${list}${rows.length > 5 ? `<div class="more">+${rows.length - 5} more</div>` : ''}</div>`;
-  }).join('') + `<button class="link" data-act="cfg">settings</button>`;
+  }).join('') + '</div>' + `<button class="link" data-act="cfg">settings</button>`;
+}
+function renderPlan(){
+  const rows = plan(), sm = ssMap(rows, day);
+  $('hd').innerHTML = `<div class="row"><button class="back" data-act="back">‹</button><div class="ttl">${esc(label(day))}</div><div class="sync" id="sync"></div></div>`;
+  if (!boot) { $('app').innerHTML = '<p class="muted">Loading your plan… (needs signal once)</p>'; return; }
+  const total = rows.reduce((a, r) => a + (+r.sets || 0), 0);
+  const cards = rows.map((r, ei) => {
+    const last = lastSets(r.ex);
+    const sr = r.target ? `${r.target.sets || r.sets}×${esc(r.target.reps)}` : `${r.sets}×${r.lo === r.hi ? r.lo : r.lo + '-' + r.hi}`;
+    const sub = r.target ? `Target ${fmtW(num(r.target.w))} kg × ${esc(r.target.reps)}` : (last.length ? 'Last: ' + last.map(x => fmtW(num(x[1])) + '×' + x[2]).join('  ') : 'No history');
+    const lk = ei < rows.length - 1 ? `<button class="lk ${sm[ei] && !sm[ei].last ? 'on' : ''}" style="margin-top:8px;${sm[ei] ? '--c:' + sm[ei].color : ''}" data-act="link" data-ei="${ei}">${sm[ei] && !sm[ei].last ? '⛓ Unlink' : '⛓ Superset ↓'}</button>` : '';
+    return `<div class="pl"><div class="r1"><div class="t">${esc(r.ex)}</div><div class="sr">${sr}</div></div><div class="s">${sub}</div>${r.target && r.target.why ? `<div class="why">${esc(r.target.why)}</div>` : ''}${lk}</div>`;
+  });
+  let out = '';
+  cards.forEach((c, i) => {
+    const m = sm[i];
+    if (m && m.first) out += `<div class="ssg" style="--c:${m.color}"><div class="sstag">Superset</div>`;
+    out += c;
+    if (m && m.last) out += '</div>';
+  });
+  $('app').innerHTML = `<div class="muted" style="margin:0 2px 10px">${rows.length} exercises · ${total} sets</div>` + (out || '<p class="muted">No exercises in this template yet.</p>') + `<button class="link" data-act="add">+ add exercise</button><div class="pbar"><button class="startbtn" data-act="start" ${starting ? 'disabled' : ''}>${starting ? 'Starting…' : 'Start workout'}</button></div>`;
 }
 function renderDay(){
   $('hd').innerHTML = `<div class="row"><button class="back" data-act="back">‹</button><div class="ttl">${esc(label(day))}</div><div class="sync" id="sync"></div></div>${workoutBar()}`;
   if (!boot) { $('app').innerHTML = '<p class="muted">Loading your plan… (needs signal once)</p>'; return; }
-  const rows = plan();
-  $('app').innerHTML = rows.map((r, ei) => {
+  const rows = plan(), sm = ssMap(rows, day);
+  const cards = rows.map((r, ei) => {
     const mine = loggedFor(r.ex), last = lastSets(r.ex), b = baseFor(r.ex);
     const n = Math.max(xs[day + '|' + r.ex] || 0, r.sets, mine.reduce((m, s) => Math.max(m, s.set), 0));
     const tgt = r.target ? `Target ${fmtW(num(r.target.w))} kg × ${esc(r.target.reps)} · ${r.target.sets || r.sets} sets` : `${r.sets} sets · ${r.lo}-${r.hi} reps`;
@@ -423,15 +525,28 @@ function renderDay(){
         <div class="tg"><span>Help</span>${['none','spotter','assisted'].map(x => `<button class="chip ${v.help === x ? 'on' : ''}" data-act="tag" ${a} data-f="help" data-v="${x}">${x}</button>`).join('')}</div></div>`;
     }
     return `<div class="ex" data-i="${ei}"><div class="exh"><div><div class="t">${esc(r.ex)}</div><div class="s">${tgt}</div>${b && (b.maxW || b.e1rm) ? `<div class="best">Best ${fmtW(b.maxW)} kg · est. 1RM ${b.e1rm} kg</div>` : ''}${r.target && r.target.why ? `<div class="why">${esc(r.target.why)}</div>` : ''}</div><div class="n">${mine.length}/${n}<br><span class="xt" data-i="${ei}"></span></div></div>
-      <div class="sets">${cells}</div><button class="addset" data-act="addset" data-ei="${ei}">+ Add set</button></div>`;
-  }).join('') + `<div class="muted" style="padding:4px">Tap a set number to add effort / form / help tags. Tap the previous value to copy it.</div><button class="link" data-act="add">+ add exercise</button> <button class="link" data-act="cfg">settings</button>`;
+      <div class="sets">${cells}</div><div class="exr"><button class="addset" data-act="addset" data-ei="${ei}">+ Add set</button>${ei < rows.length - 1 ? `<button class="lk ${sm[ei] && !sm[ei].last ? 'on' : ''}" ${sm[ei] ? `style="--c:${sm[ei].color}"` : ''} data-act="link" data-ei="${ei}">${sm[ei] && !sm[ei].last ? '⛓ Unlink' : '⛓ Superset ↓'}</button>` : ''}</div></div>`;
+  });
+  let out = '';
+  cards.forEach((c, i) => {
+    const m = sm[i];
+    if (m && m.first) out += `<div class="ssg" style="--c:${m.color}"><div class="sstag">Superset</div>`;
+    out += c;
+    if (m && m.last) out += '</div>';
+  });
+  $('app').innerHTML = out + `<div class="muted" style="padding:4px">Tap a set number to add effort / form / help tags. Tap the previous value to copy it. ⛓ links an exercise with the one below as a superset.</div><button class="link" data-act="add">+ add exercise</button> <button class="link" data-act="cfg">settings</button>`;
 }
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-act]'); if (!t || t.disabled) return;
   captureInputs();
   const D = t.dataset, a = D.act, ei = +D.ei, si = +D.si;
-  if (a === 'openDay') { day = D.d; view = 'day'; draft = {}; render(); window.scrollTo(0, 0); }
+  if (a === 'openDay') {
+    if (running() && D.d !== sess.day) { toast('Finish or cancel the running workout first'); return; }
+    day = D.d; view = running() ? 'day' : 'plan'; draft = {}; render(); window.scrollTo(0, 0);
+  }
   else if (a === 'back') { view = 'home'; render(); window.scrollTo(0, 0); }
+  else if (a === 'tab') { view = D.t; render(); window.scrollTo(0, 0); }
+  else if (a === 'link') toggleLink(ei);
   else if (a === 'rename') renameDay(D.d);
   else if (a === 'start') startWorkout();
   else if (a === 'finish') finishWorkout();
