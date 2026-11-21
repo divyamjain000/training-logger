@@ -232,6 +232,64 @@ header{border-bottom:0;background:linear-gradient(var(--bg) 82%,transparent)}
 .hasnav .toast{bottom:calc(150px + env(safe-area-inset-bottom))}
 body.hasnav{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
 .ttl{font-size:22px}
+
+/* night batch: mock-exact screens */
+.ttl.big{margin:26px 4px 18px}
+.tb{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.tb .ttl{flex:1;font-size:22px;font-weight:500;margin:0 0 0 8px}
+.tb .ib{padding:8px}
+.tabs{display:flex;gap:4px;margin:6px -12px -8px;padding:0 12px;border-top:0}
+.tabs button{background:none;border:0;color:var(--mut);font-size:15px;font-weight:600;letter-spacing:.08em;padding:14px 10px 12px;text-transform:uppercase;border-bottom:3px solid transparent}
+.tabs button.on{color:var(--acc);border-bottom-color:var(--acc)}
+.frow{display:block;width:100%;text-align:left;background:none;border:0;color:var(--tx);padding:20px 4px;font-size:21px;font-weight:600}
+.frow .fs{font-size:18px;font-weight:400;color:var(--mut);margin-top:3px}
+.sect2{font-size:28px;font-weight:600;margin:26px 4px 6px}
+.bluebtn{display:block;width:100%;height:52px;border:0;border-radius:8px;background:var(--acc);color:#fff;font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.pbar2{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--bg);padding:10px 14px calc(14px + env(safe-area-inset-bottom))}
+.subt{color:var(--mut);font-size:18px;margin:2px 4px 18px}
+.trow{display:flex;align-items:center;gap:14px;padding:12px 4px;min-height:84px}
+.trow.ss{border-left:6px solid var(--c);padding-left:12px;margin-left:-12px}
+.av{width:48px;height:48px;border-radius:50%;background:#8a9097;color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;flex:none}
+.trow .tn{font-size:20px;font-weight:600;line-height:1.2}
+.trow .tm{font-size:17px;color:var(--mut);margin-top:2px}
+.trow .q{margin-left:auto;font-size:28px;color:var(--mut);background:none;border:0;padding:6px 10px}
+.hdate{font-size:18px;color:var(--mut);margin:34px 4px 14px}
+.dxh{display:flex;justify-content:space-between;font-size:20px;font-weight:600;margin:18px 4px 6px}
+.dxn{color:var(--mut);font-size:18px;margin:0 4px 4px}
+.dsr{display:flex;align-items:center;gap:14px;padding:6px 4px;font-size:20px;font-variant-numeric:tabular-nums}
+.dsr .no{width:28px;color:var(--mut)}
+.dsr .e{margin-left:auto;min-width:48px;text-align:left;color:var(--mut)}
+.dsr.ssr{border-left:6px solid var(--c);padding-left:12px;margin-left:-12px}
+.pc{display:inline-flex;align-items:center;gap:8px;border:1.5px solid #2fb3a5;color:#2fb3a5;border-radius:999px;padding:3px 16px 3px 10px;font-size:19px;white-space:nowrap}
+.pc svg{width:18px;height:18px;fill:currentColor}
+.pcs{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 6px}
+.dsr .pc{margin-left:2px}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;text-align:left;background:none;border:0;color:var(--tx);padding:18px 4px;font-size:20px}
+.srow small{display:block;color:var(--mut);font-size:16px;margin-top:2px}
+.srow .sv{color:var(--mut);font-size:18px;text-align:right}
+.shd{font-size:20px;font-weight:700;padding:20px 4px 6px;border-top:1px solid var(--line);margin-top:6px}
+.shd.first{border-top:0}
+.tog{flex:none;width:52px;height:30px;border-radius:15px;background:#4b5560;position:relative;border:0}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#c9ced6;transition:left .15s}
+.tog.on{background:#2d5f94}.tog.on::after{left:25px;background:var(--acc)}
+.letter{font-size:24px;font-weight:600;margin:26px 4px 8px}
+.erow{display:flex;align-items:center;gap:16px;width:100%;text-align:left;background:none;border:0;color:var(--tx);padding:11px 4px}
+.erow .en{font-size:21px;font-weight:600}.erow .eb{font-size:18px;color:var(--mut);margin-top:2px}
+.pn2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:26px 4px 8px}
+.rr{display:flex;justify-content:space-between;align-items:center;padding:18px 4px;font-size:21px}
+.rr span:last-child{color:var(--mut)}
+.rt{display:grid;grid-template-columns:48px 1fr 90px;align-items:center;gap:6px;padding:12px 4px;font-size:21px}
+.rt .mid{text-align:center}.rt .mid small{display:block;font-size:15px;color:var(--mut)}
+.rt .est{text-align:right;color:var(--mut)}
+.rth{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-top:26px}
+.inst{padding:0 4px}.inst ol{margin:6px 0 0;padding-left:26px;font-size:19px;line-height:1.4}.inst li{margin-bottom:14px}
+.more{background:none;border:0;color:var(--acc);font-size:18px;font-weight:600;letter-spacing:.1em;padding:8px 4px}
+.kv{padding:6px 4px 10px}.kv b{display:block;font-size:26px;font-weight:600;margin-bottom:6px}.kv span{font-size:20px}
+.cc.mk2 .cct{font-size:22px;font-weight:500}
+.hc.click{cursor:pointer}
+.hsg{border-left:6px solid var(--c);margin-left:-12px;padding-left:6px}
+.blk{shape-rendering:crispEdges}
+.sync.ok{opacity:0;width:0;padding:0;margin:0;overflow:hidden;pointer-events:none}
 </style>
 </head>
 <body>
@@ -256,6 +314,57 @@ let boot = null;
 let queue = store.get('q', []);
 let sess = store.get('sess', null);
 let pop = null, tlist = store.get('tlist', []), editing = false, showArch = false, arch = store.get('arch', {}), gone = store.get('gone', []), day = null, view = 'home', extra = store.get('extra', {}), xs = store.get('xs', {}), names = store.get('names', {}), links = store.get('links', {}), draft = {}, flushing = false, starting = false;
+let hsel = null, exsel = null, extab = 'about', exqOn = false, exQ = '', exFilter = { bp: '', cat: '' }, exSort = 'az', instOpen = false;
+const PDEF = { sound: false, lock: false, delconf: true, prevset: 'template', incomplete: 'ask', theme: 'auto', simple: false, bars: '20', plates: '1.25, 2.5, 5, 10, 15, 20, 25', rest: 90, unit: 'kg' };
+let prefs = Object.assign({}, PDEF, store.get('prefs', {}));
+let profile = store.get('profile', { name: store.get('pname', 'Divyam Jain') });
+let exovr = store.get('exovr', {});
+let st = store.get('st', {});
+// Everything below is synced to the sheet's Settings tab (key, JSON value, updatedAt). Last write wins.
+const SYNC = {
+  names: [() => names, v => { names = v || {}; }], arch: [() => arch, v => { arch = v || {}; }], gone: [() => gone, v => { gone = v || []; }],
+  tlist: [() => tlist, v => { tlist = v || []; }], charts: [() => charts, v => { if (v && v.length) charts = v; }],
+  prefs: [() => prefs, v => { prefs = Object.assign({}, PDEF, v || {}); }], profile: [() => profile, v => { profile = v || profile; }]
+};
+function syncSave(key){
+  const val = SYNC[key][0](); store.set(key, val);
+  st[key] = Date.now(); store.set('st', st);
+  queue = queue.filter(x => !(x.kind === 'pref' && x.key === key));
+  queue.push({ kind: 'pref', id: uid(), key, value: val, t: st[key] });
+  store.set('q', queue); flush();
+}
+const hasContent = v => Array.isArray(v) ? v.length > 0 : (v && typeof v === 'object') ? Object.keys(v).length > 0 : !!v;
+function hydrate(){
+  if (!boot || !(boot.v >= 8)) return false;
+  const S = boot.settings || {}; let changed = false;
+  Object.keys(SYNC).forEach(k => {
+    const r = S[k], lt = st[k] || 0, cur = SYNC[k][0]();
+    if (r && r.t >= lt) {
+      if (JSON.stringify(cur) !== JSON.stringify(r.v)) { SYNC[k][1](r.v); store.set(k, SYNC[k][0]()); changed = true; }
+      st[k] = r.t;
+    } else if (!queue.some(x => x.kind === 'pref' && x.key === k) && (lt || hasContent(cur))) {
+      st[k] = lt || Date.now(); queue.push({ kind: 'pref', id: uid(), key: k, value: cur, t: st[k] });
+    }
+  });
+  // Supersets live on the Template rows (JSON column), so rebuild links from the sheet.
+  if (Array.isArray(boot.template)) {
+    const has = (d, e) => boot.template.some(t => t.day === d && t.ex === e);
+    if (!store.get('linksMig', false)) {
+      Object.keys(links).forEach(d => Object.keys(links[d] || {}).forEach(e => {
+        const row = boot.template.find(t => t.day === d && t.ex === e);
+        if (links[d][e] && row && !(row.data && row.data.ss) && !queue.some(x => x.kind === 'tdata' && x.day === d && x.ex === e)) queue.push({ kind: 'tdata', id: uid(), day: d, ex: e, data: { ss: true } });
+      }));
+      store.set('linksMig', true);
+    }
+    const L = {};
+    boot.template.forEach(t => { if (t.data && t.data.ss) (L[t.day] = L[t.day] || {})[t.ex] = true; });
+    queue.filter(x => x.kind === 'tdata').forEach(x => { if (x.data && x.data.ss) (L[x.day] = L[x.day] || {})[x.ex] = true; else if (L[x.day]) delete L[x.day][x.ex]; });
+    Object.keys(links).forEach(d => { if (!boot.template.some(t => t.day === d) && hasContent(links[d])) L[d] = links[d]; });
+    if (JSON.stringify(L) !== JSON.stringify(links)) { links = L; store.set('links', links); changed = true; }
+  }
+  store.set('st', st); store.set('q', queue);
+  return changed;
+}
 
 // ---- helpers
 const pad = n => String(n).padStart(2, '0');
@@ -279,7 +388,7 @@ function stepFor(ex){
   return 2.5;
 }
 function running(){ return !!(sess && !sess.ended && sess.date === todayKey()); }
-function restFor(ex){ const t = boot && boot.template.find(x => x.ex === ex); return (t && t.rest) || 90; }
+function restFor(ex){ const t = boot && boot.template.find(x => x.ex === ex), o = exMeta(ex).data; return (t && t.rest) || (o && o.rest) || prefs.rest || 90; }
 
 // ---- data
 function readQs(){
@@ -292,14 +401,14 @@ async function refreshBoot(){
     const r = await fetch(cfg.u + (cfg.u.includes('?') ? '&' : '?') + 'key=' + encodeURIComponent(cfg.k), { redirect: 'follow' });
     const j = await r.json();
     if (j.error) { lastErr = j.error; toast(j.error === 'unauthorized' ? 'Wrong secret. Open settings and re-enter it.' : 'Script says: ' + j.error, 4000); return; }
-    lastErr = ''; boot = normBoot(j); store.set('boot', boot); captureInputs(); render();
+    lastErr = ''; boot = normBoot(j); store.set('boot', boot); hydrate(); captureInputs(); render(); flush();
   } catch(e){ lastErr = 'network'; /* offline or cold start, keep cache */ }
 }
 function holding(){ return store.get('syncMode', 'live') === 'finish' && running(); }
 function sendable(force){
   const hold = !force && holding();
   const v5 = boot && boot.v >= 5, v4 = boot && boot.v >= 4, v2 = boot && boot.v >= 2;
-  return queue.filter(x => (hold && (x.kind === 'set' || x.kind === 'update' || x.kind === 'delete')) ? false : (x.kind === 'set' || (x.kind === 'finish' && v2) || ((x.kind === 'delete' || x.kind === 'update') && v4) || ((x.kind === 'body' || x.kind === 'bodydel') && v5) || (x.kind === 'tmpl' && boot && boot.v >= 6) || (x.kind === 'tdel' && boot && boot.v >= 7)));
+  return queue.filter(x => (hold && (x.kind === 'set' || x.kind === 'update' || x.kind === 'delete')) ? false : (x.kind === 'set' || (x.kind === 'finish' && v2) || ((x.kind === 'delete' || x.kind === 'update') && v4) || ((x.kind === 'body' || x.kind === 'bodydel') && v5) || (x.kind === 'tmpl' && boot && boot.v >= 6) || (x.kind === 'tdel' && boot && boot.v >= 7) || ((x.kind === 'pref' || x.kind === 'tdata' || x.kind === 'exercise') && boot && boot.v >= 8)));
 }
 let lastErr = '';
 async function flush(force){
@@ -310,9 +419,9 @@ async function flush(force){
   const strip = o => { const c = Object.assign({}, o); delete c.kind; return c; };
   const rows = send.filter(x => x.kind === 'set'), fins = send.filter(x => x.kind === 'finish');
   const dels = send.filter(x => x.kind === 'delete'), ups = send.filter(x => x.kind === 'update');
-  const bodies = send.filter(x => x.kind === 'body'), bdels = send.filter(x => x.kind === 'bodydel'), tadds = send.filter(x => x.kind === 'tmpl'), tdels = send.filter(x => x.kind === 'tdel');
+  const bodies = send.filter(x => x.kind === 'body'), bdels = send.filter(x => x.kind === 'bodydel'), tadds = send.filter(x => x.kind === 'tmpl'), tdels = send.filter(x => x.kind === 'tdel'), prefOps = send.filter(x => x.kind === 'pref'), tdatas = send.filter(x => x.kind === 'tdata'), exOps = send.filter(x => x.kind === 'exercise');
   try {
-    const r = await fetch(cfg.u, { method: 'POST', redirect: 'follow', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ key: cfg.k, rows: rows.map(strip), finishes: fins.map(strip), deletes: dels.map(x => x.id), updates: ups.map(strip), body: bodies.map(strip), bodyDeletes: bdels.map(x => x.id), templateAdds: tadds.map(strip), templateDeletes: tdels.map(strip) }) });
+    const r = await fetch(cfg.u, { method: 'POST', redirect: 'follow', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ key: cfg.k, rows: rows.map(strip), finishes: fins.map(strip), deletes: dels.map(x => x.id), updates: ups.map(strip), body: bodies.map(strip), bodyDeletes: bdels.map(x => x.id), templateAdds: tadds.map(strip), templateDeletes: tdels.map(strip), settings: prefOps.map(strip), templateData: tdatas.map(strip), exercises: exOps.map(strip) }) });
     const j = await r.json();
     if (j.ok) {
       lastErr = '';
@@ -344,6 +453,7 @@ async function forceSync(){
 }
 function updSync(){
   const el = $('sync'); if (!el) return;
+  el.classList.toggle('ok', !queue.length && navigator.onLine);
   el.innerHTML = queue.length ? (holding() ? `${queue.length} saved on phone · tap to sync` : `<b>${queue.length} unsynced · tap to sync</b>`) : (navigator.onLine ? 'synced ✓' : 'offline');
 }
 
@@ -362,7 +472,9 @@ function toggleLink(ei){
   const rows = plan(); if (ei >= rows.length - 1) return;
   const L = links[day] || (links[day] = {}); const ex = rows[ei].ex;
   if (L[ex]) delete L[ex]; else L[ex] = true;
-  store.set('links', links); render();
+  store.set('links', links);
+  queue = queue.filter(x => !(x.kind === 'tdata' && x.day === day && x.ex === ex));
+  queue.push({ kind: 'tdata', id: uid(), day, ex, data: L[ex] ? { ss: true } : null }); store.set('q', queue); flush(); render();
 }
 
 // ---- model
@@ -493,6 +605,7 @@ function showSummary(){
 
 // ---- set actions
 function logSet(ei, si){
+  if (prefs.sound) beep();
   const row = plan()[ei]; if (!row) return;
   const n = si + 1;
   if (loggedFor(row.ex).find(s => s.set === n)) return;
@@ -518,6 +631,7 @@ function undo(ei, si){
   const row = plan()[ei]; if (!row) return;
   const rec = loggedFor(row.ex).find(s => s.set === si + 1); if (!rec) return;
   if (!running()) { toast('Workout is finished. Edit it in the sheet.'); return; }
+  if (prefs.delconf && rec.synced && !confirm('Delete this set?')) return;
   const pending = queue.find(q => q.kind === 'set' && q.id === rec.id);
   queue = queue.filter(q => q.id !== rec.id);
   if (!pending) { queue.push({ kind: 'delete', id: rec.id }); if (!(boot && boot.v >= 4)) toast('Removed here. Redeploy the script (v4) to remove it from the sheet too.', 4000); }
@@ -551,7 +665,7 @@ function renameDay(d){
   const v = prompt('Name for ' + d + ' (leave empty to reset)', label(d));
   if (v === null) return;
   if (v.trim()) names[d] = v.trim(); else delete names[d];
-  store.set('names', names); render();
+  syncSave('names'); render();
 }
 function addExercise(){ openSheet('pick'); }
 function qop(o){ queue.push(Object.assign({ id: uid() }, o)); store.set('q', queue); flush(); }
@@ -567,17 +681,17 @@ function dupTemplate(d){
   const rows = plan(d); const pd = day;
   rows.forEach((r, k) => {
     boot.template.push({ day: n, order: k + 1, ex: r.ex, sets: r.sets, lo: r.lo, hi: r.hi, rest: r.rest });
-    queue.push({ kind: 'tmpl', id: uid(), day: n, ex: r.ex, sets: r.sets, lo: r.lo, hi: r.hi, rest: r.rest });
+    queue.push({ kind: 'tmpl', id: uid(), day: n, ex: r.ex, sets: r.sets, lo: r.lo, hi: r.hi, rest: r.rest, data: (links[d] || {})[r.ex] ? { ss: true } : null });
   });
-  if (!rows.length) { tlist.push(n); store.set('tlist', tlist); }
+  if (!rows.length) { tlist.push(n); syncSave('tlist'); }
   if (links[d]) { links[n] = Object.assign({}, links[d]); store.set('links', links); }
   store.set('boot', boot); store.set('q', queue); flush();
   toast(rows.length ? 'Duplicated as "' + n + '"' : 'Template is empty, nothing to copy');
 }
 function delTemplate(d){
   if (!confirm('Delete "' + label(d) + '"? Its exercises are removed from the sheet template. Logged history stays.')) return;
-  delete arch[d]; store.set('arch', arch); tlist = tlist.filter(x => x !== d); store.set('tlist', tlist);
-  if (!gone.includes(d)) { gone.push(d); store.set('gone', gone); }
+  delete arch[d]; syncSave('arch'); tlist = tlist.filter(x => x !== d); syncSave('tlist');
+  if (!gone.includes(d)) { gone.push(d); syncSave('gone'); }
   delete extra[d]; store.set('extra', extra);
   qop({ kind: 'tdel', day: d });
 }
@@ -585,7 +699,7 @@ function closePop(){ pop = null; const e = $('pop'); if (e) e.remove(); }
 function openPop(btn, d, cid){
   closePop(); pop = { d, cid };
   const ar = !!arch[d];
-  const items = cid ? [['cexp', 'Expand'], ['crm', 'Remove from dashboard']] : ar ? [['tunarch', 'Restore'], ['tdelete', 'Delete']] : [['tedit', 'Edit'], ['trename', 'Rename'], ['tarch', 'Archive'], ['tdup', 'Duplicate'], ['tdelete', 'Delete']];
+  const items = cid ? (/^(body|ex):/.test(cid) ? [['cexp', 'Expand']] : [['cexp', 'Expand'], ['crm', 'Remove from dashboard']]) : ar ? [['tunarch', 'Restore'], ['tdelete', 'Delete']] : [['tedit', 'Edit'], ['trename', 'Rename'], ['tarch', 'Archive'], ['tdup', 'Duplicate'], ['tdelete', 'Delete']];
   const el = document.createElement('div'); el.id = 'pop'; el.className = 'pop';
   el.innerHTML = items.map(([a, l]) => `<button class="pi ${a === 'tdelete' || a === 'crm' ? 'bad' : ''}" data-act="${a}" data-d="${esc(d || '')}" data-cid="${esc(cid || '')}">${l}</button>`).join('');
   document.body.appendChild(el);
@@ -596,8 +710,8 @@ function openPop(btn, d, cid){
 function newTemplate(){
   const n = (prompt('Template name') || '').trim(); if (!n) return;
   if (allTmpls().concat(Object.keys(arch)).includes(n)) { toast('That name exists already'); return; }
-  gone = gone.filter(x => x !== n); store.set('gone', gone);
-  tlist.push(n); store.set('tlist', tlist); day = n; editing = true; view = 'plan'; render(); window.scrollTo(0, 0);
+  gone = gone.filter(x => x !== n); syncSave('gone');
+  tlist.push(n); syncSave('tlist'); day = n; editing = true; view = 'plan'; render(); window.scrollTo(0, 0);
 }
 function lastDone(d){
   const k = x => String(x.day || '').trim();
@@ -614,8 +728,8 @@ function tmenuAct(a, d){
   if (a === 'tedit') { if (running()) { toast('Finish the running workout first'); return; } day = d; editing = true; view = 'plan'; }
   else if (a === 'trename') { renameDay(d); return; }
   else if (a === 'tdup') dupTemplate(d);
-  else if (a === 'tarch') { arch[d] = true; store.set('arch', arch); toast('Archived. Tap the folder to find it.'); }
-  else if (a === 'tunarch') { delete arch[d]; store.set('arch', arch); if (!allTmpls().some(x => arch[x])) showArch = false; }
+  else if (a === 'tarch') { arch[d] = true; syncSave('arch'); toast('Archived. Tap the folder to find it.'); }
+  else if (a === 'tunarch') { delete arch[d]; syncSave('arch'); if (!allTmpls().some(x => arch[x])) showArch = false; }
   else if (a === 'tdelete') delTemplate(d);
   render(); window.scrollTo(0, 0);
 }
@@ -643,8 +757,8 @@ function tick(){
     const srows = plan(sess.day), si0 = srows.findIndex(r => r.ex === last.ex);
     const linked = si0 >= 0 && si0 < srows.length - 1 && (links[sess.day] || {})[last.ex];
     const tg = linked ? Infinity : restFor(last.ex);
-    bar.classList.add('on'); bar.classList.toggle('go', el >= tg);
-    $('barEx').textContent = linked ? `Superset · next: ${srows[si0 + 1].ex}` : `Rest · ${last.ex} · target ${fmtDur(tg)}`;
+    bar.classList.add('on'); bar.classList.toggle('go', !prefs.simple && el >= tg);
+    $('barEx').textContent = prefs.simple ? 'Rest' : linked ? `Superset · next: ${srows[si0 + 1].ex}` : `Rest · ${last.ex} · target ${fmtDur(tg)}`;
     $('barT').textContent = fmtDur(el);
     if (el >= tg && !sess.alerted) { sess.alerted = true; store.set('sess', sess); if (navigator.vibrate) navigator.vibrate([200,100,200]); }
   } else bar.classList.remove('on');
@@ -659,7 +773,7 @@ function workoutBar(){
 function render(){
   if (!cfg) return renderSetup();
   if (running() && view === 'day' && sess.day !== day) day = sess.day;
-  if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else if (view === 'body') renderBody(); else if (view === 'bodym') renderBodyM(); else if (view === 'prof') renderProf(); else if (view === 'ex') renderEx(); else renderHome();
+  if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else if (view === 'body') renderBody(); else if (view === 'bodym') renderBodyM(); else if (view === 'prof') renderProf(); else if (view === 'ex') renderEx(); else if (view === 'hdet') renderHDet(); else if (view === 'exd') renderExD(); else if (view === 'exrh') renderExRH(); else if (view === 'settings') renderSettings(); else renderHome();
   if (view === 'home' || view === 'hist' || view === 'body' || view === 'prof' || view === 'ex') store.set('view', view);
   renderNav(); updSync(); tick();
 }
@@ -709,7 +823,7 @@ function renderNav(){
   n.innerHTML = [['prof', 'Profile'], ['hist', 'History'], ['home', 'Workout'], ['ex', 'Exercises'], ['body', 'Measure']].map(([k, l]) => `<button class="${act === k ? 'on' : ''}" data-act="tab" data-t="${k}">${ICON[k]}<span>${l}</span></button>`).join('');
 }
 // ---- body measurements
-const BF = [['w','Weight','kg'],['bf','Body fat','%'],['neck','Neck','cm'],['sh','Shoulders','cm'],['chest','Chest','cm'],['waist','Waist','cm'],['hips','Hips','cm'],['arm','Arm','cm'],['thigh','Thigh','cm'],['calf','Calf','cm']];
+const BF = [['w','Weight','kg'],['bf','Body fat percentage','%'],['cal','Caloric intake','kcal'],['neck','Neck','cm'],['sh','Shoulders','cm'],['chest','Chest','cm'],['lbi','Left bicep','cm'],['rbi','Right bicep','cm'],['lfa','Left forearm','cm'],['rfa','Right forearm','cm'],['abs','Upper abs','cm'],['waist','Waist','cm'],['hips','Hips','cm'],['lth','Left thigh','cm'],['rth','Right thigh','cm'],['lca','Left calf','cm'],['rca','Right calf','cm'],['arm','Arm','cm',1],['thigh','Thigh','cm',1],['calf','Calf','cm',1]];
 function bodyList(){
   const map = {};
   ((boot && boot.body) || []).forEach(e => map[e.id] = e);
@@ -735,16 +849,13 @@ function delBody(id){
 let bodyMetric = 'w';
 const adhoc = {};
 function renderBody(){
-  $('hd').innerHTML = `<div class="row"><div class="ttl">Body</div><button class="sync" id="sync" data-act="sync"></button></div>`;
+  $('hd').innerHTML = `<div class="row"><button class="sync" id="sync" data-act="sync"></button></div><div class="ttl big">Measure</div>`;
   const list = bodyList();
   const warn = boot && boot.v < 5 ? '<p class="muted">Entries are saved on this phone and will sync after you redeploy Code.gs.</p>' : '';
-  $('app').innerHTML = warn + '<div class="mlist">' + BF.map(([k, l, u]) => {
-    const es = list.filter(e => has(e[k])), cur = es[0], prev = es[1];
-    let d = '';
-    if (cur && prev) { const df = +(cur[k] - prev[k]).toFixed(1); if (df) d = `<i class="${df > 0 ? 'up' : 'dn'}">${df > 0 ? '+' : '−'}${Math.abs(df)}</i>`; }
-    return `<button class="mrow" data-act="bodym" data-m="${k}"><div><div class="mn">${l}</div><div class="muted">${cur ? esc(shortD(pdate(cur.ts))) : 'no entries yet'}</div></div><div class="mv">${cur ? fmtW(+cur[k]) + ' ' + u : '–'}${d}</div><span class="chev">›</span></button>`;
-  }).join('') + '</div>';
+  const row = ([k, l, u, leg]) => { const cur = list.find(e => has(e[k])); if (leg && !cur) return ''; return `<button class="frow" data-act="bodym" data-m="${k}"><div>${l}</div>${cur ? `<div class="fs">${fmtW(+cur[k])} ${u}</div>` : ''}</button>`; };
+  $('app').innerHTML = warn + BF.slice(0, 3).map(row).join('') + '<div class="sect2">Body part</div>' + BF.slice(3).map(row).join('');
 }
+
 function renderBodyM(){
   const f = BF.find(x => x[0] === bodyMetric) || BF[0], k = f[0];
   $('hd').innerHTML = `<div class="row"><button class="back" data-act="bback">‹</button><div class="ttl">${f[1]}</div><button class="sync" id="sync" data-act="sync"></button></div>`;
@@ -761,7 +872,7 @@ function renderBodyM(){
 // ---- dashboard charts
 const SC = '#8b5cf6';
 let charts = store.get('charts', null) || [{ id: 'c1', type: 'wpw' }, { id: 'c2', type: 'body', metric: 'w' }];
-const saveCharts = () => store.set('charts', charts);
+const saveCharts = () => syncSave('charts');
 let xopen = null, sheet = null;
 const getChart = id => charts.find(x => x.id === id) || adhoc[id];
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -795,7 +906,10 @@ function weeklyBars(kind, weeks){
 function linePoints(c, days){
   let pts = [];
   if (c.type === 'body') pts = bodyList().filter(e => has(e[c.metric])).map(e => ({ t: pdate(e.ts), ts: e.ts.slice(0, 10), v: +e[c.metric] }));
-  else if (c.type === 'ex') { const k = c.metric === 'w' ? 2 : c.metric === 'vol' ? 3 : 1; pts = (((boot && boot.exseries) || {})[c.ex] || []).filter(r => +r[k] > 0).map(r => ({ t: pdate(r[0]), ts: r[0], v: +r[k] })); }
+  else if (c.type === 'ex') {
+    if (boot && boot.xsets && boot.xsets[c.ex]) pts = exSessions(c.ex).map(x => { let e = 0, w = 0, v = 0, rp = 0; x.sets.forEach(t => { const a = num(t[1]), r = num(t[2]); if (r <= 0) return; e = Math.max(e, e1rm(a, r)); w = Math.max(w, a); v += a * r; rp = Math.max(rp, r); }); const val = c.metric === 'w' ? w : c.metric === 'vol' ? v : c.metric === 'reps' ? rp : e; return { t: pdate(x.ts), ts: x.ts.slice(0, 10), v: Math.round(val * 10) / 10 }; }).filter(p => p.v > 0);
+    else { const k = c.metric === 'w' ? 2 : c.metric === 'vol' ? 3 : 1; pts = (((boot && boot.exseries) || {})[c.ex] || []).filter(r => +r[k] > 0).map(r => ({ t: pdate(r[0]), ts: r[0], v: +r[k] })); }
+  }
   pts.sort((a, b) => a.t - b.t);
   if (days > 0) { const cut = new Date(); cut.setDate(cut.getDate() - days); pts = pts.filter(p => p.t >= cut); }
   return pts;
@@ -806,26 +920,35 @@ function chartMeta(c){
   if (c.type === 'wpw') return { kind: 'bar', title: 'Workouts per week', unit: '', def: 12 };
   if (c.type === 'vol') return { kind: 'bar', title: 'Volume per week', unit: 'kg', def: 12 };
   if (c.type === 'body') { const f = BF.find(x => x[0] === c.metric) || BF[0]; return { kind: 'line', title: f[1] + ' trend', unit: f[2], def: String(c.id).startsWith('body:') ? 0 : 90, empty: 'Add entries in the Body tab' }; }
-  return { kind: 'line', title: c.ex, sub: { e1: 'Est. 1RM', w: 'Heaviest set', vol: 'Session volume' }[c.metric || 'e1'], unit: 'kg', def: 0, empty: 'No logged sets for this exercise yet' };
+  return { kind: 'line', title: c.title || c.ex, sub: c.title ? '' : { e1: 'Est. 1RM', w: 'Heaviest set', vol: 'Session volume', reps: 'Best reps' }[c.metric || 'e1'], unit: c.metric === 'reps' ? 'reps' : 'kg', def: 0, empty: 'No logged sets for this exercise yet' };
 }
+const UNITS = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
 function svgBars(bars, W, H){
-  const L = 8, R = 38, T = 18, B = 22, iw = W - L - R, ih = H - T - B;
-  const max = Math.max(...bars.map(b => b.v), 0), sc = niceScale(max, 3), y = v => T + ih - (v / sc.max) * ih;
-  let g = '', m = '', lab = '';
-  for (let v = 0; v <= sc.max + 1e-9; v += sc.step) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${W - R + 6}" y="${y(v) + 3.5}" class="ax" text-anchor="start">${tickFmt(v)}</text>`;
-  const band = iw / bars.length, bw = Math.min(24, Math.max(3, band - 4)), every = Math.ceil(bars.length / 6);
+  const L = 6, R = 6, T = 22, B = 22, GAP = 2, iw = W - L - R, ih = H - T - B, band = iw / bars.length;
+  const sMax = Math.max(3, Math.min(26, Math.floor(band - 7))), max = Math.max(...bars.map(b => b.v), 0);
+  let unit = UNITS[UNITS.length - 1], size = 3;
+  for (const u of UNITS) {
+    const n = Math.max(1, Math.ceil(max / u - 1e-9)), sz = Math.floor((ih + GAP) / n) - GAP, use = Math.min(sz, sMax);
+    if (use >= Math.min(9, sMax)) { unit = u; size = use; break; }
+  }
+  const base = T + ih, tr = (x, y, w, h) => { const r = Math.min(3, h, w / 2); return `M${x},${y + h} V${y + r} Q${x},${y} ${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h} Z`; };
+  let m = `<line x1="${L}" x2="${W - R}" y1="${base + .5}" y2="${base + .5}" class="gl"/>`, lab = '';
+  const every = Math.ceil(bars.length / 6), showAll = bars.length <= 8;
   bars.forEach((b, i) => {
-    const cx = L + band * i + band / 2, h = (b.v / sc.max) * ih, x = cx - bw / 2, yy = y(b.v), r = Math.min(5, h, bw / 2);
-    if (b.v > 0) m += `<path class="mk" data-i="${i}" fill="${SC}" d="M${x},${T + ih} V${yy + r} Q${x},${yy} ${x + r},${yy} H${x + bw - r} Q${x + bw},${yy} ${x + bw},${yy + r} V${T + ih} Z"/>`;
-    m += `<rect class="hit" data-i="${i}" x="${L + band * i}" y="${T}" width="${band}" height="${ih}" fill="transparent"/>`;
+    const cx = L + band * i + band / 2, x = cx - size / 2, q = b.v / unit, full = Math.floor(q + 1e-9), frac = q - full;
+    for (let k = 0; k < full; k++) {
+      const y = base - (k + 1) * size - k * GAP, top = k === full - 1 && frac < .02;
+      m += top ? `<path class="mk blk" data-i="${i}" fill="${SC}" d="${tr(x, y, size, size)}"/>` : `<rect class="mk blk" data-i="${i}" fill="${SC}" x="${x}" y="${y}" width="${size}" height="${size}"/>`;
+    }
+    if (frac >= .02) { const h = Math.max(2, frac * size), y = base - full * (size + GAP) - h; m += `<path class="mk blk part" data-i="${i}" fill="${SC}" fill-opacity=".75" d="${tr(x, y, size, h)}"/>`; }
+    m += `<rect class="hit" data-i="${i}" x="${L + band * i}" y="${T - 8}" width="${band}" height="${ih + 8}" fill="transparent"/>`;
     if ((bars.length - 1 - i) % every === 0) lab += `<text x="${cx}" y="${H - 6}" class="ax" text-anchor="middle">${b.label}</text>`;
+    if (b.v > 0 && (showAll || i === bars.length - 1)) lab += `<text x="${cx}" y="${base - Math.ceil(q) * (size + GAP) - 3}" class="vl" text-anchor="middle">${tickFmt(b.v)}</text>`;
   });
-  const lb = bars[bars.length - 1];
-  if (lb.v > 0) lab += `<text x="${L + band * (bars.length - 1) + band / 2}" y="${y(lb.v) - 5}" class="vl" text-anchor="middle">${tickFmt(lb.v)}</text>`;
-  return `<svg class="ch" viewBox="0 0 ${W} ${H}" data-kind="bar" data-w="${W}" data-caps="${esc(JSON.stringify(bars.map(b => b.cap)))}" role="img" aria-label="Bar chart">${g}${m}${lab}</svg>`;
+  return { unit, svg: `<svg class="ch" viewBox="0 0 ${W} ${H}" data-kind="bar" data-w="${W}" data-unit="${unit}" data-caps="${esc(JSON.stringify(bars.map(b => b.cap)))}" role="img" aria-label="Bar chart">${m}${lab}</svg>` };
 }
-function svgLine(pts, W, H){
-  const L = 8, R = 44, T = 18, B = 22, iw = W - L - R, ih = H - T - B;
+function svgLine(pts, W, H, unit){
+  const L = 8, R = unit ? 58 : 44, T = 18, B = 22, iw = W - L - R, ih = H - T - B;
   let lo = Math.min(...pts.map(p => p.v)), hi = Math.max(...pts.map(p => p.v));
   if (hi === lo) { hi += 1; lo -= 1; }
   const sc = niceScale(hi - lo, 3); lo = Math.floor(lo / sc.step + 1e-9) * sc.step; hi = Math.ceil(hi / sc.step - 1e-9) * sc.step;
@@ -834,16 +957,23 @@ function svgLine(pts, W, H){
   const t0 = pts[0].t.getTime(), t1 = pts[pts.length - 1].t.getTime();
   const x = t => (pts.length === 1 || t1 === t0) ? L + iw / 2 : L + ((t - t0) / (t1 - t0)) * iw;
   let g = '';
-  for (let k = 0; ; k++) { const v = lo + k * sc.step; if (v > hi + 1e-9) break; g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${W - R + 6}" y="${y(v) + 3.5}" class="ax" text-anchor="start">${tickFmt(v)}</text>`; }
+  for (let k = 0; ; k++) { const v = lo + k * sc.step; if (v > hi + 1e-9) break; g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${W - R + 6}" y="${y(v) + 3.5}" class="ax" text-anchor="start">${tickFmt(v)}${unit ? ' ' + unit : ''}</text>`; }
   const xy = pts.map(p => [x(p.t.getTime()), y(p.v), p.cap]);
   const d = xy.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
   const area = d + ` L${xy[xy.length - 1][0].toFixed(1)},${T + ih} L${xy[0][0].toFixed(1)},${T + ih} Z`;
   const e = xy[xy.length - 1];
-  let lab = `<text x="${L}" y="${H - 6}" class="ax" text-anchor="start">${shortD(pts[0].t)}</text>`;
-  if (pts.length > 1) lab += `<text x="${W - R}" y="${H - 6}" class="ax" text-anchor="end">${shortD(pts[pts.length - 1].t)}</text>`;
-  if (t1 - t0 > 14 * 864e5) lab += `<text x="${L + iw / 2}" y="${H - 6}" class="ax" text-anchor="middle">${shortD(new Date((t0 + t1) / 2))}</text>`;
+  let lab = '';
+  if (t1 - t0 > 45 * 864e5) {
+    const f = new Date(pts[0].t.getFullYear(), pts[0].t.getMonth() + 1, 1);
+    for (let d = f; d.getTime() <= t1; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) { const xx = x(d.getTime()); if (xx > L + 12 && xx < W - R - 12) lab += `<text x="${xx}" y="${H - 6}" class="ax" text-anchor="middle">${MON[d.getMonth()].toUpperCase()}</text>`; }
+  } else {
+    lab = `<text x="${L}" y="${H - 6}" class="ax" text-anchor="start">${shortD(pts[0].t)}</text>`;
+    if (pts.length > 1) lab += `<text x="${W - R}" y="${H - 6}" class="ax" text-anchor="end">${shortD(pts[pts.length - 1].t)}</text>`;
+    if (t1 - t0 > 14 * 864e5) lab += `<text x="${L + iw / 2}" y="${H - 6}" class="ax" text-anchor="middle">${shortD(new Date((t0 + t1) / 2))}</text>`;
+  }
+  const dots = pts.length <= 80 ? xy.map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5" fill="#323a42" stroke="${SC}" stroke-width="1.8" pointer-events="none"/>`).join('') : '';
   lab += `<text x="${e[0]}" y="${e[1] - 9}" class="vl" text-anchor="${e[0] > W - R - 20 ? 'end' : 'middle'}">${tickFmt(pts[pts.length - 1].v)}</text>`;
-  return `<svg class="ch" viewBox="0 0 ${W} ${H}" data-kind="line" data-w="${W}" data-pts="${esc(JSON.stringify(xy))}" role="img" aria-label="Line chart">${g}<path d="${area}" fill="${SC}" fill-opacity=".12"/><path d="${d}" fill="none" stroke="${SC}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><line class="xh" x1="0" x2="0" y1="${T}" y2="${T + ih}" style="display:none"/><circle class="hl" r="5" style="display:none"/><circle cx="${e[0]}" cy="${e[1]}" r="4.5" fill="${SC}" stroke="#323a42" stroke-width="2"/><rect class="hit" x="${L}" y="${T}" width="${iw}" height="${ih}" fill="transparent"/>${lab}</svg>`;
+  return `<svg class="ch" viewBox="0 0 ${W} ${H}" data-kind="line" data-w="${W}" data-pts="${esc(JSON.stringify(xy))}" role="img" aria-label="Line chart">${g}<path d="${area}" fill="${SC}" fill-opacity=".12"/><path d="${d}" fill="none" stroke="${SC}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>${dots}<line class="xh" x1="0" x2="0" y1="${T}" y2="${T + ih}" style="display:none"/><circle class="hl" r="5" style="display:none"/><circle cx="${e[0]}" cy="${e[1]}" r="4.5" fill="${SC}" stroke="#323a42" stroke-width="2"/><rect class="hit" x="${L}" y="${T}" width="${iw}" height="${ih}" fill="transparent"/>${lab}</svg>`;
 }
 function chartParts(c, big){
   const meta = chartMeta(c), range = c.range != null ? c.range : meta.def, W = big ? 340 : 320, H = big ? 250 : 150;
@@ -852,18 +982,19 @@ function chartParts(c, big){
     const noun = c.type === 'vol' ? 'kg' : 'workouts';
     bars.forEach(b => { b.cap = `${b.tip} · ${fmtNum(b.v)} ${c.type === 'wpw' && b.v === 1 ? 'workout' : noun}`; });
     const last = bars[bars.length - 1];
-    return { meta, range, empty: !any, svg: any ? svgBars(bars, W, H) : '', cap: last ? 'This week · ' + last.cap.split(' · ')[1] : '',
-      sub: (c.type === 'vol' ? 'kg · ' : '') + (range ? 'last ' + range + ' weeks' : 'all time'), rows: bars.slice().reverse().map(b => [b.tip.replace('Week of ', ''), fmtNum(b.v)]) };
+    const bv = any ? svgBars(bars, W, H) : null;
+    return { meta, range, empty: !any, svg: bv ? bv.svg : '', cap: last ? 'This week · ' + last.cap.split(' · ')[1] : '',
+      sub: (c.type === 'vol' ? 'kg · ' : '') + (range ? 'last ' + range + ' weeks' : 'all time') + (bv ? ' · 1 block = ' + fmtNum(bv.unit) + (c.type === 'vol' ? ' kg' : bv.unit === 1 ? ' workout' : ' workouts') : ''), rows: bars.slice().reverse().map(b => [b.tip.replace('Week of ', ''), fmtNum(b.v)]) };
   }
   const pts = linePoints(c, range);
   pts.forEach(p => { p.cap = `${shortD(p.t)} · ${fmtNum(p.v)} ${meta.unit}`; });
   const last = pts[pts.length - 1];
-  return { meta, range, empty: !pts.length, svg: pts.length ? svgLine(pts, W, H) : '', cap: last ? 'Latest · ' + last.cap : '',
+  return { meta, range, empty: !pts.length, svg: pts.length ? svgLine(pts, W, H, c.type === 'ex' ? meta.unit : '') : '', cap: last ? 'Latest · ' + last.cap : '',
     sub: (meta.sub ? meta.sub + ' · ' : '') + meta.unit + ' · ' + (range ? 'last ' + rlabel(range) : 'all time'), rows: pts.slice().reverse().map(p => [p.ts, fmtNum(p.v) + ' ' + meta.unit]) };
 }
 function chartCard(c){
   const p = chartParts(c, false);
-  return `<div class="cc" data-cid="${esc(c.id)}"><div class="cch"><div data-act="expand" data-cid="${esc(c.id)}" style="min-width:0"><div class="cct">${esc(p.meta.title)}</div><div class="ccs">${esc(p.sub)}</div></div><span class="cca"><button class="ib sm" data-act="expand" data-cid="${esc(c.id)}" aria-label="Expand chart"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button><button class="ed" data-act="tmenu" data-cid="${esc(c.id)}" aria-label="Chart options">⋯</button></span></div>${p.empty ? `<div class="muted" style="padding:28px 0;text-align:center">${esc(p.meta.empty || 'No data yet')}</div>` : p.svg}<div class="cap">${esc(p.cap)}</div></div>`;
+  return `<div class="cc ${c.title ? 'mk2' : ''}" data-cid="${esc(c.id)}"><div class="cch"><div data-act="expand" data-cid="${esc(c.id)}" style="min-width:0"><div class="cct">${esc(p.meta.title)}</div>${c.title ? '' : `<div class="ccs">${esc(p.sub)}</div>`}</div><span class="cca"><button class="ib sm" data-act="expand" data-cid="${esc(c.id)}" aria-label="Expand chart"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button><button class="ed" data-act="tmenu" data-cid="${esc(c.id)}" aria-label="Chart options">⋯</button></span></div>${p.empty ? `<div class="muted" style="padding:28px 0;text-align:center">${esc(p.meta.empty || 'No data yet')}</div>` : p.svg}<div class="cap">${esc(p.cap)}</div></div>`;
 }
 function renderX(){
   const o = $('xov'), c = xopen && getChart(xopen);
@@ -894,28 +1025,170 @@ document.addEventListener('pointermove', chartHover);
 document.addEventListener('click', chartHover);
 function renderProf(){
   $('hd').innerHTML = `<div class="row"><span class="hact" style="margin-left:0"><button class="sync" id="sync" data-act="sync"></button></span><button class="ib" style="margin-left:auto" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3.3h-4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1l.4 2.6h4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.500 1 2-3.500zM13 15.500a3.500 3.500 0 1 1 0-7 3.500 3.500 0 0 1 0 7z"/></svg></button></div><div class="ttl big">Profile</div>`;
-  const nm = store.get('pname', 'Divyam Jain'), n = allWorkouts().length;
+  const nm = profile.name, n = allWorkouts().length;
   const note = boot && boot.v < 6 ? '<p class="muted">Update Code.gs to see your full workout history in these charts.</p>' : '';
-  $('app').innerHTML = note + `<div class="prow2"><div class="avatar">${esc(nm.trim()[0] || '?')}</div><div><div class="pn">${esc(nm)}</div><div class="muted">${n} workouts</div></div><span class="chev">›</span></div>
+  $('app').innerHTML = note + `<div class="prow2"><div class="avatar">${esc(nm.trim()[0] || '?')}</div><div><div class="pn">${esc(nm)}</div><div class="muted">${n} workouts</div></div><span class="chev" data-act="pedit">›</span></div>
     <div class="dashh"><div class="sect" style="margin:0">Dashboard</div><button class="ib" data-act="addchart" aria-label="Add chart">${IC.plus}</button></div>` + charts.map(chartCard).join('');
 }
-function renderEx(){
-  $('hd').innerHTML = `<div class="row"><div class="ttl big">Exercises</div><button class="sync" id="sync" data-act="sync"></button></div>`;
-  if (!boot) { $('app').innerHTML = '<p class="muted">Loading… (needs signal once)</p>'; return; }
-  const names = exNames();
-  $('app').innerHTML = `<input class="sq" id="exq" placeholder="Search exercises" autocomplete="off" style="width:100%;height:44px;border-radius:14px;margin-bottom:10px;background:var(--card);border:1px solid var(--line);color:var(--tx);padding:0 14px;font-size:16px"><div id="exlist">${exListHtml('')}</div>`;
-}
 function exListHtml(q){
-  const ql = q.trim().toLowerCase(), ser = (boot && boot.exseries) || {};
-  return exNames().filter(n => !ql || n.toLowerCase().includes(ql)).map(n => {
-    const r = ser[n] || [], best = r.reduce((m, x) => Math.max(m, +x[1] || 0), 0), L = lastSets(n);
-    const sub = best ? 'Best est. 1RM ' + fmtW(best) + ' kg' : (L.length ? 'Last: ' + fmtW(num(L[0][1])) + ' × ' + L[0][2] : 'No history');
-    return `<button class="exrow" data-act="exopen" data-n="${esc(n)}"><span>${esc(n)}</span><small>${sub}</small></button>`;
-  }).join('') || '<p class="muted">No exercises found.</p>';
+  const ql = (q || '').trim().toLowerCase(), cnt = {}, rec = {};
+  const xs = (boot && boot.xsets) || {};
+  Object.keys(xs).forEach(k => { const ds = new Set(); xs[k].forEach(r => ds.add(String(r[0]).slice(0, 10))); cnt[k] = ds.size; rec[k] = [...ds].sort().pop() || ''; });
+  let list = exAll().filter(n => (!ql || n.toLowerCase().includes(ql)) && (!exFilter.bp || exMeta(n).bp === exFilter.bp) && (!exFilter.cat || exMeta(n).cat === exFilter.cat));
+  if (exSort === 'used') list.sort((a, b) => (cnt[b] || 0) - (cnt[a] || 0) || a.localeCompare(b));
+  else if (exSort === 'recent') list.sort((a, b) => (rec[b] || '').localeCompare(rec[a] || '') || a.localeCompare(b));
+  let h = '', L = '';
+  list.forEach(n => {
+    if (exSort === 'az' && n[0].toUpperCase() !== L) { L = n[0].toUpperCase(); h += `<div class="letter">${esc(L)}</div>`; }
+    h += `<button class="erow" data-act="exopen" data-n="${esc(n)}">${letterAv(n)}<div style="min-width:0"><div class="en">${esc(n)}</div><div class="eb">${esc(exMeta(n).bp)}</div></div></button>`;
+  });
+  return h || '<p class="muted">No exercises found.</p>';
 }
+function renderEx(){
+  $('hd').innerHTML = `<div class="row"><button class="sync" id="sync" data-act="sync"></button><span class="hact" style="margin-left:auto"><button class="ib" data-act="exsearch" aria-label="Search">${IC2.search}</button><button class="ib ${exFilter.bp || exFilter.cat ? 'on' : ''}" data-act="exfilter" aria-label="Filter">${IC2.filter}</button><button class="ib" data-act="exsort" aria-label="Sort">${IC2.sort}</button><button class="ib" data-act="exmore" aria-label="More">${IC2.dots}</button></span></div><div class="ttl big">Exercises</div>`;
+  if (!boot) { $('app').innerHTML = '<p class="muted">Loading… (needs signal once)</p>'; return; }
+  $('app').innerHTML = (exqOn ? `<input class="sq" id="exq" value="${esc(exQ)}" placeholder="Search exercises" autocomplete="off" style="width:100%;height:44px;border-radius:8px;margin-bottom:6px;background:var(--card);border:1px solid var(--line);color:var(--tx);padding:0 14px;font-size:16px">` : '') + `<div id="exlist">${exListHtml(exQ)}</div>`;
+  if (exqOn) { const i = $('exq'); if (i && !i.dataset.f) { i.dataset.f = 1; i.focus(); } }
+}
+function exSeriesChart(n, m, title){
+  const id = 'ex:' + n + ':' + m;
+  return adhoc[id] || (adhoc[id] = { id, type: 'ex', ex: n, metric: m, range: 0, title });
+}
+function renderExD(){
+  const n = exsel, meta = exMeta(n);
+  $('hd').innerHTML = `<div class="tb"><button class="ib" data-act="exback" aria-label="Back">${IC2.back}</button><div class="ttl" style="font-size:20px;font-weight:400">${esc(n)}</div><button class="sync" id="sync" data-act="sync"></button><button class="ib" data-act="exmenu" aria-label="More">${IC2.dots}</button></div><div class="tabs">${[['about', 'About'], ['history', 'History'], ['charts', 'Charts'], ['records', 'Records']].map(([k, l]) => `<button class="${extab === k ? 'on' : ''}" data-act="extab" data-t="${k}">${l}</button>`).join('')}</div>`;
+  if (!boot) { $('app').innerHTML = '<p class="muted">Loading…</p>'; return; }
+  let h = '';
+  if (extab === 'about') {
+    let ins = meta.data && meta.data.instructions; if (typeof ins === 'string') ins = ins.split(/\s*\|\s*|\n/).filter(Boolean);
+    h = `<div class="ttl" style="font-size:26px;font-weight:600;margin:6px 4px 6px">Instructions</div>` + (ins && ins.length ? `<div class="inst"><ol>${(instOpen ? ins : ins.slice(0, 2)).map(x => `<li>${esc(x)}</li>`).join('')}</ol></div>${ins.length > 2 ? `<button class="more" data-act="inst">${instOpen ? '⌃ LESS' : '⌄ MORE'}</button>` : ''}` : '<div class="inst muted" style="font-size:16px">No instructions yet. Add them from ⋮ → Edit details.</div>')
+      + `<div class="kv" style="margin-top:18px"><b>Body part</b><span>${esc(meta.bp)}</span></div><div class="kv"><b>Category</b><span>${esc(meta.cat)}</span></div>`
+      + (meta.notes ? `<div class="kv"><b>Notes</b><span>${esc(meta.notes)}</span></div>` : '')
+      + `<div class="kv"><b>Preferences</b></div><button class="srow" data-act="exrest"><span>Rest Timer Settings</span><span class="sv">${restFor(n)} s</span></button><div class="srow"><span>Weight unit</span><span class="sv">Default (kg)</span></div>`;
+  } else if (extab === 'history') {
+    const S = exSessions(n);
+    h = S.slice(0, 60).map(x => {
+      const fl = prFor(n, x.ts, x.sets);
+      return `<div class="hc"><div class="ht">${esc(label(x.day))}</div><div class="hdt" style="margin-bottom:12px">${esc(fmtFull(x.ts))}</div><div class="dxh" style="margin:0 0 4px"><span style="font-size:18px">Sets Performed</span><span style="font-size:18px">1RM</span></div>` + x.sets.map((t, j) => {
+        const wt = num(t[1]), r = num(t[2]), ch = fl[j];
+        return `<div class="dsr" style="font-size:19px"><span class="no">${j + 1}</span><span>${wt > 0 ? fmtW(wt) + ' kg × ' + r : r + ' reps'}</span>${ch.length === 1 ? trophyChip(ch[0]) : ''}<span class="e">${Math.round(e1rm(wt, r)) || ''}</span></div>` + (ch.length > 1 ? `<div class="pcs">${ch.map(trophyChip).join('')}</div>` : '');
+      }).join('') + '</div>';
+    }).join('') || '<p class="muted">No logged sets for this exercise yet.</p>';
+  } else if (extab === 'charts') {
+    h = [['e1', 'Best set (est. 1RM)'], ['w', 'Best set (max weight)'], ['vol', 'Total volume (kg)'], ['reps', 'Best set (reps)']].map(([m, t]) => chartCard(exSeriesChart(n, m, t))).join('');
+  } else {
+    const S = exStats(n), B = S.best;
+    h = `<div class="pn2">Personal records</div><div class="rr"><span>Estimated 1RM</span><span>${B.E ? Math.round(B.E) + ' kg' : '–'}</span></div><div class="rr"><span>Max weight</span><span>${B.W ? fmtW(B.W) + ' kg' : '–'}</span></div><div class="rr"><span>Max volume</span><span>${B.V ? Math.round(B.V) + ' kg' : '–'}</span></div>
+      <button class="bluebtn" data-act="exrecs" style="margin:6px 0 4px">View records history</button>
+      <div class="rt rth" style="grid-template-columns:48px 1fr 90px;padding:0"><span>Reps</span><span class="mid">Best performance</span><span class="est">Estimated</span></div>`;
+    for (let k = 1; k <= 10; k++) {
+      let best = null; S.all.forEach(a => { if (a.r >= k && (!best || a.w > best.w || (a.w === best.w && a.r > best.r))) best = a; });
+      h += `<div class="rt"><span>${k}</span><span class="mid">${best ? (best.w > 0 ? fmtW(best.w) + ' kg (×' + best.r + ')' : best.r + ' reps') + `<small>${esc(fmtDate(best.ts))}</small>` : '–'}</span><span class="est">${B.E ? Math.round(B.E * (31 / 30) / (1 + k / 30)) + ' kg' : '–'}</span></div>`;
+    }
+  }
+  $('app').innerHTML = h;
+}
+function renderExRH(){
+  const n = exsel, S = exStats(n);
+  $('hd').innerHTML = `<div class="tb"><button class="ib" data-act="exrhback" aria-label="Back">${IC2.back}</button><div class="ttl" style="font-size:20px;font-weight:400">${esc(n)}</div></div>`;
+  const sec = (t, arr, f) => `<div class="pn2">${t}</div>` + (arr.length ? arr.slice().reverse().map(([v, d]) => `<div class="rr"><span>${f(v)}</span><span>${esc(fmtDate(d))}</span></div>`).join('') : '<div class="muted" style="padding:8px 4px">No records yet.</div>');
+  $('app').innerHTML = sec('Max weight', S.maxW, v => fmtW(v) + ' kg') + sec('Estimated 1RM', S.e1, v => Math.round(v) + ' kg') + sec('Max volume', S.vol, v => Math.round(v) + ' kg');
+}
+
+// ---- night batch helpers: exercise metadata, sessions, records
+const BPK = [['Core', /ab wheel|crunch|plank|leg raise|twist|sit.?up|woodchop|hanging/i], ['Cardio', /aerobic|rowing machine|bike|cycl|treadmill|battle rope|jump rope|stair|elliptical|walk|run\b/i], ['Shoulders', /shoulder|arnold|lateral raise|front raise|face pull|overhead press|military|rear delt|reverse fly|shrug|upright row/i], ['Legs', /squat|leg |lunge|calf|hamstring|glute|hip thrust|romanian|step.?up|adductor|abductor/i], ['Chest', /bench|chest|pec|fly|flye|push.?up|around the world|incline press|decline press/i], ['Back', /row|pull.?up|chin.?up|lat |pulldown|deadlift|back extension|pullover|hyperextension/i], ['Arms', /curl|tricep|bicep|pushdown|kickback|skull|hammer|preacher|spider|dip/i], ['Full Body', /ball slam|clean|snatch|burpee|thruster|carry/i]];
+const BPARTS = ['Core', 'Cardio', 'Shoulders', 'Legs', 'Chest', 'Back', 'Arms', 'Full Body', 'Other'];
+const CATS = ['Barbell', 'Dumbbell', 'Machine/Other', 'Bodyweight'];
+function guessBP(n){ for (const [b, re] of BPK) if (re.test(n)) return b; return 'Other'; }
+function guessCat(n){
+  if (/barbell/i.test(n)) return 'Barbell'; if (/dumbbell/i.test(n)) return 'Dumbbell';
+  if (/cable|machine|smith|band/i.test(n)) return 'Machine/Other';
+  if (/ab wheel|push.?up|pull.?up|chin|plank|dip\b|leg raise|crunch|sit.?up|burpee|aerobic|battle|jump/i.test(n)) return 'Bodyweight';
+  return 'Machine/Other';
+}
+function exMeta(n){
+  const o = { name: n, bp: guessBP(n), cat: guessCat(n), notes: '', data: null };
+  const sh = ((boot && boot.exercises) || []).find(x => x.name === n), lo = exovr[n];
+  [sh, lo && (!sh || (lo.t || 0) >= (sh.t || 0)) ? lo : null].forEach(x => { if (x) { if (x.bp) o.bp = x.bp; if (x.cat) o.cat = x.cat; if (x.notes) o.notes = x.notes; if (x.data) o.data = x.data; } });
+  return o;
+}
+function saveExMeta(n, patch){
+  const cur = exMeta(n), rec = { name: n, bp: cur.bp, cat: cur.cat, notes: cur.notes, data: cur.data };
+  Object.assign(rec, patch); rec.t = Date.now(); exovr[n] = rec; store.set('exovr', exovr);
+  queue = queue.filter(x => !(x.kind === 'exercise' && x.name === n));
+  queue.push(Object.assign({ kind: 'exercise', id: uid() }, rec)); store.set('q', queue); flush();
+}
+function exAll(){
+  const set = new Set(exNames());
+  ((boot && boot.exercises) || []).forEach(x => set.add(x.name)); Object.keys(exovr).forEach(k => set.add(k));
+  return [...set].sort((a, b) => a.localeCompare(b));
+}
+function exSessions(ex){
+  const map = {}, xs = boot && boot.xsets && boot.xsets[ex];
+  if (xs) xs.forEach(r => { const ts = String(normTs(r[0])), k = ts.slice(0, 10) + '|' + String(r[1]).trim(); const g = map[k] || (map[k] = { ts, day: String(r[1]).trim(), sets: [] }); if (ts < g.ts) g.ts = ts; g.sets.push([r[2], r[3], r[4]]); });
+  else ((boot && boot.history) || []).forEach(h => { const ss = h.sets.filter(x => x[0] === ex); if (ss.length) { const ts = String(normTs(h.ts)); map[ts.slice(0, 10) + '|' + String(h.day).trim()] = { ts, day: String(h.day).trim(), sets: ss.map(x => [x[1], x[2], x[3]]) }; } });
+  return Object.keys(map).map(k => map[k]).sort((a, b) => a.ts < b.ts ? 1 : -1);
+}
+function prFor(ex, ts, sets){
+  const d0 = String(normTs(ts)).slice(0, 10); let bE = 0, bW = 0, bV = 0, any = false;
+  exSessions(ex).forEach(x => { if (x.ts.slice(0, 10) < d0) { any = true; x.sets.forEach(t => { const w = num(t[1]), r = num(t[2]); if (r > 0) { bE = Math.max(bE, e1rm(w, r)); bW = Math.max(bW, w); bV = Math.max(bV, w * r); } }); } });
+  return sets.map(t => {
+    const w = num(t[1]), r = num(t[2]), ch = [];
+    if (any && r > 0) { const e = e1rm(w, r), v = w * r; if (e > bE + 1e-9) ch.push('1RM'); if (w > 0 && v > bV + 1e-9) ch.push('Vol.'); if (w > bW + 1e-9) ch.push('Weight'); }
+    if (r > 0) { bE = Math.max(bE, e1rm(w, r)); bW = Math.max(bW, w); bV = Math.max(bV, w * r); }
+    return ch;
+  });
+}
+function exStats(ex){
+  const asc = exSessions(ex).slice().reverse(), out = { maxW: [], e1: [], vol: [], all: [], best: { W: 0, E: 0, V: 0 } };
+  let rW = 0, rE = 0, rV = 0;
+  asc.forEach(x => {
+    let sw = 0, se = 0, sv = 0;
+    x.sets.forEach(t => { const w = num(t[1]), r = num(t[2]); if (r <= 0) return; sv += w * r; sw = Math.max(sw, w); se = Math.max(se, e1rm(w, r)); out.all.push({ w, r, ts: x.ts }); });
+    const d = x.ts.slice(0, 10);
+    if (sw > rW) { rW = sw; out.maxW.push([sw, d]); } if (se > rE + 1e-9) { rE = se; out.e1.push([se, d]); } if (sv > rV) { rV = sv; out.vol.push([sv, d]); }
+  });
+  out.best = { W: rW, E: rE, V: rV }; return out;
+}
+const MONF = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+function fmtFull(ts){
+  const m = String(normTs(ts)).match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/); if (!m) return String(ts);
+  const d = new Date(+m[1], +m[2] - 1, +m[3]);
+  let out = WDAY[d.getDay()] + ', ' + MONF[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  if (m[4] && !(m[4] === '00' && m[5] === '00')) { let h = +m[4]; const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; out += ' at ' + h + ':' + m[5] + ' ' + ap; }
+  return out;
+}
+const fmtDate = ts => { const d = pdate(ts); return isNaN(d) ? String(ts) : MON[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); };
+const IC2 = {
+  back: '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12H5M11 5l-7 7 7 7"/></svg>',
+  share: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5M5 12v8h14v-8"/></svg>',
+  dots: '<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>',
+  search: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>',
+  filter: '<svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M3 4h18l-7 8.5V20l-4-2v-5.5z"/></svg>',
+  sort: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20V5M3 9l4-4 4 4M17 4v15M13 15l4 4 4-4"/></svg>',
+  cal: '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="16" rx="2"/><path d="M3.5 9h17M8 2.5v4M16 2.5v4"/><path d="M12.5 12.5v5" stroke-linecap="round"/></svg>',
+  sync: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14-4L4 9M4 4v5h5M4 13a8 8 0 0 0 14 4l2-2M20 20v-5h-5"/></svg>'
+};
+const trophyChip = c => `<span class="pc">${IC.trophy}${c}</span>`;
+const letterAv = n => `<div class="av">${esc((n.trim()[0] || '?').toUpperCase())}</div>`;
+function histOf(k){ return ((boot && boot.history) || []).find(x => x.ts + '|' + x.day === k); }
+function histText(w){
+  const by = {}, order = [];
+  w.sets.forEach(s => { if (!by[s[0]]) { by[s[0]] = []; order.push(s[0]); } by[s[0]].push(s); });
+  return label(String(w.day).trim()) + '\n' + fmtFull(w.ts) + '\n\n' + order.map(ex => ex + '\n' + by[ex].map((s, i) => (i + 1) + '  ' + (num(s[2]) > 0 ? fmtW(num(s[2])) + ' kg × ' + s[3] : s[3] + ' reps')).join('\n')).join('\n\n');
+}
+function performAgain(d){
+  d = String(d).trim();
+  if (running()) { toast('Finish the running workout first'); return; }
+  if (!allTmpls().includes(d)) { toast('That template no longer exists'); return; }
+  day = d; view = 'plan'; editing = false; render(); startWorkout();
+}
+function beep(){ try { const A = window.AudioContext || window.webkitAudioContext, c = new A(), o = c.createOscillator(), g = c.createGain(); o.connect(g); g.connect(c.destination); o.frequency.value = 880; g.gain.value = .08; o.start(); o.stop(c.currentTime + .09); } catch(e){} }
+const savePrefs = () => syncSave('prefs');
+
 // ---- bottom sheets (add chart, add body value, exercise picker)
 function exNames(){
-  const set = new Set([...Object.keys((boot && boot.exseries) || {}), ...Object.keys((boot && boot.last) || {}), ...Object.keys((boot && boot.bests) || {}), ...((boot && boot.template) || []).map(t => t.ex)]);
+  const set = new Set([...Object.keys((boot && boot.xsets) || {}), ...Object.keys((boot && boot.exseries) || {}), ...Object.keys((boot && boot.last) || {}), ...Object.keys((boot && boot.bests) || {}), ...((boot && boot.template) || []).map(t => t.ex)]);
   return [...set].sort((a, b) => a.localeCompare(b));
 }
 function openSheet(step, st){ sheet = Object.assign({}, st || {}, { step }); renderSheet(); }
@@ -928,7 +1201,7 @@ function renderSheet(){
     <button class="sopt" data-act="addc" data-t="vol">Volume per week<small>Bar chart, total kg lifted</small></button>
     <button class="sopt" data-act="sstep" data-s="bmetric">Body measurement trend<small>Weight, waist, chest, …</small></button>
     <button class="sopt" data-act="sstep" data-s="exsel">Exercise progress<small>Est. 1RM, heaviest set or volume over time</small></button>`;
-  else if (sheet.step === 'bmetric') h = `<div class="ht">Which measurement?</div>` + BF.map(([k, l, u]) => `<button class="sopt" data-act="addc" data-t="body" data-m="${k}">${l}<small>${u}</small></button>`).join('');
+  else if (sheet.step === 'bmetric') h = `<div class="ht">Which measurement?</div>` + BF.filter(f => !f[3]).map(([k, l, u]) => `<button class="sopt" data-act="addc" data-t="body" data-m="${k}">${l}<small>${u}</small></button>`).join('');
   else if (sheet.step === 'exsel') {
     const names = exNames(), m = sheet.metric || 'e1';
     h = `<div class="ht">Exercise progress</div><select id="exsel">${names.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('')}</select>
@@ -944,6 +1217,12 @@ function renderSheet(){
   else if (sheet.step === 'settings') h = `<div class="ht">Settings</div>
     <button class="sopt" data-act="syncmode">Sync mode<small>${store.get('syncMode', 'live') === 'live' ? 'Live: each set syncs right after you log it' : 'Sets stay on this phone until you tap Finish'} · tap to change</small></button>
     <button class="sopt" data-act="cfg">Script URL and secret<small>Change which sheet this app talks to</small></button>`;
+  else if (sheet.step === 'months') { const seen = []; ((boot && boot.history) || []).forEach(w => { const k = String(normTs(w.ts)).slice(0, 7); if (!seen.includes(k)) seen.push(k); }); h = `<div class="ht">Jump to month</div>` + seen.map(k => { const [y, m] = k.split('-'); return `<button class="sopt" data-act="mjump" data-k="${k}">${MONF[+m - 1]} ${y}</button>`; }).join(''); }
+  else if (sheet.step === 'hmenu') h = `<div class="ht">Workout</div><button class="sopt" data-act="hagain" data-d="${esc(String((histOf(hsel) || {}).day || '').trim())}">Perform again</button><button class="sopt" data-act="hshare">Copy summary</button>`;
+  else if (sheet.step === 'exfilter') h = `<div class="ht">Filter exercises</div><div class="muted" style="margin-bottom:6px">Body part</div><div class="rng">${['', ...BPARTS].map(b => `<button class="chip ${exFilter.bp === b ? 'on' : ''}" data-act="exf" data-k="bp" data-v="${esc(b)}">${b || 'All'}</button>`).join('')}</div><div class="muted" style="margin:10px 0 6px">Category</div><div class="rng">${['', ...CATS].map(b => `<button class="chip ${exFilter.cat === b ? 'on' : ''}" data-act="exf" data-k="cat" data-v="${esc(b)}">${b || 'All'}</button>`).join('')}</div>`;
+  else if (sheet.step === 'exsort') h = `<div class="ht">Sort by</div>${[['az', 'Name (A–Z)'], ['used', 'Most used'], ['recent', 'Most recent']].map(([k, l]) => `<button class="sopt" data-act="exs" data-v="${k}">${exSort === k ? '✓ ' : ''}${l}</button>`).join('')}`;
+  else if (sheet.step === 'exmore') h = `<div class="ht">Exercises</div><button class="sopt" data-act="exnew">Add custom exercise</button><button class="sopt" data-act="exf" data-k="bp" data-v="" data-all="1">Clear filters</button>`;
+  else if (sheet.step === 'exmenu') h = `<div class="ht">${esc(exsel || '')}</div><button class="sopt" data-act="exedit">Edit details<small>Body part, category, notes, instructions</small></button>`;
   else if (sheet.step === 'pick') h = `<div class="ht">Add exercise</div><input class="sq" id="pq" placeholder="Search or type a new name" autocomplete="off"><div id="plist">${pickerList('')}</div>`;
   bg.innerHTML = `<div class="sheet">${h}</div>`;
   bg.classList.add('on');
@@ -966,10 +1245,10 @@ function addExerciseTo(ex){
   toast(ex + ' added' + (lastSets(ex).length ? ' with last sets' : ''));
 }
 function renderHist(){
-  $('hd').innerHTML = `<div class="row"><div class="ttl">History</div><button class="sync" id="sync" data-act="sync"></button></div>`;
+  $('hd').innerHTML = `<div class="row"><button class="sync" id="sync" data-act="sync"></button><button class="ib" style="margin-left:auto" data-act="hcal" aria-label="Jump to month">${IC2.cal}</button></div><div class="ttl big">History</div>`;
   const h = boot && boot.history;
   if (!boot) { $('app').innerHTML = '<p class="muted">Loading… (needs signal once)</p>'; return; }
-  if (!h) { $('app').innerHTML = '<p class="muted">History needs the updated script. Redeploy Code.gs (v3) in Apps Script, then reopen the app.</p>'; return; }
+  if (!h) { $('app').innerHTML = '<p class="muted">History needs the updated script. Redeploy Code.gs in Apps Script, then reopen the app.</p>'; return; }
   if (!h.length) { $('app').innerHTML = '<p class="muted">No workouts yet.</p>'; return; }
   const wk = allWorkouts(), months = [];
   const mk = ts => String(normTs(ts)).slice(0, 7);
@@ -978,20 +1257,68 @@ function renderHist(){
   $('app').innerHTML = months.map(k => {
     const n = Math.max(groups[k].length, wk.filter(x => mk(x.ts) === k).length);
     const [y, m] = k.split('-');
-    const title = new Date(+y, +m - 1, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    return `<div class="mh"><span>${title}</span><span>${n} workout${n === 1 ? '' : 's'}</span></div>` + groups[k].map(w => {
+    const title = new Date(+y, +m - 1, 1).toLocaleDateString('en-US', { month: 'long', year: +y === new Date().getFullYear() ? undefined : 'numeric' });
+    return `<div class="mh" id="m-${k}"><span style="font-size:26px;font-weight:600">${title}</span><span>${n} workout${n === 1 ? '' : 's'}</span></div>` + groups[k].map(w => {
       const by = {}, order = [];
       w.sets.forEach(s => { if (!by[s[0]]) { by[s[0]] = []; order.push(s[0]); } by[s[0]].push(s); });
       const vol = w.sets.reduce((a, x) => a + num(x[2]) * num(x[3]), 0);
       const dur = w.dur > 0 ? (w.dur >= 60 ? Math.floor(w.dur / 60) + 'h ' + pad(Math.round(w.dur % 60)) + 'm' : Math.round(w.dur) + ' min') : '–';
       const prs = w.prs == null ? '–' : w.prs;
       const sm = ssMap(order.map(ex => ({ ex })), String(w.day).trim());
-      return `<div class="hc"><div class="ht">${esc(label(w.day))}</div><div class="hdt">${esc(fmtWhen(w.ts))}</div>
+      return `<div class="hc click" data-act="hopen" data-k="${esc(w.ts + '|' + w.day)}"><div class="ht">${esc(label(String(w.day).trim()))}</div><div class="hdt">${esc(fmtWhen(w.ts))}</div>
         <div class="hg"><div class="hh"><span>Sets</span><span>Best set</span></div>${order.map((ex, i) => `<div class="hr ${sm[i] ? 'ss' : ''}" ${sm[i] ? `style="--c:${sm[i].color}"` : ''}><span class="hn">${by[ex].length} × ${esc(ex)}</span><span class="hv">${esc(bestSet(by[ex]))}</span></div>`).join('')}</div>
         <div class="hfoot"><div>${IC.clock}<b>${dur}</b></div><div>${IC.weight}<b>${fmtVol(vol)} kg</b></div><div>${IC.trophy}<b>${prs} ${prs === 1 ? 'PR' : 'PRs'}</b></div></div></div>`;
     }).join('');
   }).join('');
 }
+function renderHDet(){
+  const w = histOf(hsel);
+  if (!w) { view = 'hist'; return render(); }
+  $('hd').innerHTML = `<div class="tb"><button class="ib" data-act="hback" aria-label="Back">${IC2.back}</button><span style="flex:1"></span><button class="sync" id="sync" data-act="sync"></button><button class="ib" data-act="hshare" aria-label="Share">${IC2.share}</button><button class="ib" data-act="hmenu" aria-label="More">${IC2.dots}</button></div>`;
+  const by = {}, order = [];
+  w.sets.forEach(s => { if (!by[s[0]]) { by[s[0]] = []; order.push(s[0]); } by[s[0]].push(s); });
+  const sm = ssMap(order.map(ex => ({ ex })), String(w.day).trim());
+  let body = '';
+  order.forEach((ex, i) => {
+    const sets = by[ex].map(s => [s[1], s[2], s[3]]), fl = prFor(ex, w.ts, sets), m = sm[i];
+    if (m && m.first) body += `<div class="hsg" style="--c:${m.color}">`;
+    body += `<div class="dxh"><span>${esc(ex)}</span><span>1RM</span></div>` + sets.map((t, j) => {
+      const wt = num(t[1]), r = num(t[2]), e = Math.round(e1rm(wt, r)), ch = fl[j];
+      const txt = wt > 0 ? `${fmtW(wt)} kg × ${r}` : `${r} reps`;
+      return `<div class="dsr"><span class="no">${j + 1}</span><span>${txt}</span>${ch.length === 1 ? trophyChip(ch[0]) : ''}<span class="e">${e || ''}</span></div>` + (ch.length > 1 ? `<div class="pcs" style="padding-left:46px">${ch.map(trophyChip).join('')}</div>` : '');
+    }).join('');
+    if (m && m.last) body += '</div>';
+  });
+  $('app').innerHTML = `<div class="ttl big" style="margin-bottom:0">${esc(label(String(w.day).trim()))}</div><div class="hdate">${esc(fmtFull(w.ts))}</div>${body}<div style="height:90px"></div><div class="pbar2"><button class="bluebtn" data-act="hagain" data-d="${esc(String(w.day).trim())}">Perform again</button></div>`;
+}
+function renderTmplDetail(){
+  const rows = plan(), sm = ssMap(rows, day), ld = lastDone(day);
+  $('hd').innerHTML = `<div class="tb"><button class="ib" data-act="back" aria-label="Back">${IC2.back}</button><span style="flex:1"></span><button class="sync" id="sync" data-act="sync"></button><button class="ib" data-act="tmenu" data-d="${esc(day)}" aria-label="Template options">${IC2.dots}</button></div>`;
+  if (!boot) { $('app').innerHTML = '<p class="muted">Loading your plan… (needs signal once)</p>'; return; }
+  const out = rows.map((r, i) => {
+    const m = sm[i], n = r.target ? (r.target.sets || r.sets) : r.sets;
+    return `<div class="trow ${m ? 'ss' : ''}" ${m ? `style="--c:${m.color}"` : ''}>${letterAv(r.ex)}<div style="min-width:0"><div class="tn">${n} × ${esc(r.ex)}</div><div class="tm">${esc(exMeta(r.ex).bp)}</div></div><button class="q" data-act="exopen" data-n="${esc(r.ex)}" aria-label="About ${esc(r.ex)}">?</button></div>`;
+  }).join('');
+  $('app').innerHTML = `<div class="ttl big" style="margin-bottom:6px">${esc(label(day))}</div>` + (ld ? `<div class="subt">Last performed: ${ld}</div>` : '<div class="subt">&nbsp;</div>') + (out || '<p class="muted">No exercises in this template yet. Use ⋮ → Edit.</p>') + `<div style="height:100px"></div><div class="pbar2"><button class="bluebtn" data-act="start" ${starting ? 'disabled' : ''}>${starting ? 'Starting…' : 'Start workout'}</button></div>`;
+}
+const PREVL = { template: 'Workouts from same template only', all: 'All workouts' }, INCL = { ask: 'Ask every time', complete: 'Mark as complete', discard: 'Discard' };
+function renderSettings(){
+  $('hd').innerHTML = `<div class="tb"><button class="ib" data-act="setback" aria-label="Back">${IC2.back}</button><div class="ttl">Settings</div><button class="ib" data-act="sync" aria-label="Sync now">${IC2.sync}</button></div>`;
+  const tog = k => `<button class="tog ${prefs[k] ? 'on' : ''}" data-act="ptog" data-k="${k}" aria-label="${k}"></button>`;
+  const rowT = (l, k, sub) => `<div class="srow"><div>${l}${sub ? `<small>${sub}</small>` : ''}</div>${tog(k)}</div>`;
+  $('app').innerHTML = `<div class="shd first">Profile</div><button class="srow" data-act="pedit"><span>Edit</span><span class="sv">${esc(profile.name)}</span></button>
+    <div class="shd">Appearance</div><button class="srow" data-act="ptheme"><span>Theme</span><span class="sv">Auto dark</span></button>
+    <div class="shd">Workout</div>${rowT('Sound Effects', 'sound', "Doesn't include the rest timer alert")}${rowT('Lock completed sets', 'lock')}${rowT('Delete set confirmation', 'delconf')}
+    <button class="srow" data-act="pcyc" data-k="prevset"><span>Previous set</span><span class="sv">${PREVL[prefs.prevset]}</span></button>
+    <button class="srow" data-act="pcyc" data-k="incomplete"><span>Handle incomplete sets</span><span class="sv">${INCL[prefs.incomplete]}</span></button>
+    <button class="srow" data-act="ppr" data-k="bars"><span>Available bars</span><span class="sv">${esc(prefs.bars)}</span></button>
+    <button class="srow" data-act="ppr" data-k="plates"><span>Available plates</span><span class="sv">${esc(prefs.plates)}</span></button>
+    <div class="shd">Rest timer</div>${rowT('Simple Timers', 'simple')}
+    <button class="srow" data-act="ppr" data-k="rest"><span>Default Values</span><span class="sv">${prefs.rest} s</span></button>
+    <div class="shd">Sync</div><button class="srow" data-act="syncmode"><span>Sync mode<small>${store.get('syncMode', 'live') === 'live' ? 'Live: each set syncs right after you log it' : 'Sets stay on this phone until you tap Finish'}</small></span></button>
+    <button class="srow" data-act="cfg"><span>Script URL and secret<small>Change which sheet this app talks to</small></span></button>`;
+}
+
 const IC = {
   clock: '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 5v5.2l4.3 2.5-.8 1.3-5-3V7z"/></svg>',
   weight: '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 3a3 3 0 0 1 2.8 4H18l3 13H3L6 7h3.2A3 3 0 0 1 12 3zm0 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>',
@@ -1016,6 +1343,7 @@ function renderHome(){
   $('app').innerHTML = `<div class="sect">${showArch ? 'Archived' : 'My Templates'} (${list.length})</div>` + (list.length ? '<div class="grid2">' + list.map(card).join('') + '</div>' : `<p class="muted">${showArch ? 'Nothing archived.' : 'No templates. Tap + to create one.'}</p>`);
 }
 function renderPlan(){
+  if (!editing) return renderTmplDetail();
   const rows = plan(), sm = ssMap(rows, day);
   $('hd').innerHTML = `<div class="row"><button class="back" data-act="back">‹</button><div class="ttl">${esc(label(day))}${editing ? ' · editing' : ''}</div><button class="sync" id="sync" data-act="sync"></button></div>`;
   if (!boot) { $('app').innerHTML = '<p class="muted">Loading your plan… (needs signal once)</p>'; return; }
@@ -1053,8 +1381,8 @@ function renderDay(){
       const a = `data-ei="${ei}" data-si="${si}"`;
       cells += `<button class="sn ${rec && rec.pr ? 'pr' : (flagged ? 'tg' : '')}" data-act="tags" ${a}>${rec && rec.pr ? '🏆' : si + 1}</button>
         <button class="pv" data-act="prev" ${a} ${rec || !last[si] ? 'disabled' : ''}>${pv}</button>
-        <input class="in ${rec ? 'done' : ''}" inputmode="decimal" ${a} data-f="w" value="${fmtW(v.w)}" ${rec ? 'data-done="1"' : ''} ${rec && !running() ? 'readonly' : ''}>
-        <input class="in ${rec ? 'done' : ''}" inputmode="numeric" ${a} data-f="reps" value="${v.reps}" ${rec ? 'data-done="1"' : ''} ${rec && !running() ? 'readonly' : ''}>
+        <input class="in ${rec ? 'done' : ''}" inputmode="decimal" ${a} data-f="w" value="${fmtW(v.w)}" ${rec ? 'data-done="1"' : ''} ${rec && (!running() || prefs.lock) ? 'readonly' : ''}>
+        <input class="in ${rec ? 'done' : ''}" inputmode="numeric" ${a} data-f="reps" value="${v.reps}" ${rec ? 'data-done="1"' : ''} ${rec && (!running() || prefs.lock) ? 'readonly' : ''}>
         <button class="ck ${rec ? 'on' : ''}" data-act="check" ${a}>✓</button>`;
       if (!rec && dr.tags) cells += `<div class="tagp">
         <div class="tg"><span>Effort</span>${['0','1','2','3+'].map(x => `<button class="chip ${v.rir === x ? 'on' : ''}" data-act="tag" ${a} data-f="rir" data-v="${x}">RIR ${x}</button>`).join('')}</div>
@@ -1073,11 +1401,61 @@ function renderDay(){
   });
   $('app').innerHTML = out + `<div class="muted" style="padding:4px">Tap a set number to add effort / form / help tags. Tap the previous value to copy it. ⛓ links an exercise with the one below as a superset.</div><button class="link" data-act="add">+ add exercise</button> <button class="link" data-act="cfg">settings</button>${running() ? '<button class="cancelbtn" data-act="cancel">Cancel workout</button>' : ''}`;
 }
+function editEx(n){
+  const m = exMeta(n), bp = prompt('Body part (' + BPARTS.join(', ') + ')', m.bp); if (bp === null) return;
+  const cat = prompt('Category (' + CATS.join(', ') + ')', m.cat); if (cat === null) return;
+  const notes = prompt('Notes (optional)', m.notes); if (notes === null) return;
+  const cur = (m.data && m.data.instructions) ? (Array.isArray(m.data.instructions) ? m.data.instructions.join(' | ') : m.data.instructions) : '';
+  const ins = prompt('Instructions: separate steps with |', cur); if (ins === null) return;
+  const data = Object.assign({}, m.data || {}); if (ins.trim()) data.instructions = ins.split('|').map(x => x.trim()).filter(Boolean); else delete data.instructions;
+  saveExMeta(n, { bp: bp.trim() || m.bp, cat: cat.trim() || m.cat, notes: notes.trim(), data: Object.keys(data).length ? data : null });
+}
+function moreActs(a, D, t, e){
+  const go = (v, top) => { view = v; render(); if (top !== false) window.scrollTo(0, 0); };
+  if (a === 'hopen') { hsel = D.k; go('hdet'); }
+  else if (a === 'hback') go('hist');
+  else if (a === 'hcal') openSheet('months');
+  else if (a === 'mjump') { sheet = null; renderSheet(); const el = $('m-' + D.k); if (el) el.scrollIntoView({ block: 'start' }); }
+  else if (a === 'hmenu') openSheet('hmenu');
+  else if (a === 'hshare') {
+    const w = histOf(hsel); if (!w) return true; const txt = histText(w); sheet = null; renderSheet();
+    if (navigator.share) navigator.share({ text: txt }).catch(() => {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(txt).then(() => toast('Summary copied'), () => toast('Could not copy'));
+    else toast('Sharing is not available here');
+  }
+  else if (a === 'hagain') { sheet = null; renderSheet(); performAgain(D.d); }
+  else if (a === 'exopen') { exsel = D.n; extab = 'about'; instOpen = false; go('exd'); }
+  else if (a === 'exback') go('ex', false);
+  else if (a === 'extab') { extab = D.t; render(); window.scrollTo(0, 0); }
+  else if (a === 'exsearch') { exqOn = !exqOn; if (!exqOn) exQ = ''; render(); }
+  else if (a === 'exfilter') openSheet('exfilter');
+  else if (a === 'exf') { if (D.all) exFilter = { bp: '', cat: '' }; else exFilter[D.k] = D.v; if (D.all) { sheet = null; renderSheet(); } else renderSheet(); render(); }
+  else if (a === 'exsort') openSheet('exsort');
+  else if (a === 'exs') { exSort = D.v; sheet = null; renderSheet(); render(); }
+  else if (a === 'exmore') openSheet('exmore');
+  else if (a === 'exnew') { sheet = null; renderSheet(); const n = (prompt('Exercise name') || '').trim(); if (n) { saveExMeta(n, {}); exsel = n; extab = 'about'; go('exd'); } }
+  else if (a === 'exmenu') openSheet('exmenu');
+  else if (a === 'exedit') { sheet = null; renderSheet(); editEx(exsel); render(); }
+  else if (a === 'inst') { instOpen = !instOpen; render(); }
+  else if (a === 'exrest') { const v = parseInt(prompt('Rest timer for ' + exsel + ' (seconds)', restFor(exsel)), 10); if (v > 0) { const m = exMeta(exsel); saveExMeta(exsel, { data: Object.assign({}, m.data || {}, { rest: v }) }); render(); } }
+  else if (a === 'exrecs') go('exrh');
+  else if (a === 'exrhback') go('exd', false);
+  else if (a === 'settings') go('settings');
+  else if (a === 'setback') go('prof');
+  else if (a === 'ptog') { prefs[D.k] = !prefs[D.k]; savePrefs(); render(); }
+  else if (a === 'pcyc') { const o = D.k === 'prevset' ? ['template', 'all'] : ['ask', 'complete', 'discard']; prefs[D.k] = o[(o.indexOf(prefs[D.k]) + 1) % o.length]; savePrefs(); render(); }
+  else if (a === 'ppr') { const cur = prefs[D.k], v = prompt(D.k === 'rest' ? 'Default rest (seconds)' : D.k === 'bars' ? 'Available bars in kg, comma separated' : 'Available plates in kg, comma separated', cur); if (v !== null) { if (D.k === 'rest') { const n = parseInt(v, 10); if (n > 0) prefs.rest = n; } else prefs[D.k] = v.trim(); savePrefs(); render(); } }
+  else if (a === 'pedit') { const v = prompt('Your name', profile.name); if (v !== null && v.trim()) { profile = { name: v.trim() }; syncSave('profile'); render(); } }
+  else if (a === 'ptheme') toast('Dark is the only theme for now');
+  else return false;
+  return true;
+}
 document.addEventListener('click', e => {
   if (pop && !e.target.closest('#pop')) { const tb = e.target.closest('[data-act="tmenu"]'), same = tb && tb.dataset.d === pop.d && (tb.dataset.cid || '') === (pop.cid || ''); closePop(); if (!tb || same) return; }
   const t = e.target.closest('[data-act]'); if (!t || t.disabled) return;
   captureInputs();
   const D = t.dataset, a = D.act, ei = +D.ei, si = +D.si;
+  if (moreActs(a, D, t, e)) return;
   if (a === 'openDay') {
     if (running() && D.d !== sess.day) { toast('Finish or cancel the running workout first'); return; }
     day = D.d; view = running() ? 'day' : 'plan'; draft = {}; render(); window.scrollTo(0, 0);
@@ -1112,8 +1490,6 @@ document.addEventListener('click', e => {
   else if (a === 'tmenu') openPop(t, D.d, D.cid);
   else if (a === 'cexp') { closePop(); xopen = D.cid; renderX(); }
   else if (a === 'crm') { closePop(); if (confirm('Remove this chart from your dashboard?')) { charts = charts.filter(x => x.id !== D.cid); saveCharts(); render(); } }
-  else if (a === 'settings') openSheet('settings');
-  else if (a === 'exopen') { const id = 'ex:' + D.n; adhoc[id] = adhoc[id] || { id, type: 'ex', ex: D.n, metric: 'e1', range: 0 }; xopen = id; renderX(); }
   else if (a === 'newt') newTemplate();
   else if (a === 'tedit' || a === 'trename' || a === 'tdup' || a === 'tarch' || a === 'tunarch' || a === 'tdelete') tmenuAct(a, D.d);
   else if (a === 'showarch') { showArch = !showArch; render(); window.scrollTo(0, 0); }
@@ -1135,7 +1511,7 @@ document.addEventListener('change', e => {
   const t = e.target; if (!t.matches || !t.matches('input.in')) return;
   if (t.dataset.done) editLogged(+t.dataset.ei, +t.dataset.si, t.dataset.f, t.value); else captureInputs();
 });
-document.addEventListener('input', e => { const t = e.target; if (t.id === 'exq') $('exlist').innerHTML = exListHtml(t.value); if (t.id === 'pq') $('plist').innerHTML = pickerList(t.value); });
+document.addEventListener('input', e => { const t = e.target; if (t.id === 'exq') { exQ = t.value; $('exlist').innerHTML = exListHtml(exQ); } if (t.id === 'pq') $('plist').innerHTML = pickerList(t.value); });
 document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches('input.in, input.bi')) e.target.select(); });
 function renderSetup(){
   $('hd').innerHTML = '';
@@ -1149,7 +1525,7 @@ function init(){
   day = (running() ? sess.day : day) || defaultDay();
   const sv = store.get('view', 'home');
   view = running() ? 'day' : (['home', 'hist', 'body', 'prof', 'ex'].includes(sv) ? sv : 'home');
-  render(); refreshBoot(); flush();
+  hydrate(); render(); refreshBoot(); flush();
 }
 
 readQs();
