@@ -3,8 +3,8 @@
   "short_name": "Lift Log",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#1f2332",
-  "theme_color": "#1f2332",
+  "background_color": "#272e35",
+  "theme_color": "#272e35",
   "icons": [
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#1f2332">
+<meta name="theme-color" content="#272e35">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.webmanifest">
@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="icon-512.png">
 <title>Lift Log</title>
 <style>
-:root{--bg:#1f2332;--card:#2b3044;--line:#3a4160;--tx:#eef1f8;--mut:#a9b1c8;--ok:#5fe39a;--warn:#fbbf24;--bad:#ff8a8a;--acc:#7fb4ff}
+:root{--bg:#272e35;--card:#323a42;--line:#4b5560;--tx:#eef1f8;--mut:#a9b1c8;--ok:#5fe39a;--warn:#fbbf24;--bad:#ff8a8a;--acc:#3d9bf2}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:calc(120px + env(safe-area-inset-bottom))}
 header{position:sticky;top:0;z-index:5;background:var(--bg);padding:max(10px,env(safe-area-inset-top)) 12px 8px;border-bottom:1px solid var(--line)}
@@ -51,20 +51,20 @@ main{padding:10px 12px}
 .why{font-size:12px;color:var(--acc);margin-top:3px}
 .sets{display:grid;grid-template-columns:36px 1fr 72px 62px 44px;gap:6px;align-items:center}
 .sh{font-size:11px;color:var(--mut);text-align:center;text-transform:uppercase}
-.sn{height:40px;border:0;background:#232838;border-radius:8px;color:var(--tx);font-weight:700;font-size:15px}
+.sn{height:40px;border:0;background:#323a42;border-radius:8px;color:var(--tx);font-weight:700;font-size:15px}
 .sn.tg{box-shadow:inset 0 0 0 1px var(--warn)}
 .sn.pr{box-shadow:inset 0 0 0 1px var(--ok)}
 .pv{height:40px;border:0;background:none;color:var(--mut);font-size:14px;font-variant-numeric:tabular-nums;padding:0}
-.in{width:100%;min-width:0;height:40px;text-align:center;font-size:17px;font-weight:600;background:#232838;color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:0}
+.in{width:100%;min-width:0;height:40px;text-align:center;font-size:17px;font-weight:600;background:#323a42;color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:0}
 .in.done{background:#1f4a37;border-color:#2f7a52}
-.ck{height:40px;border-radius:8px;border:1px solid var(--line);background:#232838;color:transparent;font-size:20px;font-weight:700;padding:0}
+.ck{height:40px;border-radius:8px;border:1px solid var(--line);background:#323a42;color:transparent;font-size:20px;font-weight:700;padding:0}
 .ck.on{background:var(--ok);border-color:var(--ok);color:#06210f}
-.tagp{grid-column:1/-1;background:#232838;border-radius:10px;padding:4px 10px 8px}
+.tagp{grid-column:1/-1;background:#323a42;border-radius:10px;padding:4px 10px 8px}
 .tg{display:flex;gap:6px;align-items:center;margin:6px 0;flex-wrap:wrap}
 .tg span{font-size:12px;color:var(--mut);width:52px}
 .tg .chip{padding:6px 11px;font-size:13px}
 .link{background:none;border:0;color:var(--mut);font-size:13px;padding:8px 4px}
-.addset{width:100%;margin-top:8px;height:36px;border:0;border-radius:8px;background:#3a4160;color:var(--tx);font-size:14px}
+.addset{width:100%;margin-top:8px;height:36px;border:0;border-radius:8px;background:#4b5560;color:var(--tx);font-size:14px}
 .best{font-size:12px;color:var(--mut)}
 .xov{position:fixed;inset:0;background:var(--bg);z-index:30;overflow-y:auto;padding:max(12px,env(safe-area-inset-top)) 14px 40px;display:none}
 .xov.on{display:block}
@@ -72,13 +72,13 @@ main{padding:10px 12px}
 .cc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:12px}
 .cch{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
 .cct{font-weight:700;font-size:16px}.ccs{font-size:12px;color:var(--mut);margin-top:2px}
-.xb{margin-left:auto;background:#232838;border:1px solid var(--line);border-radius:8px;color:var(--tx);width:34px;height:34px;font-size:17px}
+.xb{margin-left:auto;background:#323a42;border:1px solid var(--line);border-radius:8px;color:var(--tx);width:34px;height:34px;font-size:17px}
 svg.ch{width:100%;height:auto;display:block;touch-action:pan-y}
 svg.ch .ax{fill:var(--mut);font-size:10px}
 svg.ch .vl{fill:var(--tx);font-size:11px;font-weight:600}
 svg.ch .gl{stroke:var(--line);stroke-width:1}
 svg.ch .mk.sel{filter:brightness(1.3)}
-svg.ch .hl{fill:#3987e5;stroke:#2b3044;stroke-width:2}
+svg.ch .hl{fill:#3987e5;stroke:#323a42;stroke-width:2}
 svg.ch .xh{stroke:var(--mut);stroke-width:1}
 .cap{font-size:13px;color:var(--tx);min-height:20px;margin-top:6px;font-variant-numeric:tabular-nums}
 .rng{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
@@ -87,9 +87,9 @@ svg.ch .xh{stroke:var(--mut);stroke-width:1}
 .sheetbg.on{display:block}
 .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:14px 14px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom));max-height:82%;overflow-y:auto}
 .sheet .ht{margin-bottom:10px;font-size:18px;font-weight:700}
-.sopt{display:block;width:100%;text-align:left;background:#232838;border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:13px 12px;margin-bottom:8px;font-size:15px}
+.sopt{display:block;width:100%;text-align:left;background:#323a42;border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:13px 12px;margin-bottom:8px;font-size:15px}
 .sopt small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
-.sheet select,.sheet .sq{width:100%;height:44px;background:#232838;color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:0 10px;font-size:16px;margin-bottom:10px}
+.sheet select,.sheet .sq{width:100%;height:44px;background:#323a42;color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:0 10px;font-size:16px;margin-bottom:10px}
 .prow{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);color:var(--tx);padding:12px 2px;font-size:15px}
 .cancelbtn{display:block;width:100%;height:46px;margin:14px 0 6px;border:1px solid var(--bad);background:none;color:var(--bad);border-radius:10px;font-size:15px;font-weight:700}
 .ssg{position:relative;padding-left:13px;margin-bottom:12px}
@@ -97,8 +97,8 @@ svg.ch .xh{stroke:var(--mut);stroke-width:1}
 .ssg .ex{margin-bottom:8px}.ssg .ex:last-of-type{margin-bottom:0}
 .sstag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--c);margin:0 0 5px 2px}
 .exr{display:flex;gap:8px;margin-top:8px}.exr .addset{margin-top:0}
-.lk{flex:0 0 auto;padding:0 12px;height:36px;border:0;border-radius:8px;background:#3a4160;color:var(--mut);font-size:13px}
-.lk.on{background:var(--c);color:#1f2332;font-weight:700}
+.lk{flex:0 0 auto;padding:0 12px;height:36px;border:0;border-radius:8px;background:#4b5560;color:var(--mut);font-size:13px}
+.lk.on{background:var(--c);color:#272e35;font-weight:700}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .grid2 .dcard{margin-bottom:0;padding:12px;min-width:0}
 .grid2 .dt{font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -111,7 +111,7 @@ svg.ch .xh{stroke:var(--mut);stroke-width:1}
 .pl .s{font-size:12px;color:var(--mut);margin-top:3px}
 .ssg .pl{margin-bottom:8px}.ssg .pl:last-of-type{margin-bottom:0}
 .pbar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(transparent,var(--bg) 35%);padding:26px 14px calc(12px + env(safe-area-inset-bottom))}
-.nav{position:fixed;left:0;right:0;bottom:0;z-index:7;background:#1f2332;border-top:1px solid var(--line);display:none;gap:6px;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:7;background:#272e35;border-top:1px solid var(--line);display:none;gap:6px;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
 .nav.on{display:flex}
 .nav button{flex:1;border:1px solid var(--line);background:transparent;color:var(--mut);border-radius:6px;padding:7px 4px 6px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:3px}
 .nav button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -121,10 +121,10 @@ svg.ch .xh{stroke:var(--mut);stroke-width:1}
 body.hasnav{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
 .bgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;margin:10px 0}
 .bgrid label{font-size:12px;color:var(--mut);display:block;margin-bottom:3px}
-.bgrid .bi,.bnote{width:100%;height:42px;background:#232838;color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:0 10px;font-size:16px}
+.bgrid .bi,.bnote{width:100%;height:42px;background:#323a42;color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:0 10px;font-size:16px}
 .bnote{margin-bottom:10px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.mchip{background:#232838;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:13px}
+.mchip{background:#323a42;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:13px}
 .mchip i{font-style:normal;font-size:11px;color:var(--mut);margin-left:4px}
 .mchip i.up{color:var(--warn)}.mchip i.dn{color:var(--ok)}
 .delb{float:right;background:none;border:0;color:var(--mut);font-size:16px;padding:0 4px}
@@ -135,13 +135,13 @@ body.hasnav{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
 .hg .hh{font-size:11px;color:var(--mut);text-transform:uppercase}
 .hg .hh:nth-child(2),.hg .hv{text-align:right;color:var(--mut);white-space:nowrap;font-variant-numeric:tabular-nums}
 .hg .hn{overflow:hidden;text-overflow:ellipsis}
-.bar{position:fixed;left:0;right:0;bottom:0;background:#262b3e;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;gap:12px;z-index:6}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#2f373f;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;gap:12px;z-index:6}
 .bar.on{display:flex}
 .bar.go{background:#1f4a37;border-top-color:var(--ok)}
 .bar .big{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(100px + env(safe-area-inset-bottom));background:#3a4160;border:1px solid var(--line);padding:8px 14px;border-radius:10px;font-size:14px;z-index:9;display:none;max-width:90%;text-align:center}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(100px + env(safe-area-inset-bottom));background:#4b5560;border:1px solid var(--line);padding:8px 14px;border-radius:10px;font-size:14px;z-index:9;display:none;max-width:90%;text-align:center}
 .setup{padding:20px}
-.setup input{width:100%;margin:6px 0 14px;padding:12px;background:#232838;border:1px solid var(--line);border-radius:10px;color:var(--tx);font-size:15px}
+.setup input{width:100%;margin:6px 0 14px;padding:12px;background:#323a42;border:1px solid var(--line);border-radius:10px;color:var(--tx);font-size:15px}
 .setup button{padding:12px 18px;border-radius:10px;border:0;background:var(--acc);font-weight:700}
 .muted{color:var(--mut);font-size:13px}
 .ov{position:fixed;inset:0;background:var(--bg);z-index:20;overflow-y:auto;padding:max(16px,env(safe-area-inset-top)) 16px 40px;display:none}
@@ -185,12 +185,27 @@ body.hasnav{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
 .tsum{font-size:14px;line-height:1.35;color:var(--tx);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:57px}
 .tft{display:flex;align-items:center;gap:8px;margin-top:12px;color:var(--mut);font-size:14px;min-height:20px}
 .dcard .ed{color:var(--acc);font-size:22px;line-height:1;padding:2px 6px;margin-left:auto}
-.pop{position:fixed;z-index:60;width:190px;background:#2b3044;border-radius:16px;box-shadow:0 12px 34px rgba(0,0,0,.45);padding:4px 0;overflow:hidden}
+.pop{position:fixed;z-index:60;width:190px;background:#323a42;border-radius:16px;box-shadow:0 12px 34px rgba(0,0,0,.45);padding:4px 0;overflow:hidden}
 .pop .pi{display:block;width:100%;text-align:left;background:none;border:0;color:var(--tx);font-size:16px;padding:14px 18px}
 .pop .pi.bad{color:#ff8a8a}
 .mh{display:flex;justify-content:space-between;align-items:baseline;margin:18px 4px 8px;font-weight:700;font-size:17px}
 .mh span:last-child{font-size:13px;font-weight:500;color:var(--mut)}
 .mh:first-child{margin-top:4px}
+/* mock theme: flat outlined cards on slate */
+.dcard,.ex,.pl,.hc,.cc,.kpi,.resume{border:1px solid var(--line);box-shadow:none}
+.dcard,.ex,.hc,.cc,.resume{border-radius:18px}
+.dcard.today{border-color:var(--acc)}
+.ttl.big{font-size:44px;font-weight:500;margin:34px 4px 14px;letter-spacing:-.5px}
+.prow2{display:flex;align-items:center;gap:16px;margin:6px 2px 22px}
+.avatar{width:62px;height:62px;border-radius:50%;background:#e8501e;color:#fff;font-size:34px;display:flex;align-items:center;justify-content:center;flex:none}
+.pn{font-size:20px;font-weight:600}.chev{margin-left:auto;font-size:34px;color:var(--tx);padding-right:8px}
+.dashh{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px}
+.dashh .ib{color:var(--acc)}
+.cc .ed{color:var(--acc);font-size:22px;line-height:1;padding:2px 6px}
+.cca{margin-left:auto;display:flex;align-items:center;gap:2px}
+.ib.sm{padding:4px;color:var(--acc);background:none}
+.exrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);color:var(--tx);padding:15px 4px;font-size:16px}
+.exrow small{color:var(--mut);font-size:12px;white-space:nowrap}
 /* soft, rounded look */
 body{background:var(--bg)}
 header{border-bottom:0;background:linear-gradient(var(--bg) 82%,transparent)}
@@ -206,12 +221,16 @@ header{border-bottom:0;background:linear-gradient(var(--bg) 82%,transparent)}
 .sheet{border-radius:26px 26px 0 0}.sheet select,.sheet .sq{border-radius:14px}
 .toast{border-radius:16px}.cancelbtn{border-radius:16px}
 .bar{border-radius:22px 22px 0 0}
-.nav{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));padding:6px;border-radius:28px;background:#2b3044;border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.35);gap:4px}
+.nav{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));padding:6px;border-radius:28px;background:#323a42;border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.35);gap:4px}
 .nav button{border:0;background:transparent;border-radius:22px;padding:8px 2px 7px}
 .nav button.on{background:var(--acc);color:#10203a}
-.hasnav .bar{bottom:calc(88px + env(safe-area-inset-bottom))}
-.hasnav .toast{bottom:calc(160px + env(safe-area-inset-bottom))}
-body.hasnav{padding-bottom:calc(120px + env(safe-area-inset-bottom))}
+.nav{left:0;right:0;bottom:0;border-radius:0;background:#222a30;border:0;border-top:1px solid #38414a;box-shadow:none;padding:8px 4px calc(8px + env(safe-area-inset-bottom));gap:0}
+.nav button{flex:1;border:0;background:transparent;color:var(--mut);border-radius:0;padding:4px 0;font-size:13px;font-weight:500;letter-spacing:0;text-transform:none;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav button.on{background:transparent;color:#fff;font-weight:700}
+.nav button svg{width:26px;height:26px}
+.hasnav .bar{bottom:calc(72px + env(safe-area-inset-bottom))}
+.hasnav .toast{bottom:calc(150px + env(safe-area-inset-bottom))}
+body.hasnav{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
 .ttl{font-size:22px}
 </style>
 </head>
@@ -562,12 +581,12 @@ function delTemplate(d){
   qop({ kind: 'tdel', day: d });
 }
 function closePop(){ pop = null; const e = $('pop'); if (e) e.remove(); }
-function openPop(btn, d){
-  closePop(); pop = { d };
+function openPop(btn, d, cid){
+  closePop(); pop = { d, cid };
   const ar = !!arch[d];
-  const items = ar ? [['tunarch', 'Restore'], ['tdelete', 'Delete']] : [['tedit', 'Edit'], ['trename', 'Rename'], ['tarch', 'Archive'], ['tdup', 'Duplicate'], ['tdelete', 'Delete']];
+  const items = cid ? [['cexp', 'Expand'], ['crm', 'Remove from dashboard']] : ar ? [['tunarch', 'Restore'], ['tdelete', 'Delete']] : [['tedit', 'Edit'], ['trename', 'Rename'], ['tarch', 'Archive'], ['tdup', 'Duplicate'], ['tdelete', 'Delete']];
   const el = document.createElement('div'); el.id = 'pop'; el.className = 'pop';
-  el.innerHTML = items.map(([a, l]) => `<button class="pi ${a === 'tdelete' ? 'bad' : ''}" data-act="${a}" data-d="${esc(d)}">${l}</button>`).join('');
+  el.innerHTML = items.map(([a, l]) => `<button class="pi ${a === 'tdelete' || a === 'crm' ? 'bad' : ''}" data-act="${a}" data-d="${esc(d || '')}" data-cid="${esc(cid || '')}">${l}</button>`).join('');
   document.body.appendChild(el);
   const r = btn.getBoundingClientRect(), h = items.length * 50 + 8, w = 190;
   let top = r.bottom + 2; if (top + h > window.innerHeight - 20) top = Math.max(8, r.top - h - 2);
@@ -639,8 +658,8 @@ function workoutBar(){
 function render(){
   if (!cfg) return renderSetup();
   if (running() && view === 'day' && sess.day !== day) day = sess.day;
-  if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else if (view === 'body') renderBody(); else if (view === 'bodym') renderBodyM(); else if (view === 'prof') renderProf(); else renderHome();
-  if (view === 'home' || view === 'hist' || view === 'body' || view === 'prof') store.set('view', view);
+  if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else if (view === 'body') renderBody(); else if (view === 'bodym') renderBodyM(); else if (view === 'prof') renderProf(); else if (view === 'ex') renderEx(); else renderHome();
+  if (view === 'home' || view === 'hist' || view === 'body' || view === 'prof' || view === 'ex') store.set('view', view);
   renderNav(); updSync(); tick();
 }
 function fmtWhen(ts){
@@ -665,16 +684,17 @@ function bestSet(sets){
 }
 const ICON = {
   hist: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
-  home: '<svg viewBox="0 0 24 24"><path d="M3 9v6M6 7v10M18 7v10M21 9v6M6 12h12"/></svg>',
-  prof: '<svg viewBox="0 0 24 24"><path d="M5 20v-8M12 20V5M19 20v-5"/></svg>',
+  home: '<svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" stroke-width="2.6"/></svg>',
+  prof: '<svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z"/></svg>',
+  ex: '<svg viewBox="0 0 24 24"><path d="M3 9v6M6 7v10M18 7v10M21 9v6M6 12h12"/></svg>',
   body: '<svg viewBox="0 0 24 24"><rect x="3" y="8.5" width="18" height="7" rx="1"/><path d="M7 8.5v3M11 8.5v2M15 8.5v3M19 8.5v2"/></svg>'
 };
 function renderNav(){
-  const show = cfg && (view === 'home' || view === 'hist' || view === 'body' || view === 'bodym' || view === 'prof');
+  const show = cfg && (view === 'home' || view === 'hist' || view === 'body' || view === 'bodym' || view === 'prof' || view === 'ex');
   const n = $('nav'); n.classList.toggle('on', !!show); document.body.classList.toggle('hasnav', !!show);
   if (!show) { n.innerHTML = ''; return; }
   const act = view === 'bodym' ? 'body' : view;
-  n.innerHTML = [['hist', 'History'], ['home', 'Workout'], ['body', 'Body'], ['prof', 'Profile']].map(([k, l]) => `<button class="${act === k ? 'on' : ''}" data-act="tab" data-t="${k}">${ICON[k]}<span>${l}</span></button>`).join('');
+  n.innerHTML = [['prof', 'Profile'], ['hist', 'History'], ['home', 'Workout'], ['ex', 'Exercises'], ['body', 'Measure']].map(([k, l]) => `<button class="${act === k ? 'on' : ''}" data-act="tab" data-t="${k}">${ICON[k]}<span>${l}</span></button>`).join('');
 }
 // ---- body measurements
 const BF = [['w','Weight','kg'],['bf','Body fat','%'],['neck','Neck','cm'],['sh','Shoulders','cm'],['chest','Chest','cm'],['waist','Waist','cm'],['hips','Hips','cm'],['arm','Arm','cm'],['thigh','Thigh','cm'],['calf','Calf','cm']];
@@ -727,7 +747,7 @@ function renderBodyM(){
   $('app').innerHTML = chartCard(c) + `<div class="hc"><div class="hhead"><div class="ht" style="font-size:16px">History</div><button class="plus" data-act="addbody" data-m="${k}" aria-label="Add ${f[1]}">+</button></div>${hist || '<div class="muted">No entries yet. Tap + to add one.</div>'}</div>`;
 }
 // ---- dashboard charts
-const SC = '#4b95f0';
+const SC = '#8b5cf6';
 let charts = store.get('charts', null) || [{ id: 'c1', type: 'wpw' }, { id: 'c2', type: 'body', metric: 'w' }];
 const saveCharts = () => store.set('charts', charts);
 let xopen = null, sheet = null;
@@ -777,10 +797,10 @@ function chartMeta(c){
   return { kind: 'line', title: c.ex, sub: { e1: 'Est. 1RM', w: 'Heaviest set', vol: 'Session volume' }[c.metric || 'e1'], unit: 'kg', def: 0, empty: 'No logged sets for this exercise yet' };
 }
 function svgBars(bars, W, H){
-  const L = 34, R = 8, T = 18, B = 22, iw = W - L - R, ih = H - T - B;
+  const L = 8, R = 38, T = 18, B = 22, iw = W - L - R, ih = H - T - B;
   const max = Math.max(...bars.map(b => b.v), 0), sc = niceScale(max, 3), y = v => T + ih - (v / sc.max) * ih;
   let g = '', m = '', lab = '';
-  for (let v = 0; v <= sc.max + 1e-9; v += sc.step) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${L - 6}" y="${y(v) + 3.5}" class="ax" text-anchor="end">${tickFmt(v)}</text>`;
+  for (let v = 0; v <= sc.max + 1e-9; v += sc.step) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${W - R + 6}" y="${y(v) + 3.5}" class="ax" text-anchor="start">${tickFmt(v)}</text>`;
   const band = iw / bars.length, bw = Math.min(24, Math.max(3, band - 4)), every = Math.ceil(bars.length / 6);
   bars.forEach((b, i) => {
     const cx = L + band * i + band / 2, h = (b.v / sc.max) * ih, x = cx - bw / 2, yy = y(b.v), r = Math.min(5, h, bw / 2);
@@ -793,7 +813,7 @@ function svgBars(bars, W, H){
   return `<svg class="ch" viewBox="0 0 ${W} ${H}" data-kind="bar" data-w="${W}" data-caps="${esc(JSON.stringify(bars.map(b => b.cap)))}" role="img" aria-label="Bar chart">${g}${m}${lab}</svg>`;
 }
 function svgLine(pts, W, H){
-  const L = 38, R = 16, T = 18, B = 22, iw = W - L - R, ih = H - T - B;
+  const L = 8, R = 44, T = 18, B = 22, iw = W - L - R, ih = H - T - B;
   let lo = Math.min(...pts.map(p => p.v)), hi = Math.max(...pts.map(p => p.v));
   if (hi === lo) { hi += 1; lo -= 1; }
   const sc = niceScale(hi - lo, 3); lo = Math.floor(lo / sc.step + 1e-9) * sc.step; hi = Math.ceil(hi / sc.step - 1e-9) * sc.step;
@@ -802,7 +822,7 @@ function svgLine(pts, W, H){
   const t0 = pts[0].t.getTime(), t1 = pts[pts.length - 1].t.getTime();
   const x = t => (pts.length === 1 || t1 === t0) ? L + iw / 2 : L + ((t - t0) / (t1 - t0)) * iw;
   let g = '';
-  for (let k = 0; ; k++) { const v = lo + k * sc.step; if (v > hi + 1e-9) break; g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${L - 6}" y="${y(v) + 3.5}" class="ax" text-anchor="end">${tickFmt(v)}</text>`; }
+  for (let k = 0; ; k++) { const v = lo + k * sc.step; if (v > hi + 1e-9) break; g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${W - R + 6}" y="${y(v) + 3.5}" class="ax" text-anchor="start">${tickFmt(v)}</text>`; }
   const xy = pts.map(p => [x(p.t.getTime()), y(p.v), p.cap]);
   const d = xy.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
   const area = d + ` L${xy[xy.length - 1][0].toFixed(1)},${T + ih} L${xy[0][0].toFixed(1)},${T + ih} Z`;
@@ -810,8 +830,8 @@ function svgLine(pts, W, H){
   let lab = `<text x="${L}" y="${H - 6}" class="ax" text-anchor="start">${shortD(pts[0].t)}</text>`;
   if (pts.length > 1) lab += `<text x="${W - R}" y="${H - 6}" class="ax" text-anchor="end">${shortD(pts[pts.length - 1].t)}</text>`;
   if (t1 - t0 > 14 * 864e5) lab += `<text x="${L + iw / 2}" y="${H - 6}" class="ax" text-anchor="middle">${shortD(new Date((t0 + t1) / 2))}</text>`;
-  lab += `<text x="${e[0]}" y="${e[1] - 9}" class="vl" text-anchor="${e[0] > W - 40 ? 'end' : 'middle'}">${tickFmt(pts[pts.length - 1].v)}</text>`;
-  return `<svg class="ch" viewBox="0 0 ${W} ${H}" data-kind="line" data-w="${W}" data-pts="${esc(JSON.stringify(xy))}" role="img" aria-label="Line chart">${g}<path d="${area}" fill="${SC}" fill-opacity=".12"/><path d="${d}" fill="none" stroke="${SC}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><line class="xh" x1="0" x2="0" y1="${T}" y2="${T + ih}" style="display:none"/><circle class="hl" r="5" style="display:none"/><circle cx="${e[0]}" cy="${e[1]}" r="4.5" fill="${SC}" stroke="#2b3044" stroke-width="2"/><rect class="hit" x="${L}" y="${T}" width="${iw}" height="${ih}" fill="transparent"/>${lab}</svg>`;
+  lab += `<text x="${e[0]}" y="${e[1] - 9}" class="vl" text-anchor="${e[0] > W - R - 20 ? 'end' : 'middle'}">${tickFmt(pts[pts.length - 1].v)}</text>`;
+  return `<svg class="ch" viewBox="0 0 ${W} ${H}" data-kind="line" data-w="${W}" data-pts="${esc(JSON.stringify(xy))}" role="img" aria-label="Line chart">${g}<path d="${area}" fill="${SC}" fill-opacity=".12"/><path d="${d}" fill="none" stroke="${SC}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><line class="xh" x1="0" x2="0" y1="${T}" y2="${T + ih}" style="display:none"/><circle class="hl" r="5" style="display:none"/><circle cx="${e[0]}" cy="${e[1]}" r="4.5" fill="${SC}" stroke="#323a42" stroke-width="2"/><rect class="hit" x="${L}" y="${T}" width="${iw}" height="${ih}" fill="transparent"/>${lab}</svg>`;
 }
 function chartParts(c, big){
   const meta = chartMeta(c), range = c.range != null ? c.range : meta.def, W = big ? 340 : 320, H = big ? 250 : 150;
@@ -831,12 +851,12 @@ function chartParts(c, big){
 }
 function chartCard(c){
   const p = chartParts(c, false);
-  return `<div class="cc" data-cid="${esc(c.id)}"><div class="cch"><div data-act="expand" data-cid="${esc(c.id)}" style="min-width:0"><div class="cct">${esc(p.meta.title)}</div><div class="ccs">${esc(p.sub)}</div></div><button class="xb" data-act="expand" data-cid="${esc(c.id)}" aria-label="Expand chart">⤢</button></div>${p.empty ? `<div class="muted" style="padding:28px 0;text-align:center">${esc(p.meta.empty || 'No data yet')}</div>` : p.svg}<div class="cap">${esc(p.cap)}</div></div>`;
+  return `<div class="cc" data-cid="${esc(c.id)}"><div class="cch"><div data-act="expand" data-cid="${esc(c.id)}" style="min-width:0"><div class="cct">${esc(p.meta.title)}</div><div class="ccs">${esc(p.sub)}</div></div><span class="cca"><button class="ib sm" data-act="expand" data-cid="${esc(c.id)}" aria-label="Expand chart"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button><button class="ed" data-act="tmenu" data-cid="${esc(c.id)}" aria-label="Chart options">⋯</button></span></div>${p.empty ? `<div class="muted" style="padding:28px 0;text-align:center">${esc(p.meta.empty || 'No data yet')}</div>` : p.svg}<div class="cap">${esc(p.cap)}</div></div>`;
 }
 function renderX(){
   const o = $('xov'), c = xopen && getChart(xopen);
   if (!c) { o.classList.remove('on'); o.innerHTML = ''; xopen = null; return; }
-  const p = chartParts(c, true), rs = RANGES[p.meta.kind], adh = String(c.id).startsWith('body:');
+  const p = chartParts(c, true), rs = RANGES[p.meta.kind], adh = /^(body|ex):/.test(String(c.id));
   o.innerHTML = `<div class="xh2"><button class="back" data-act="xclose">‹</button><div class="ttl">${esc(p.meta.title)}</div></div><div class="ccs" style="margin:2px 2px 10px">${esc(p.sub)}</div>
     <div class="cc"><div class="rng">${rs.map(([v, l]) => `<button class="chip ${v === p.range ? 'on' : ''}" data-act="range" data-cid="${esc(c.id)}" data-r="${v}">${l}</button>`).join('')}</div>${p.empty ? `<div class="muted" style="padding:40px 0;text-align:center">No data in this range</div>` : p.svg}<div class="cap">${esc(p.cap)}</div></div>
     <div class="lbl" style="margin:16px 2px 6px">Data</div><div>${p.rows.slice(0, 80).map(r => `<div class="vrow"><span>${esc(r[0])}</span><span>${esc(r[1])}</span></div>`).join('') || '<div class="muted">Nothing to show.</div>'}</div>${adh ? '' : `<button class="cancelbtn" data-act="rmchart" data-cid="${esc(c.id)}">Remove chart</button>`}`;
@@ -861,15 +881,25 @@ function chartHover(e){
 document.addEventListener('pointermove', chartHover);
 document.addEventListener('click', chartHover);
 function renderProf(){
-  $('hd').innerHTML = `<div class="row"><div class="ttl">Profile</div><button class="sync" id="sync" data-act="sync"></button></div>`;
-  const ws = allWorkouts(), cur = ymd(monday(new Date()));
-  const tw = ws.filter(w => ymd(monday(pdate(w.ts))) === cur), wt = bodyList().find(e => has(e.w));
-  const k = (b, t) => `<div class="kpi"><b>${b}</b><span>${t}</span></div>`;
-  const note = boot && boot.v < 6 ? '<p class="muted">Update Code.gs (v6) to see your full workout history in these charts.</p>' : '';
-  $('app').innerHTML = note + `<div class="kpis">${k(tw.length, 'workouts this week')}${k(fmtVol(tw.reduce((a, w) => a + (+w.vol || 0), 0)), 'kg this week')}${k(wt ? fmtW(+wt.w) : '–', 'kg weight')}</div>` + charts.map(chartCard).join('') + `<button class="startbtn" style="background:#3a4160;color:var(--tx)" data-act="addchart">+ Add chart</button>
-    <div class="hc" style="margin-top:18px"><div class="ht" style="font-size:16px;margin-bottom:8px">Settings</div>
-    <button class="sopt" data-act="syncmode">Sync mode<small>${store.get('syncMode', 'live') === 'live' ? 'Live: each set syncs right after you log it' : 'Sets stay on this phone until you tap Finish'} · tap to change</small></button>
-    <button class="sopt" data-act="cfg" style="margin-bottom:0">Script URL and secret<small>Change which sheet this app talks to</small></button></div>`;
+  $('hd').innerHTML = `<div class="row"><span class="hact" style="margin-left:0"><button class="sync" id="sync" data-act="sync"></button></span><button class="ib" style="margin-left:auto" data-act="settings" aria-label="Settings"><svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3.3h-4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1l.4 2.6h4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.500 1 2-3.500zM13 15.500a3.500 3.500 0 1 1 0-7 3.500 3.500 0 0 1 0 7z"/></svg></button></div><div class="ttl big">Profile</div>`;
+  const nm = store.get('pname', 'Divyam Jain'), n = allWorkouts().length;
+  const note = boot && boot.v < 6 ? '<p class="muted">Update Code.gs to see your full workout history in these charts.</p>' : '';
+  $('app').innerHTML = note + `<div class="prow2"><div class="avatar">${esc(nm.trim()[0] || '?')}</div><div><div class="pn">${esc(nm)}</div><div class="muted">${n} workouts</div></div><span class="chev">›</span></div>
+    <div class="dashh"><div class="sect" style="margin:0">Dashboard</div><button class="ib" data-act="addchart" aria-label="Add chart">${IC.plus}</button></div>` + charts.map(chartCard).join('');
+}
+function renderEx(){
+  $('hd').innerHTML = `<div class="row"><div class="ttl big">Exercises</div><button class="sync" id="sync" data-act="sync"></button></div>`;
+  if (!boot) { $('app').innerHTML = '<p class="muted">Loading… (needs signal once)</p>'; return; }
+  const names = exNames();
+  $('app').innerHTML = `<input class="sq" id="exq" placeholder="Search exercises" autocomplete="off" style="width:100%;height:44px;border-radius:14px;margin-bottom:10px;background:var(--card);border:1px solid var(--line);color:var(--tx);padding:0 14px;font-size:16px"><div id="exlist">${exListHtml('')}</div>`;
+}
+function exListHtml(q){
+  const ql = q.trim().toLowerCase(), ser = (boot && boot.exseries) || {};
+  return exNames().filter(n => !ql || n.toLowerCase().includes(ql)).map(n => {
+    const r = ser[n] || [], best = r.reduce((m, x) => Math.max(m, +x[1] || 0), 0), L = lastSets(n);
+    const sub = best ? 'Best est. 1RM ' + fmtW(best) + ' kg' : (L.length ? 'Last: ' + fmtW(num(L[0][1])) + ' × ' + L[0][2] : 'No history');
+    return `<button class="exrow" data-act="exopen" data-n="${esc(n)}"><span>${esc(n)}</span><small>${sub}</small></button>`;
+  }).join('') || '<p class="muted">No exercises found.</p>';
 }
 // ---- bottom sheets (add chart, add body value, exercise picker)
 function exNames(){
@@ -899,6 +929,9 @@ function renderSheet(){
       <input class="sq" id="bv" inputmode="decimal" placeholder="${has(last) ? esc(last) : ''}"><div class="muted" style="margin-bottom:6px">Date</div>
       <input class="sq" id="bd" type="date" value="${todayKey()}" max="${todayKey()}"><button class="startbtn" data-act="savebody">Save</button>`;
   }
+  else if (sheet.step === 'settings') h = `<div class="ht">Settings</div>
+    <button class="sopt" data-act="syncmode">Sync mode<small>${store.get('syncMode', 'live') === 'live' ? 'Live: each set syncs right after you log it' : 'Sets stay on this phone until you tap Finish'} · tap to change</small></button>
+    <button class="sopt" data-act="cfg">Script URL and secret<small>Change which sheet this app talks to</small></button>`;
   else if (sheet.step === 'pick') h = `<div class="ht">Add exercise</div><input class="sq" id="pq" placeholder="Search or type a new name" autocomplete="off"><div id="plist">${pickerList('')}</div>`;
   bg.innerHTML = `<div class="sheet">${h}</div>`;
   bg.classList.add('on');
@@ -921,7 +954,7 @@ function addExerciseTo(ex){
   toast(ex + ' added' + (lastSets(ex).length ? ' with last sets' : ''));
 }
 function renderHist(){
-  $('hd').innerHTML = `<div class="row"><div class="ttl">Lift Log</div><button class="sync" id="sync" data-act="sync"></button></div>`;
+  $('hd').innerHTML = `<div class="row"><div class="ttl">History</div><button class="sync" id="sync" data-act="sync"></button></div>`;
   const h = boot && boot.history;
   if (!boot) { $('app').innerHTML = '<p class="muted">Loading… (needs signal once)</p>'; return; }
   if (!h) { $('app').innerHTML = '<p class="muted">History needs the updated script. Redeploy Code.gs (v3) in Apps Script, then reopen the app.</p>'; return; }
@@ -1029,7 +1062,7 @@ function renderDay(){
   $('app').innerHTML = out + `<div class="muted" style="padding:4px">Tap a set number to add effort / form / help tags. Tap the previous value to copy it. ⛓ links an exercise with the one below as a superset.</div><button class="link" data-act="add">+ add exercise</button> <button class="link" data-act="cfg">settings</button>${running() ? '<button class="cancelbtn" data-act="cancel">Cancel workout</button>' : ''}`;
 }
 document.addEventListener('click', e => {
-  if (pop && !e.target.closest('#pop')) { const tb = e.target.closest('[data-act="tmenu"]'), same = tb && tb.dataset.d === pop.d; closePop(); if (!tb || same) return; }
+  if (pop && !e.target.closest('#pop')) { const tb = e.target.closest('[data-act="tmenu"]'), same = tb && tb.dataset.d === pop.d && (tb.dataset.cid || '') === (pop.cid || ''); closePop(); if (!tb || same) return; }
   const t = e.target.closest('[data-act]'); if (!t || t.disabled) return;
   captureInputs();
   const D = t.dataset, a = D.act, ei = +D.ei, si = +D.si;
@@ -1041,7 +1074,7 @@ document.addEventListener('click', e => {
   else if (a === 'tab') { view = D.t; render(); window.scrollTo(0, 0); }
   else if (a === 'link') toggleLink(ei);
   else if (a === 'sync') forceSync();
-  else if (a === 'syncmode') { const m = store.get('syncMode', 'live') === 'live' ? 'finish' : 'live'; store.set('syncMode', m); toast(m === 'live' ? 'Live: each set syncs right away' : 'Sets stay on this phone until you tap Finish'); render(); flush(); }
+  else if (a === 'syncmode') { const m = store.get('syncMode', 'live') === 'live' ? 'finish' : 'live'; store.set('syncMode', m); toast(m === 'live' ? 'Live: each set syncs right away' : 'Sets stay on this phone until you tap Finish'); render(); if (sheet && sheet.step === 'settings') renderSheet(); flush(); }
   else if (a === 'bodym') { bodyMetric = D.m; view = 'bodym'; render(); window.scrollTo(0, 0); }
   else if (a === 'bback') { view = 'body'; render(); window.scrollTo(0, 0); }
   else if (a === 'addbody') openSheet('addbody', { m: D.m });
@@ -1064,7 +1097,11 @@ document.addEventListener('click', e => {
   else if (a === 'sheetbg') { if (e.target === t) { sheet = null; renderSheet(); } }
   else if (a === 'pickex') { addExerciseTo(D.n); sheet = null; renderSheet(); render(); }
   else if (a === 'rename') renameDay(D.d);
-  else if (a === 'tmenu') openPop(t, D.d);
+  else if (a === 'tmenu') openPop(t, D.d, D.cid);
+  else if (a === 'cexp') { closePop(); xopen = D.cid; renderX(); }
+  else if (a === 'crm') { closePop(); if (confirm('Remove this chart from your dashboard?')) { charts = charts.filter(x => x.id !== D.cid); saveCharts(); render(); } }
+  else if (a === 'settings') openSheet('settings');
+  else if (a === 'exopen') { const id = 'ex:' + D.n; adhoc[id] = adhoc[id] || { id, type: 'ex', ex: D.n, metric: 'e1', range: 0 }; xopen = id; renderX(); }
   else if (a === 'newt') newTemplate();
   else if (a === 'tedit' || a === 'trename' || a === 'tdup' || a === 'tarch' || a === 'tunarch' || a === 'tdelete') tmenuAct(a, D.d);
   else if (a === 'showarch') { showArch = !showArch; render(); window.scrollTo(0, 0); }
@@ -1080,13 +1117,13 @@ document.addEventListener('click', e => {
   else if (a === 'prev') usePrev(ei, si);
   else if (a === 'addset') addSet(ei);
   else if (a === 'add') addExercise();
-  else if (a === 'cfg') { cfg = null; render(); }
+  else if (a === 'cfg') { sheet = null; renderSheet(); cfg = null; render(); }
 });
 document.addEventListener('change', e => {
   const t = e.target; if (!t.matches || !t.matches('input.in')) return;
   if (t.dataset.done) editLogged(+t.dataset.ei, +t.dataset.si, t.dataset.f, t.value); else captureInputs();
 });
-document.addEventListener('input', e => { const t = e.target; if (t.id === 'pq') $('plist').innerHTML = pickerList(t.value); });
+document.addEventListener('input', e => { const t = e.target; if (t.id === 'exq') $('exlist').innerHTML = exListHtml(t.value); if (t.id === 'pq') $('plist').innerHTML = pickerList(t.value); });
 document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches('input.in, input.bi')) e.target.select(); });
 function renderSetup(){
   $('hd').innerHTML = '';
@@ -1099,7 +1136,7 @@ function init(){
   if (sess && !sess.ended && sess.date !== todayKey()) { sess.ended = true; sess.summary = sess.summary || { dur: 0, vol: 0, sets: sess.sets.length, prs: [], by: {} }; store.set('sess', sess); }
   day = (running() ? sess.day : day) || defaultDay();
   const sv = store.get('view', 'home');
-  view = running() ? 'day' : (['home', 'hist', 'body', 'prof'].includes(sv) ? sv : 'home');
+  view = running() ? 'day' : (['home', 'hist', 'body', 'prof', 'ex'].includes(sv) ? sv : 'home');
   render(); refreshBoot(); flush();
 }
 
