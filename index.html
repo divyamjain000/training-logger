@@ -66,6 +66,7 @@ main{padding:10px 12px}
 .link{background:none;border:0;color:var(--mut);font-size:13px;padding:8px 4px}
 .addset{width:100%;margin-top:8px;height:36px;border:0;border-radius:8px;background:#222733;color:var(--tx);font-size:14px}
 .best{font-size:12px;color:var(--mut)}
+.cancelbtn{display:block;width:100%;height:46px;margin:14px 0 6px;border:1px solid var(--bad);background:none;color:var(--bad);border-radius:10px;font-size:15px;font-weight:700}
 .ssg{position:relative;padding-left:13px;margin-bottom:12px}
 .ssg::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:3px;background:var(--c)}
 .ssg .ex{margin-bottom:8px}.ssg .ex:last-of-type{margin-bottom:0}
@@ -85,8 +86,23 @@ main{padding:10px 12px}
 .pl .s{font-size:12px;color:var(--mut);margin-top:3px}
 .ssg .pl{margin-bottom:8px}.ssg .pl:last-of-type{margin-bottom:0}
 .pbar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:linear-gradient(transparent,var(--bg) 35%);padding:26px 14px calc(12px + env(safe-area-inset-bottom))}
-.tabs{display:flex;gap:8px;margin-top:8px}
-.tabs .chip{flex:1;text-align:center}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:7;background:#0b0d12;border-top:1px solid var(--line);display:none;gap:6px;padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.nav.on{display:flex}
+.nav button{flex:1;border:1px solid var(--line);background:#14171e;color:var(--mut);border-radius:6px;padding:7px 4px 6px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button.on{background:var(--acc);border-color:var(--acc);color:#07101f}
+.hasnav .bar{bottom:calc(64px + env(safe-area-inset-bottom))}
+.hasnav .toast{bottom:calc(150px + env(safe-area-inset-bottom))}
+body.hasnav{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;margin:10px 0}
+.bgrid label{font-size:12px;color:var(--mut);display:block;margin-bottom:3px}
+.bgrid .bi,.bnote{width:100%;height:42px;background:#0c0e13;color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:0 10px;font-size:16px}
+.bnote{margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.mchip{background:#0c0e13;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:13px}
+.mchip i{font-style:normal;font-size:11px;color:var(--mut);margin-left:4px}
+.mchip i.up{color:var(--warn)}.mchip i.dn{color:var(--ok)}
+.delb{float:right;background:none;border:0;color:var(--mut);font-size:16px;padding:0 4px}
 .hc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
 .hc .ht{font-size:19px;font-weight:700}
 .hc .hdt{font-size:13px;color:var(--mut);margin:2px 0 10px}
@@ -122,6 +138,7 @@ main{padding:10px 12px}
 <main id="app"></main>
 <div class="bar" id="bar"><div><div class="muted" id="barEx"></div><div class="big" id="barT">0:00</div></div></div>
 <div class="toast" id="toast"></div>
+<nav class="nav" id="nav"></nav>
 <div class="ov" id="ov"></div>
 <script>
 'use strict';
@@ -135,7 +152,7 @@ let cfg = store.get('cfg', null);
 let boot = store.get('boot', null);
 let queue = store.get('q', []);
 let sess = store.get('sess', null);
-let day = null, view = 'home', extra = store.get('extra', {}), xs = store.get('xs', {}), names = store.get('names', {}), links = store.get('links', {}), draft = {}, flushing = false, starting = false;
+let day = null, view = 'home', extra = store.get('extra', {}), xs = store.get('xs', {}), names = store.get('names', {}), links = store.get('links', {}), draft = {}, bodyDraft = {}, flushing = false, starting = false;
 
 // ---- helpers
 const pad = n => String(n).padStart(2, '0');
@@ -174,9 +191,11 @@ async function refreshBoot(){
     boot = j; store.set('boot', boot); captureInputs(); render();
   } catch(e){ /* offline or cold start, keep cache */ }
 }
+function holding(){ return store.get('syncMode', 'live') === 'finish' && running(); }
 function sendable(){
-  const v4 = boot && boot.v >= 4, v2 = boot && boot.v >= 2;
-  return queue.filter(x => x.kind === 'set' || (x.kind === 'finish' && v2) || ((x.kind === 'delete' || x.kind === 'update') && v4));
+  const hold = holding();
+  const v5 = boot && boot.v >= 5, v4 = boot && boot.v >= 4, v2 = boot && boot.v >= 2;
+  return queue.filter(x => (hold && (x.kind === 'set' || x.kind === 'update' || x.kind === 'delete')) ? false : (x.kind === 'set' || (x.kind === 'finish' && v2) || ((x.kind === 'delete' || x.kind === 'update') && v4) || ((x.kind === 'body' || x.kind === 'bodydel') && v5)));
 }
 async function flush(){
   if (!cfg || flushing || !queue.length || !navigator.onLine) { updSync(); return; }
@@ -186,13 +205,19 @@ async function flush(){
   const strip = o => { const c = Object.assign({}, o); delete c.kind; return c; };
   const rows = send.filter(x => x.kind === 'set'), fins = send.filter(x => x.kind === 'finish');
   const dels = send.filter(x => x.kind === 'delete'), ups = send.filter(x => x.kind === 'update');
+  const bodies = send.filter(x => x.kind === 'body'), bdels = send.filter(x => x.kind === 'bodydel');
   try {
-    const r = await fetch(cfg.u, { method: 'POST', redirect: 'follow', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ key: cfg.k, rows: rows.map(strip), finishes: fins.map(strip), deletes: dels.map(x => x.id), updates: ups.map(strip) }) });
+    const r = await fetch(cfg.u, { method: 'POST', redirect: 'follow', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ key: cfg.k, rows: rows.map(strip), finishes: fins.map(strip), deletes: dels.map(x => x.id), updates: ups.map(strip), body: bodies.map(strip), bodyDeletes: bdels.map(x => x.id) }) });
     const j = await r.json();
     if (j.ok) {
       const done = new Set(j.ids), sent = new Set(send);
       queue = queue.filter(x => !(sent.has(x) && done.has(x.id))); store.set('q', queue);
       if (sess) { sess.sets.forEach(s => { if (rows.some(x => x.id === s.id)) s.synced = true; }); store.set('sess', sess); }
+      if (boot && (bodies.length || bdels.length)) {
+        const gone = new Set(bdels.map(x => x.id));
+        boot.body = (boot.body || []).filter(e => !gone.has(e.id) && !bodies.some(b => b.id === e.id)).concat(bodies.map(strip));
+        store.set('boot', boot);
+      }
       if (!queue.length && !running()) setTimeout(refreshBoot, 600);
     } else toast('Sync: ' + (j.error || 'failed'));
   } catch(e){ /* stay queued */ }
@@ -201,7 +226,7 @@ async function flush(){
 }
 function updSync(){
   const el = $('sync'); if (!el) return;
-  el.innerHTML = queue.length ? `<b>${queue.length} unsynced</b>` : (navigator.onLine ? 'synced' : 'offline');
+  el.innerHTML = queue.length ? (holding() ? `${queue.length} saved on phone` : `<b>${queue.length} unsynced</b>`) : (navigator.onLine ? 'synced' : 'offline');
 }
 
 // ---- supersets
@@ -446,11 +471,8 @@ function workoutBar(){
 function render(){
   if (!cfg) return renderSetup();
   if (running() && view === 'day' && sess.day !== day) day = sess.day;
-  if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else renderHome();
-  updSync(); tick();
-}
-function tabsHtml(active){
-  return `<div class="tabs"><button class="chip ${active === 'home' ? 'on' : ''}" data-act="tab" data-t="home">Workouts</button><button class="chip ${active === 'hist' ? 'on' : ''}" data-act="tab" data-t="hist">History</button></div>`;
+  if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else if (view === 'body') renderBody(); else renderHome();
+  renderNav(); updSync(); tick();
 }
 function fmtWhen(ts){
   const m = String(ts).match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/); if (!m) return ts;
@@ -466,8 +488,63 @@ function bestSet(sets){
   });
   return b ? (b.w > 0 ? `${fmtW(b.w)} kg × ${b.r}` : `${b.r} reps`) : '–';
 }
+const ICON = {
+  hist: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  home: '<svg viewBox="0 0 24 24"><path d="M3 9v6M6 7v10M18 7v10M21 9v6M6 12h12"/></svg>',
+  body: '<svg viewBox="0 0 24 24"><rect x="3" y="8.5" width="18" height="7" rx="1"/><path d="M7 8.5v3M11 8.5v2M15 8.5v3M19 8.5v2"/></svg>'
+};
+function renderNav(){
+  const show = cfg && (view === 'home' || view === 'hist' || view === 'body');
+  const n = $('nav'); n.classList.toggle('on', !!show); document.body.classList.toggle('hasnav', !!show);
+  if (!show) { n.innerHTML = ''; return; }
+  n.innerHTML = [['hist', 'History'], ['home', 'Workout'], ['body', 'Body']].map(([k, l]) => `<button class="${view === k ? 'on' : ''}" data-act="tab" data-t="${k}">${ICON[k]}<span>${l}</span></button>`).join('');
+}
+// ---- body measurements
+const BF = [['w','Weight','kg'],['bf','Body fat','%'],['neck','Neck','cm'],['sh','Shoulders','cm'],['chest','Chest','cm'],['waist','Waist','cm'],['hips','Hips','cm'],['arm','Arm','cm'],['thigh','Thigh','cm'],['calf','Calf','cm']];
+function bodyList(){
+  const map = {};
+  ((boot && boot.body) || []).forEach(e => map[e.id] = e);
+  queue.filter(x => x.kind === 'body').forEach(x => map[x.id] = x);
+  const gone = new Set(queue.filter(x => x.kind === 'bodydel').map(x => x.id));
+  return Object.keys(map).map(k => map[k]).filter(e => !gone.has(e.id)).sort((a, b) => a.ts < b.ts ? 1 : -1);
+}
+const has = v => v !== undefined && v !== null && v !== '';
+function saveBody(){
+  const rec = { kind: 'body', id: uid(), ts: nowStr(), note: (bodyDraft.note || '').trim() };
+  let any = false;
+  BF.forEach(([k]) => { if (has(bodyDraft[k])) { const n = num(bodyDraft[k], NaN); if (!isNaN(n) && n > 0) { rec[k] = n; any = true; } } });
+  if (!any) { toast('Enter at least one measurement'); return; }
+  queue.push(rec); store.set('q', queue); bodyDraft = {};
+  toast('Saved'); render(); flush();
+}
+function delBody(id){
+  if (!confirm('Delete this entry?')) return;
+  if (queue.some(x => x.kind === 'body' && x.id === id)) queue = queue.filter(x => x.id !== id);
+  else queue.push({ kind: 'bodydel', id });
+  store.set('q', queue); render(); flush();
+}
+function renderBody(){
+  $('hd').innerHTML = `<div class="row"><div class="ttl">Body</div><div class="sync" id="sync"></div></div>`;
+  const list = bodyList();
+  const lastOf = k => { const e = list.find(x => has(x[k])); return e ? e[k] : ''; };
+  const warn = boot && boot.v < 5 ? '<p class="muted">Entries are saved on this phone and will sync after you redeploy Code.gs (v5).</p>' : '';
+  const form = `<div class="hc"><div class="ht">New entry</div><div class="muted">Fill only what you measured. Greyed numbers are your last values.</div>
+    <div class="bgrid">${BF.map(([k, l, u]) => `<div><label>${l} (${u})</label><input class="bi" inputmode="decimal" data-bf="${k}" placeholder="${has(lastOf(k)) ? esc(lastOf(k)) : ''}" value="${has(bodyDraft[k]) ? esc(bodyDraft[k]) : ''}"></div>`).join('')}</div>
+    <input class="bnote" data-bf="note" placeholder="Note (optional)" value="${esc(bodyDraft.note || '')}">
+    <button class="startbtn" data-act="savebody">Save measurements</button></div>`;
+  const hist = list.map((e, i) => {
+    const chips = BF.filter(([k]) => has(e[k])).map(([k, l, u]) => {
+      const prev = list.slice(i + 1).find(x => has(x[k]));
+      let d = '';
+      if (prev) { const df = +(e[k] - prev[k]).toFixed(1); if (df) d = `<i class="${df > 0 ? 'up' : 'dn'}">${df > 0 ? '+' : '−'}${Math.abs(df)}</i>`; }
+      return `<span class="mchip">${l} ${fmtW(+e[k])} ${u}${d}</span>`;
+    }).join('');
+    return `<div class="hc"><button class="delb" data-act="delbody" data-id="${esc(e.id)}">✕</button><div class="hdt" style="margin:0 0 8px">${esc(fmtWhen(e.ts))}</div><div class="chips">${chips}</div>${e.note ? `<div class="muted" style="margin-top:8px">${esc(e.note)}</div>` : ''}</div>`;
+  }).join('');
+  $('app').innerHTML = warn + form + (hist || '<p class="muted">No entries yet.</p>');
+}
 function renderHist(){
-  $('hd').innerHTML = `<div class="row"><div class="ttl">Lift Log</div><div class="sync" id="sync"></div></div>${tabsHtml('hist')}`;
+  $('hd').innerHTML = `<div class="row"><div class="ttl">Lift Log</div><div class="sync" id="sync"></div></div>`;
   const h = boot && boot.history;
   if (!boot) { $('app').innerHTML = '<p class="muted">Loading… (needs signal once)</p>'; return; }
   if (!h) { $('app').innerHTML = '<p class="muted">History needs the updated script. Redeploy Code.gs (v3) in Apps Script, then reopen the app.</p>'; return; }
@@ -480,7 +557,7 @@ function renderHist(){
   }).join('');
 }
 function renderHome(){
-  $('hd').innerHTML = `<div class="row"><div class="ttl">Lift Log</div><div class="sync" id="sync"></div></div>${tabsHtml('home')}`;
+  $('hd').innerHTML = `<div class="row"><div class="ttl">Lift Log</div><div class="sync" id="sync"></div></div>`;
   if (!boot) { $('app').innerHTML = '<p class="muted">Loading your plan… (needs signal once)</p>'; return; }
   const todayDay = DAYS[new Date().getDay() - 1];
   let top = '';
@@ -496,7 +573,7 @@ function renderHome(){
     return `<div class="dcard ${d === todayDay ? 'today' : ''}" data-act="openDay" data-d="${d}">
       <div class="dh"><div class="dt">${esc(label(d))}</div><span class="dsub">${d.slice(0,3)}${d === todayDay ? ' · today' : ''}</span><button class="ed" data-act="rename" data-d="${d}">✎</button></div>
       ${list}${rows.length > 5 ? `<div class="more">+${rows.length - 5} more</div>` : ''}</div>`;
-  }).join('') + '</div>' + `<button class="link" data-act="cfg">settings</button>`;
+  }).join('') + '</div>' + `<button class="link" data-act="syncmode">Sync: ${store.get('syncMode', 'live') === 'live' ? 'live, after every set' : 'when I finish'} · change</button> <button class="link" data-act="cfg">settings</button>`;
 }
 function renderPlan(){
   const rows = plan(), sm = ssMap(rows, day);
@@ -554,7 +631,7 @@ function renderDay(){
     out += c;
     if (m && m.last) out += '</div>';
   });
-  $('app').innerHTML = out + `<div class="muted" style="padding:4px">Tap a set number to add effort / form / help tags. Tap the previous value to copy it. ⛓ links an exercise with the one below as a superset.</div><button class="link" data-act="add">+ add exercise</button> <button class="link" data-act="cfg">settings</button>`;
+  $('app').innerHTML = out + `<div class="muted" style="padding:4px">Tap a set number to add effort / form / help tags. Tap the previous value to copy it. ⛓ links an exercise with the one below as a superset.</div><button class="link" data-act="add">+ add exercise</button> <button class="link" data-act="cfg">settings</button>${running() ? '<button class="cancelbtn" data-act="cancel">Cancel workout</button>' : ''}`;
 }
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-act]'); if (!t || t.disabled) return;
@@ -567,6 +644,9 @@ document.addEventListener('click', e => {
   else if (a === 'back') { view = 'home'; render(); window.scrollTo(0, 0); }
   else if (a === 'tab') { view = D.t; render(); window.scrollTo(0, 0); }
   else if (a === 'link') toggleLink(ei);
+  else if (a === 'savebody') saveBody();
+  else if (a === 'syncmode') { const m = store.get('syncMode', 'live') === 'live' ? 'finish' : 'live'; store.set('syncMode', m); toast(m === 'live' ? 'Live: each set syncs right away' : 'Sets stay on this phone until you tap Finish'); render(); flush(); }
+  else if (a === 'delbody') delBody(D.id);
   else if (a === 'rename') renameDay(D.d);
   else if (a === 'start') startWorkout();
   else if (a === 'finish') finishWorkout();
@@ -584,7 +664,8 @@ document.addEventListener('change', e => {
   const t = e.target; if (!t.matches || !t.matches('input.in')) return;
   if (t.dataset.done) editLogged(+t.dataset.ei, +t.dataset.si, t.dataset.f, t.value); else captureInputs();
 });
-document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches('input.in')) e.target.select(); });
+document.addEventListener('input', e => { const t = e.target; if (t.dataset && t.dataset.bf) bodyDraft[t.dataset.bf] = t.value; });
+document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches('input.in, input.bi')) e.target.select(); });
 function renderSetup(){
   $('hd').innerHTML = '';
   $('app').innerHTML = `<div class="setup"><h2>Lift Log setup</h2><p class="muted">Paste your Apps Script web app URL and the secret you set in Code.gs. Stored only on this phone.</p>
