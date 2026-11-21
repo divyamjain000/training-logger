@@ -174,26 +174,30 @@ async function refreshBoot(){
     boot = j; store.set('boot', boot); captureInputs(); render();
   } catch(e){ /* offline or cold start, keep cache */ }
 }
+function sendable(){
+  const v4 = boot && boot.v >= 4, v2 = boot && boot.v >= 2;
+  return queue.filter(x => x.kind === 'set' || (x.kind === 'finish' && v2) || ((x.kind === 'delete' || x.kind === 'update') && v4));
+}
 async function flush(){
   if (!cfg || flushing || !queue.length || !navigator.onLine) { updSync(); return; }
-  const canFin = boot && boot.v >= 2;
-  const rows = queue.filter(x => x.kind === 'set').slice(0, 50);
-  const fins = canFin ? queue.filter(x => x.kind === 'finish') : [];
-  if (!rows.length && !fins.length) { updSync(); return; }
+  const send = sendable().slice(0, 60);
+  if (!send.length) { updSync(); return; }
   flushing = true; updSync();
+  const strip = o => { const c = Object.assign({}, o); delete c.kind; return c; };
+  const rows = send.filter(x => x.kind === 'set'), fins = send.filter(x => x.kind === 'finish');
+  const dels = send.filter(x => x.kind === 'delete'), ups = send.filter(x => x.kind === 'update');
   try {
-    const strip = o => { const c = Object.assign({}, o); delete c.kind; return c; };
-    const r = await fetch(cfg.u, { method: 'POST', redirect: 'follow', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ key: cfg.k, rows: rows.map(strip), finishes: fins.map(strip) }) });
+    const r = await fetch(cfg.u, { method: 'POST', redirect: 'follow', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({ key: cfg.k, rows: rows.map(strip), finishes: fins.map(strip), deletes: dels.map(x => x.id), updates: ups.map(strip) }) });
     const j = await r.json();
     if (j.ok) {
-      const done = new Set(j.ids);
-      queue = queue.filter(x => !done.has(x.id)); store.set('q', queue);
-      if (sess) { sess.sets.forEach(s => { if (done.has(s.id)) s.synced = true; }); store.set('sess', sess); }
+      const done = new Set(j.ids), sent = new Set(send);
+      queue = queue.filter(x => !(sent.has(x) && done.has(x.id))); store.set('q', queue);
+      if (sess) { sess.sets.forEach(s => { if (rows.some(x => x.id === s.id)) s.synced = true; }); store.set('sess', sess); }
       if (!queue.length && !running()) setTimeout(refreshBoot, 600);
     } else toast('Sync: ' + (j.error || 'failed'));
   } catch(e){ /* stay queued */ }
   flushing = false; updSync();
-  if (queue.some(x => x.kind === 'set') && navigator.onLine) setTimeout(flush, 4000);
+  if (sendable().length && navigator.onLine) setTimeout(flush, 4000);
 }
 function updSync(){
   const el = $('sync'); if (!el) return;
@@ -248,7 +252,7 @@ function cur(row, si){
   return rec ? { w: rec.w, reps: rec.reps, rir: rec.rir, form: rec.form, help: rec.help } : vals(row, si);
 }
 function captureInputs(){
-  const inputs = document.querySelectorAll('#app input.in:not([readonly])'); if (!inputs.length) return;
+  const inputs = document.querySelectorAll('#app input.in:not([data-done]):not([readonly])'); if (!inputs.length) return;
   const rows = plan();
   inputs.forEach(inp => {
     if (inp.value === inp.defaultValue) return;
@@ -307,13 +311,16 @@ function finishWorkout(){
 }
 function cancelWorkout(){
   if (!running()) return;
-  const n = sess.sets.length, syn = sess.sets.filter(x => x.synced).length;
-  const msg = n ? `Cancel this workout? ${n} logged set${n > 1 ? 's' : ''} will be discarded.` + (syn ? `\n\n${syn} already reached your sheet and will stay there.` : '') : 'Cancel this workout?';
+  const n = sess.sets.length, syn = sess.sets.filter(x => x.synced);
+  const can = boot && boot.v >= 4;
+  const msg = n ? `Cancel this workout? ${n} logged set${n > 1 ? 's' : ''} will be discarded.` + (syn.length ? (can ? `\n\n${syn.length} already in your sheet will be removed from it.` : `\n\n${syn.length} already in your sheet will stay there.`) : '') : 'Cancel this workout?';
   if (!confirm(msg)) return;
   const ids = new Set(sess.sets.map(x => x.id)); ids.add(sess.id);
-  queue = queue.filter(q => !ids.has(q.id)); store.set('q', queue);
+  queue = queue.filter(q => !ids.has(q.id));
+  if (can) syn.forEach(x => queue.push({ kind: 'delete', id: x.id }));
+  store.set('q', queue);
   sess = null; store.set('sess', null); draft = {}; xs = {}; store.set('xs', xs);
-  $('bar').classList.remove('on'); toast('Workout cancelled'); view = 'home'; render();
+  $('bar').classList.remove('on'); toast('Workout cancelled'); view = 'home'; render(); flush();
 }
 function showSummary(){
   if (!sess || !sess.summary) return;
@@ -357,11 +364,24 @@ function logSet(ei, si){
 function undo(ei, si){
   const row = plan()[ei]; if (!row) return;
   const rec = loggedFor(row.ex).find(s => s.set === si + 1); if (!rec) return;
-  if (!queue.find(q => q.id === rec.id)) { toast('Already synced. Fix it in the sheet.'); return; }
-  queue = queue.filter(q => q.id !== rec.id); store.set('q', queue);
+  if (!running()) { toast('Workout is finished. Edit it in the sheet.'); return; }
+  const pending = queue.find(q => q.kind === 'set' && q.id === rec.id);
+  queue = queue.filter(q => q.id !== rec.id);
+  if (!pending) { queue.push({ kind: 'delete', id: rec.id }); if (!(boot && boot.v >= 4)) toast('Removed here. Redeploy the script (v4) to remove it from the sheet too.', 4000); }
+  store.set('q', queue);
   sess.sets = sess.sets.filter(s => s.id !== rec.id);
   sess.lastT = sess.sets.length ? sess.sets[sess.sets.length-1].t : sess.start; store.set('sess', sess);
-  render();
+  render(); flush();
+}
+function editLogged(ei, si, f, v){
+  const row = plan()[ei]; if (!row || !running()) return;
+  const rec = loggedFor(row.ex).find(x => x.set === si + 1); if (!rec) return;
+  if (f === 'w') rec.w = num(v); else rec.reps = Math.round(num(v));
+  store.set('sess', sess);
+  const item = queue.find(q => q.id === rec.id);
+  if (item) { item.w = rec.w; item.reps = rec.reps; }
+  else queue.push({ kind: 'update', id: rec.id, w: rec.w, reps: rec.reps, rir: rec.rir, form: rec.form, help: rec.help });
+  store.set('q', queue); tick(); flush();
 }
 function tagToggle(ei, si){ const r = plan()[ei]; const d = draft[dk(r.ex, si)] || (draft[dk(r.ex, si)] = {}); d.tags = !d.tags; render(); }
 function tag(ei, si, f, v){ const r = plan()[ei]; const d = draft[dk(r.ex, si)] || (draft[dk(r.ex, si)] = {}); d[f] = d[f] === v ? '' : v; render(); }
@@ -516,8 +536,8 @@ function renderDay(){
       const a = `data-ei="${ei}" data-si="${si}"`;
       cells += `<button class="sn ${rec && rec.pr ? 'pr' : (flagged ? 'tg' : '')}" data-act="tags" ${a}>${rec && rec.pr ? '🏆' : si + 1}</button>
         <button class="pv" data-act="prev" ${a} ${rec || !last[si] ? 'disabled' : ''}>${pv}</button>
-        <input class="in ${rec ? 'done' : ''}" inputmode="decimal" ${a} data-f="w" value="${fmtW(v.w)}" ${rec ? 'readonly' : ''}>
-        <input class="in ${rec ? 'done' : ''}" inputmode="numeric" ${a} data-f="reps" value="${v.reps}" ${rec ? 'readonly' : ''}>
+        <input class="in ${rec ? 'done' : ''}" inputmode="decimal" ${a} data-f="w" value="${fmtW(v.w)}" ${rec ? 'data-done="1"' : ''} ${rec && !running() ? 'readonly' : ''}>
+        <input class="in ${rec ? 'done' : ''}" inputmode="numeric" ${a} data-f="reps" value="${v.reps}" ${rec ? 'data-done="1"' : ''} ${rec && !running() ? 'readonly' : ''}>
         <button class="ck ${rec ? 'on' : ''}" data-act="check" ${a}>✓</button>`;
       if (!rec && dr.tags) cells += `<div class="tagp">
         <div class="tg"><span>Effort</span>${['0','1','2','3+'].map(x => `<button class="chip ${v.rir === x ? 'on' : ''}" data-act="tag" ${a} data-f="rir" data-v="${x}">RIR ${x}</button>`).join('')}</div>
@@ -560,7 +580,10 @@ document.addEventListener('click', e => {
   else if (a === 'add') addExercise();
   else if (a === 'cfg') { cfg = null; render(); }
 });
-document.addEventListener('change', e => { if (e.target.matches && e.target.matches('input.in')) captureInputs(); });
+document.addEventListener('change', e => {
+  const t = e.target; if (!t.matches || !t.matches('input.in')) return;
+  if (t.dataset.done) editLogged(+t.dataset.ei, +t.dataset.si, t.dataset.f, t.value); else captureInputs();
+});
 document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches('input.in')) e.target.select(); });
 function renderSetup(){
   $('hd').innerHTML = '';
