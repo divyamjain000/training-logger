@@ -472,6 +472,7 @@ function render(){
   if (!cfg) return renderSetup();
   if (running() && view === 'day' && sess.day !== day) day = sess.day;
   if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else if (view === 'body') renderBody(); else renderHome();
+  if (view === 'home' || view === 'hist' || view === 'body') store.set('view', view);
   renderNav(); updSync(); tick();
 }
 function fmtWhen(ts){
@@ -676,7 +677,8 @@ function renderSetup(){
 function init(){
   if (sess && !sess.ended && sess.date !== todayKey()) { sess.ended = true; sess.summary = sess.summary || { dur: 0, vol: 0, sets: sess.sets.length, prs: [], by: {} }; store.set('sess', sess); }
   day = (running() ? sess.day : day) || defaultDay();
-  view = running() ? 'day' : 'home';
+  const sv = store.get('view', 'home');
+  view = running() ? 'day' : (['home', 'hist', 'body'].includes(sv) ? sv : 'home');
   render(); refreshBoot(); flush();
 }
 
