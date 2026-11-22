@@ -1,4 +1,4 @@
-const CACHE = 'liftlog-v8';
+const CACHE = 'liftlog-v9';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon.svg'];
 
 self.addEventListener('install', e => {
@@ -17,4 +17,16 @@ self.addEventListener('fetch', e => {
       return res;
     }).catch(() => caches.match(e.request))
   );
+});
+
+// Workout notification actions: forward to the open app, or open it.
+self.addEventListener('notificationclick', e => {
+  const a = e.action;
+  if (e.notification.tag === 'liftlog-buzz') { e.notification.close(); return; }
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(cs => {
+    if (a === 'pause' || a === 'skip' || a === 'add30') { cs.forEach(c => c.postMessage({ type: 'wk', act: a })); return; }
+    e.notification.close();
+    if (cs.length) return cs[0].focus();
+    return self.clients.openWindow('./');
+  }));
 });

@@ -315,7 +315,7 @@ let queue = store.get('q', []);
 let sess = store.get('sess', null);
 let pop = null, tlist = store.get('tlist', []), editing = false, showArch = false, arch = store.get('arch', {}), gone = store.get('gone', []), day = null, view = 'home', extra = store.get('extra', {}), xs = store.get('xs', {}), names = store.get('names', {}), links = store.get('links', {}), draft = {}, flushing = false, starting = false;
 let hsel = null, exsel = null, extab = 'about', exqOn = false, exQ = '', exFilter = { bp: '', cat: '' }, exSort = 'az', instOpen = false;
-const PDEF = { sound: false, lock: false, delconf: true, prevset: 'template', incomplete: 'ask', theme: 'auto', simple: false, bars: '20', plates: '1.25, 2.5, 5, 10, 15, 20, 25', rest: 90, unit: 'kg' };
+const PDEF = { sound: false, lock: false, delconf: true, prevset: 'template', incomplete: 'ask', theme: 'auto', simple: false, bars: '20', plates: '1.25, 2.5, 5, 10, 15, 20, 25', rest: 90, unit: 'kg', notif: true, buzz: true };
 let prefs = Object.assign({}, PDEF, store.get('prefs', {}));
 let profile = store.get('profile', { name: store.get('pname', 'Divyam Jain') });
 let exovr = store.get('exovr', {});
@@ -538,7 +538,7 @@ async function startWorkout(){
   if (running() || starting) return;
   starting = true; render();
   await Promise.race([refreshBoot(), new Promise(r => setTimeout(r, 3000))]);
-  newSess(boot && boot.bests); starting = false; view = 'day'; render(); window.scrollTo(0, 0); tick();
+  newSess(boot && boot.bests); starting = false; view = 'day'; render(); window.scrollTo(0, 0); tick(); askNotif(); wakeSync();
 }
 function evalSession(){
   const by = {};
@@ -572,7 +572,7 @@ function finishWorkout(){
   store.set('q', queue);
   draft = {}; xs = {}; store.set('xs', xs);
   $('bar').classList.remove('on');
-  render(); showSummary(); flush();
+  render(); showSummary(); flush(); wakeSync();
 }
 function cancelWorkout(){
   if (!running()) return;
@@ -585,7 +585,7 @@ function cancelWorkout(){
   if (can) syn.forEach(x => queue.push({ kind: 'delete', id: x.id }));
   store.set('q', queue);
   sess = null; store.set('sess', null); draft = {}; xs = {}; store.set('xs', xs);
-  $('bar').classList.remove('on'); toast('Workout cancelled'); view = 'home'; render(); flush();
+  $('bar').classList.remove('on'); toast('Workout cancelled'); view = 'home'; render(); flush(); wakeSync();
 }
 function showSummary(){
   if (!sess || !sess.summary) return;
@@ -620,7 +620,7 @@ function logSet(ei, si){
     else if (e1rm(d.w, d.reps) > (b.e1rm || 0) + 0.05 && b.e1rm > 0) pr = 'e1rm';
   }
   const rec = { id: uid(), ex: row.ex, set: n, w: d.w, reps: d.reps, rir: d.rir, form: d.form, help: d.help, t: now, pr, synced: false };
-  sess.sets.push(rec); sess.lastT = now; sess.alerted = false; store.set('sess', sess);
+  sess.sets.push(rec); sess.lastT = now; sess.alerted = false; sess.xtra = 0; sess.pauseAt = null; notifAt = 0; store.set('sess', sess);
   queue.push({ kind: 'set', id: rec.id, ts: sess.ts, day: sess.day, ex: row.ex, set: n, w: d.w, reps: d.reps, rest, rir: d.rir, form: d.form, help: d.help, note: '' });
   store.set('q', queue);
   if (pr) { toast(pr === 'weight' ? `🏆 New weight PR: ${fmtW(d.w)} kg` : `🏆 New est. 1RM PR: ${e1rm(d.w, d.reps).toFixed(1)} kg`, 3500); if (navigator.vibrate) navigator.vibrate([80,60,80]); }
@@ -751,17 +751,98 @@ function tick(){
     });
   }
   const bar = $('bar');
-  if (run && sess.sets.length) {
-    const last = sess.sets[sess.sets.length-1];
-    const el = (Date.now() - sess.lastT) / 1000;
-    const srows = plan(sess.day), si0 = srows.findIndex(r => r.ex === last.ex);
-    const linked = si0 >= 0 && si0 < srows.length - 1 && (links[sess.day] || {})[last.ex];
-    const tg = linked ? Infinity : restFor(last.ex);
+  const rs = restState();
+  if (rs) {
+    const { last, srows, si0, linked, tg, el } = rs;
     bar.classList.add('on'); bar.classList.toggle('go', !prefs.simple && el >= tg);
     $('barEx').textContent = prefs.simple ? 'Rest' : linked ? `Superset · next: ${srows[si0 + 1].ex}` : `Rest · ${last.ex} · target ${fmtDur(tg)}`;
     $('barT').textContent = fmtDur(el);
-    if (el >= tg && !sess.alerted) { sess.alerted = true; store.set('sess', sess); if (navigator.vibrate) navigator.vibrate([200,100,200]); }
+    if (el >= tg && !sess.alerted) { sess.alerted = true; store.set('sess', sess); if (navigator.vibrate && !prefs.buzz) navigator.vibrate([200,100,200]); }
   } else bar.classList.remove('on');
+  armBuzz(rs); syncNotif(rs);
+}
+
+// ---- rest state, notification, buzz, wake lock
+function restState(){
+  if (!running() || !sess.sets.length) return null;
+  const last = sess.sets[sess.sets.length-1];
+  const srows = plan(sess.day), si0 = srows.findIndex(r => r.ex === last.ex);
+  const linked = si0 >= 0 && si0 < srows.length - 1 && !!(links[sess.day] || {})[last.ex];
+  const tg = linked ? Infinity : restFor(last.ex) + (sess.xtra || 0);
+  const el = ((sess.pauseAt || Date.now()) - sess.lastT) / 1000;
+  return { last, srows, si0, linked, tg, el, paused: !!sess.pauseAt };
+}
+function nextUp(rs){
+  if (!rs) { if (!running()) return null; const sr = plan(sess.day); for (let i = 0; i < sr.length; i++) { const n = sess.sets.filter(x => x.ex === sr[i].ex).length; if (n < sr[i].sets) { const d = rowDef(sr[i], n); return { ex: sr[i].ex, n: n + 1, of: sr[i].sets, w: d.w, reps: d.reps }; } } return null; }
+  if (rs.si0 < 0) return null;
+  for (let i = rs.si0; i < rs.srows.length; i++) {
+    const row = rs.srows[i], n = sess.sets.filter(x => x.ex === row.ex).length;
+    if (n < row.sets) { const d = rowDef(row, n); return { ex: row.ex, n: n + 1, of: row.sets, w: d.w, reps: d.reps }; }
+  }
+  return null;
+}
+function restAct(a){
+  if (!running() || !sess.sets.length) return;
+  const rs = restState(); if (!rs) return;
+  const now = Date.now();
+  if (a === 'pause') { if (sess.pauseAt) { sess.lastT += now - sess.pauseAt; sess.pauseAt = null; } else sess.pauseAt = now; }
+  else if (a === 'skip') { sess.pauseAt = null; sess.lastT = now - (isFinite(rs.tg) ? rs.tg : 0) * 1000; sess.alerted = true; try { navigator.vibrate && navigator.vibrate(0); } catch(e){} }
+  else if (a === 'add30') { sess.xtra = (sess.xtra || 0) + 30; sess.alerted = false; }
+  store.set('sess', sess); notifAt = 0; tick();
+}
+var notifKey = '', notifAt = 0, lastNotifOn = false;
+async function askNotif(){ try { if (prefs.notif && 'Notification' in window && Notification.permission === 'default') await Notification.requestPermission(); } catch(e){} }
+function notifReg(){ return (navigator.serviceWorker && navigator.serviceWorker.ready) ? navigator.serviceWorker.ready : Promise.resolve(null); }
+function notifContent(rs){
+  const nx = nextUp(rs), bar = (f) => { const k = Math.max(0, Math.min(10, Math.round(f * 10))); return '\u25B0'.repeat(k) + '\u25B1'.repeat(10 - k); };
+  const clock = fmtDur((Date.now() - sess.start) / 1000);
+  if (rs && !rs.linked && rs.el < rs.tg) {
+    const left = rs.tg - rs.el;
+    return { title: 'Next: ' + (nx ? nx.ex : rs.last.ex), body: `${fmtDur(Math.ceil(left))}${rs.paused ? ' (paused)' : ''}  ${bar(rs.el / rs.tg)}\n${nx ? fmtW(nx.w) + ' kg \u00D7 ' + nx.reps + '  \u00B7  ' : ''}workout ${clock}`, rest: true, paused: rs.paused };
+  }
+  const row = nx ? nx : null, ex = row ? row.ex : (rs ? rs.last.ex : 'Workout');
+  const over = rs && !rs.linked ? ' \u00B7 rest done +' + fmtDur(rs.el - rs.tg) : '';
+  return { title: ex, body: row ? `Add values to mark as complete - (${row.n} of ${row.of})${over}\nworkout ${clock}` : `All sets logged${over}\nworkout ${clock}`, rest: false };
+}
+async function syncNotif(rs){
+  const on = running() && prefs.notif && 'Notification' in window && Notification.permission === 'granted';
+  if (!on) { if (lastNotifOn) { lastNotifOn = false; notifKey = ''; const r = await notifReg(); if (r) (await r.getNotifications({ tag: 'liftlog-wk' })).forEach(n => n.close()); } return; }
+  const c = notifContent(rs === undefined ? restState() : rs);
+  const key = c.title + '|' + c.body, now = Date.now();
+  if (key === notifKey || now - notifAt < 900) return;
+  notifKey = key; notifAt = now; lastNotifOn = true;
+  const r = await notifReg(); if (!r) return;
+  const actions = c.rest ? [{ action: 'pause', title: c.paused ? 'Resume' : 'Pause' }, { action: 'skip', title: 'Skip rest' }, { action: 'add30', title: '+30 sec' }] : [{ action: 'open', title: 'Open' }];
+  try { r.showNotification(c.title, { body: c.body, tag: 'liftlog-wk', renotify: false, silent: true, requireInteraction: true, icon: 'icon.svg', badge: 'icon.svg', actions }); } catch(e){}
+}
+const BUZZ = [100, 900, 100, 900, 100, 900, 1000];
+let buzzT = null, buzzFor = 0;
+function armBuzz(rs){
+  const endAt = rs && prefs.buzz && !rs.linked && !rs.paused && isFinite(rs.tg) ? sess.lastT + rs.tg * 1000 : 0;
+  if (endAt === buzzFor) return;
+  clearTimeout(buzzT); buzzT = null; buzzFor = endAt;
+  if (!endAt) { try { navigator.vibrate && navigator.vibrate(0); } catch(e){} return; }
+  const wait = endAt - 4000 - Date.now();
+  if (wait < -4000) return;
+  buzzT = setTimeout(fireBuzz, Math.max(0, wait));
+}
+function fireBuzz(){
+  buzzT = null;
+  const remain = buzzFor - Date.now(); if (remain <= 0) return;
+  // joining late: keep the final long buzz aligned to the end of the rest
+  const segs = [[4000, 100], [3000, 100], [2000, 100], [1000, 1000]].filter(x => x[0] <= remain + 50).map(x => ({ at: Math.max(0, remain - x[0]), d: x[1] }));
+  const pat = []; let cur = 0;
+  segs.forEach((sg, i) => { const gap = Math.max(0, sg.at - cur); if (i === 0) { if (gap > 0) pat.push(0); } if (i === 0 && gap > 0) pat.push(gap); else if (i > 0) pat.push(gap); pat.push(sg.d); cur = sg.at + sg.d; });
+  if (!pat.length) return;
+  try { navigator.vibrate && navigator.vibrate(pat); } catch(e){}
+  if (document.hidden && 'Notification' in window && Notification.permission === 'granted') notifReg().then(r => r && r.showNotification('Rest almost over', { tag: 'liftlog-buzz', vibrate: BUZZ, silent: false, icon: 'icon.svg', requireInteraction: false })).then(() => setTimeout(() => notifReg().then(r => r && r.getNotifications({ tag: 'liftlog-buzz' }).then(l => l.forEach(n => n.close()))), 6000)).catch(() => {});
+}
+let wl = null;
+async function wakeSync(){
+  try {
+    if (running() && !document.hidden && 'wakeLock' in navigator) { if (!wl) { wl = await navigator.wakeLock.request('screen'); wl.addEventListener('release', () => { wl = null; }); } }
+    else if (!running() && wl) { await wl.release(); wl = null; }
+  } catch(e){ wl = null; }
 }
 
 // ---- render
@@ -1313,7 +1394,7 @@ function renderSettings(){
     <button class="srow" data-act="pcyc" data-k="incomplete"><span>Handle incomplete sets</span><span class="sv">${INCL[prefs.incomplete]}</span></button>
     <button class="srow" data-act="ppr" data-k="bars"><span>Available bars</span><span class="sv">${esc(prefs.bars)}</span></button>
     <button class="srow" data-act="ppr" data-k="plates"><span>Available plates</span><span class="sv">${esc(prefs.plates)}</span></button>
-    <div class="shd">Rest timer</div>${rowT('Simple Timers', 'simple')}
+    <div class="shd">Rest timer</div>${rowT('Workout notification', 'notif', 'Lockscreen timer with Pause, Skip, +30 sec (Android Chrome)')}${rowT('Rest buzz', 'buzz', 'Three short buzzes then one long buzz as the rest ends')}${rowT('Simple Timers', 'simple')}
     <button class="srow" data-act="ppr" data-k="rest"><span>Default Values</span><span class="sv">${prefs.rest} s</span></button>
     <div class="shd">Sync</div><button class="srow" data-act="syncmode"><span>Sync mode<small>${store.get('syncMode', 'live') === 'live' ? 'Live: each set syncs right after you log it' : 'Sets stay on this phone until you tap Finish'}</small></span></button>
     <button class="srow" data-act="cfg"><span>Script URL and secret<small>Change which sheet this app talks to</small></span></button>`;
@@ -1442,7 +1523,7 @@ function moreActs(a, D, t, e){
   else if (a === 'exrhback') go('exd', false);
   else if (a === 'settings') go('settings');
   else if (a === 'setback') go('prof');
-  else if (a === 'ptog') { prefs[D.k] = !prefs[D.k]; savePrefs(); render(); }
+  else if (a === 'ptog') { prefs[D.k] = !prefs[D.k]; savePrefs(); if (D.k === 'notif' && prefs.notif) askNotif(); notifKey = ''; render(); }
   else if (a === 'pcyc') { const o = D.k === 'prevset' ? ['template', 'all'] : ['ask', 'complete', 'discard']; prefs[D.k] = o[(o.indexOf(prefs[D.k]) + 1) % o.length]; savePrefs(); render(); }
   else if (a === 'ppr') { const cur = prefs[D.k], v = prompt(D.k === 'rest' ? 'Default rest (seconds)' : D.k === 'bars' ? 'Available bars in kg, comma separated' : 'Available plates in kg, comma separated', cur); if (v !== null) { if (D.k === 'rest') { const n = parseInt(v, 10); if (n > 0) prefs.rest = n; } else prefs[D.k] = v.trim(); savePrefs(); render(); } }
   else if (a === 'pedit') { const v = prompt('Your name', profile.name); if (v !== null && v.trim()) { profile = { name: v.trim() }; syncSave('profile'); render(); } }
@@ -1531,7 +1612,8 @@ function init(){
 readQs();
 window.addEventListener('online', () => { flush(); refreshBoot(); });
 window.addEventListener('offline', updSync);
-document.addEventListener('visibilitychange', () => { if (!document.hidden) { flush(); if (!running()) refreshBoot(); tick(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { flush(); if (!running()) refreshBoot(); tick(); } wakeSync(); });
+if (navigator.serviceWorker) navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.type === 'wk') restAct(e.data.act); });
 setInterval(tick, 1000);
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 init();
