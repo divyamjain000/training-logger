@@ -831,6 +831,7 @@ function fireBuzz(){
   const remain = buzzFor - Date.now(); if (remain <= 0) return;
   // joining late: keep the final long buzz aligned to the end of the rest
   const segs = [[4000, 100], [3000, 100], [2000, 100], [1000, 1000]].filter(x => x[0] <= remain + 50).map(x => ({ at: Math.max(0, remain - x[0]), d: x[1] }));
+  if (segs.length && segs[0].at < 60) { const o = segs[0].at; segs.forEach(g => { g.at -= o; }); }
   const pat = []; let cur = 0;
   segs.forEach((sg, i) => { const gap = Math.max(0, sg.at - cur); if (i === 0) { if (gap > 0) pat.push(0); } if (i === 0 && gap > 0) pat.push(gap); else if (i > 0) pat.push(gap); pat.push(sg.d); cur = sg.at + sg.d; });
   if (!pat.length) return;
