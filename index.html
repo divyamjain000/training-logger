@@ -855,7 +855,7 @@ function workoutBar(){
 function render(){
   if (!cfg) return renderSetup();
   if (running() && view === 'day' && sess.day !== day) day = sess.day;
-  if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else if (view === 'body') renderBody(); else if (view === 'bodym') renderBodyM(); else if (view === 'prof') renderProf(); else if (view === 'ex') renderEx(); else if (view === 'hdet') renderHDet(); else if (view === 'exd') renderExD(); else if (view === 'exrh') renderExRH(); else if (view === 'settings') renderSettings(); else renderHome();
+  if (view === 'day') renderDay(); else if (view === 'plan') renderPlan(); else if (view === 'hist') renderHist(); else if (view === 'body') renderBody(); else if (view === 'bodym') renderBodyM(); else if (view === 'prof') renderProf(); else if (view === 'ex') renderEx(); else if (view === 'hdet') renderHDet(); else if (view === 'exd') renderExD(); else if (view === 'exrh') renderExRH(); else if (view === 'settings') renderSettings(); else if (view === 'export') renderExport(); else renderHome();
   if (view === 'home' || view === 'hist' || view === 'body' || view === 'prof' || view === 'ex') store.set('view', view);
   renderNav(); updSync(); tick();
 }
@@ -1283,6 +1283,143 @@ function performAgain(d){
   day = d; view = 'plan'; editing = false; render(); startWorkout();
 }
 function beep(){ try { const A = window.AudioContext || window.webkitAudioContext, c = new A(), o = c.createOscillator(), g = c.createGain(); o.connect(g); g.connect(c.destination); o.frequency.value = 880; g.gain.value = .08; o.start(); o.stop(c.currentTime + .09); } catch(e){} }
+// ---- export to Excel (no libraries: minimal OOXML + stored ZIP)
+const CRC_T = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(u8){ let c = 0xFFFFFFFF; for (let i = 0; i < u8.length; i++) c = CRC_T[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function zipStored(files){
+  const enc = new TextEncoder(), parts = [], cen = []; let off = 0;
+  const now = new Date(), dt = ((now.getFullYear() - 1980) << 9 | (now.getMonth() + 1) << 5 | now.getDate()) & 0xFFFF, tm = (now.getHours() << 11 | now.getMinutes() << 5 | (now.getSeconds() >> 1)) & 0xFFFF;
+  const u16 = (v, a) => { a.push(v & 255, (v >>> 8) & 255); }, u32 = (v, a) => { a.push(v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255); };
+  files.forEach(f => {
+    const name = enc.encode(f.name), data = typeof f.data === 'string' ? enc.encode(f.data) : f.data, crc = crc32(data), h = [];
+    u32(0x04034b50, h); u16(20, h); u16(0x0800, h); u16(0, h); u16(tm, h); u16(dt, h); u32(crc, h); u32(data.length, h); u32(data.length, h); u16(name.length, h); u16(0, h);
+    parts.push(Uint8Array.from(h), name, data);
+    const c = [];
+    u32(0x02014b50, c); u16(20, c); u16(20, c); u16(0x0800, c); u16(0, c); u16(tm, c); u16(dt, c); u32(crc, c); u32(data.length, c); u32(data.length, c); u16(name.length, c); u16(0, c); u16(0, c); u16(0, c); u16(0, c); u32(0, c); u32(off, c);
+    cen.push(Uint8Array.from(c), name);
+    off += h.length + name.length + data.length;
+  });
+  const cl = cen.reduce((a, x) => a + x.length, 0), e = [];
+  u32(0x06054b50, e); u16(0, e); u16(0, e); u16(files.length, e); u16(files.length, e); u32(cl, e); u32(off, e); u16(0, e);
+  const all = parts.concat(cen, [Uint8Array.from(e)]), out = new Uint8Array(all.reduce((a, x) => a + x.length, 0)); let o = 0;
+  all.forEach(x => { out.set(x, o); o += x.length; });
+  return out;
+}
+const xesc = v => String(v).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function xcol(i){ let s = ''; for (i++; i > 0; i = Math.floor((i - 1) / 26)) s = String.fromCharCode(65 + (i - 1) % 26) + s; return s; }
+// cell = value | {v, s}; s: 1 header, 2 date, 3 time, 4 datetime; numbers stay numbers, strings are inline
+function sheetXml(rows, widths){
+  const cols = widths && widths.length ? '<cols>' + widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join('') + '</cols>' : '';
+  const body = rows.map((r, ri) => `<row r="${ri + 1}">` + r.map((c, ci) => {
+    if (c === null || c === undefined || c === '') return '';
+    const v = c !== null && typeof c === 'object' ? c.v : c, st = c !== null && typeof c === 'object' && c.s ? ` s="${c.s}"` : '', ref = xcol(ci) + (ri + 1);
+    if (v === null || v === undefined || v === '') return '';
+    return typeof v === 'number' && isFinite(v) ? `<c r="${ref}"${st}><v>${v}</v></c>` : `<c r="${ref}"${st} t="inlineStr"><is><t xml:space="preserve">${xesc(v)}</t></is></c>`;
+  }).join('') + '</row>').join('');
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/>${cols}<sheetData>${body}</sheetData></worksheet>`;
+}
+function buildXlsx(sheets){
+  const hdr = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  const ct = hdr + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' + sheets.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('') + '</Types>';
+  const rels = hdr + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>';
+  const wb = hdr + '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' + sheets.map((sh, i) => `<sheet name="${xesc(sh.name.slice(0, 31))}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join('') + '</sheets></workbook>';
+  const wbr = hdr + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + sheets.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('') + `<Relationship Id="rId${sheets.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
+  const styles = hdr + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="3"><numFmt numFmtId="164" formatCode="yyyy\\-mm\\-dd"/><numFmt numFmtId="165" formatCode="hh:mm"/><numFmt numFmtId="166" formatCode="yyyy\\-mm\\-dd\\ hh:mm"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="5"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="166" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+  const files = [{ name: '[Content_Types].xml', data: ct }, { name: '_rels/.rels', data: rels }, { name: 'xl/workbook.xml', data: wb }, { name: 'xl/_rels/workbook.xml.rels', data: wbr }, { name: 'xl/styles.xml', data: styles }];
+  sheets.forEach((sh, i) => files.push({ name: `xl/worksheets/sheet${i + 1}.xml`, data: sheetXml([sh.head.map(h => ({ v: h, s: 1 }))].concat(sh.rows), sh.widths) }));
+  return zipStored(files);
+}
+// Excel serial from a local wall-clock string (no timezone maths: the sheet stores the phone's local time)
+function xserial(ts){
+  const m = String(normTs(ts)).match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2})(?::(\d{2}))?)?/); if (!m) return null;
+  return Date.UTC(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)) / 86400000 + 25569;
+}
+const xday = ts => { const v = xserial(ts); return v === null ? null : Math.floor(v + 1e-9); };
+const xtime = ts => { const v = xserial(ts); return v === null ? null : Math.round((v - Math.floor(v + 1e-9)) * 86400) / 86400; };
+function inRange(ts, from, to){ const d = String(normTs(ts)).slice(0, 10); return (!from || d >= from) && (!to || d <= to); }
+function exportSets(from, to){
+  const rows = [], have = new Set(), xs = (boot && boot.xsets) || {};
+  const add = (ts, day, ex, no, w, r, rest, rir) => { const k = [normTs(ts), ex, no, w, r].join('|'); if (have.has(k) || !inRange(ts, from, to)) return; have.add(k); rows.push({ ts: String(normTs(ts)), day: String(day).trim(), ex, no: num(no, null), w: num(w), r: num(r), rest, rir, n: rows.length }); };
+  Object.keys(xs).forEach(ex => xs[ex].forEach(t => add(t[0], t[1], ex, t[2], t[3], t[4], t[5], t[6])));
+  queue.filter(x => x.kind === 'set').forEach(x => add(x.ts, x.day, x.ex, x.set, x.w, x.reps, x.rest, x.rir));
+  // performed order inside a session: use the History order where the session is loaded, else exercise then set number
+  const pos = {};
+  histList().forEach(h => { const k = String(normTs(h.ts)) + '|' + String(h.day).trim(); pos[k] = h.sets.map(x => [x[0], x[1], num(x[2]), num(x[3])].join('|')); });
+  const used = {};
+  rows.forEach(r => { const k = r.ts + '|' + r.day, a = pos[k]; r.p = 1e6 + r.n; if (a) { const key = [r.ex, r.no, r.w, r.r].join('|'); for (let i = 0; i < a.length; i++) if (a[i] === key && !(used[k + '#' + i])) { used[k + '#' + i] = 1; r.p = i; break; } } });
+  rows.sort((a, b) => a.ts < b.ts ? -1 : a.ts > b.ts ? 1 : (a.day < b.day ? -1 : a.day > b.day ? 1 : (a.p - b.p) || (a.n - b.n)));
+  return rows;
+}
+function buildWorkoutsExport(from, to){
+  const sets = exportSets(from, to);
+  const wk = allWorkouts().filter(w => inRange(w.ts, from, to)).map(w => ({ ts: String(normTs(w.ts)), day: String(w.day).trim(), vol: num(w.vol), n: num(w.n), dur: num(w.dur) }));
+  const seen = new Set(wk.map(w => w.ts.slice(0, 10) + '|' + w.day));
+  const grp = {}; sets.forEach(r => { const k = r.ts.slice(0, 10) + '|' + r.day; (grp[k] = grp[k] || { ts: r.ts, day: r.day, vol: 0, n: 0, dur: 0 }); grp[k].vol += r.w * r.r; grp[k].n++; });
+  Object.keys(grp).forEach(k => { if (!seen.has(k) && !wk.some(w => w.ts.slice(0, 10) === k.slice(0, 10))) wk.push({ ts: grp[k].ts, day: grp[k].day, vol: Math.round(grp[k].vol), n: grp[k].n, dur: 0 }); });
+  wk.sort((a, b) => a.ts < b.ts ? -1 : 1);
+  if (!wk.length && !sets.length) return null;
+  const wRows = wk.map(w => { const st = xserial(w.ts); return [{ v: xday(w.ts), s: 2 }, label(w.day), /\d{2}:\d{2}/.test(w.ts) ? { v: st, s: 4 } : '', w.dur > 0 && /\d{2}:\d{2}/.test(w.ts) ? { v: st + w.dur / 1440, s: 4 } : '', w.dur > 0 ? Math.round(w.dur * 10) / 10 : '', Math.round(w.vol), w.n]; });
+  const hasRest = sets.some(r => has(r.rest)), hasRir = sets.some(r => has(r.rir));
+  const sHead = ['Date', 'Time', 'Workout', 'Exercise', 'Set', 'Weight (kg)', 'Reps'].concat(hasRest ? ['Rest (s)'] : [], hasRir ? ['RIR'] : [], ['Est. 1RM']);
+  const sRows = sets.map(r => { const e = e1rm(r.w, r.r); return [{ v: xday(r.ts), s: 2 }, /\d{2}:\d{2}/.test(r.ts) ? { v: xtime(r.ts), s: 3 } : '', label(r.day), r.ex, r.no === null ? '' : r.no, r.w, r.r].concat(hasRest ? [has(r.rest) ? num(r.rest) : ''] : [], hasRir ? [has(r.rir) ? num(r.rir) : ''] : [], [e ? Math.round(e * 10) / 10 : '']); });
+  const names = new Set(sets.map(r => r.ex)); ((boot && boot.exercises) || []).forEach(x => names.add(x.name));
+  const eRows = [...names].sort((a, b) => a.localeCompare(b)).map(n => { const m = exMeta(n); return [n, m.bp, m.cat]; });
+  const sheets = [
+    { name: 'Workouts', head: ['Date', 'Workout', 'Start', 'End', 'Duration (min)', 'Total volume (kg)', 'Sets'], rows: wRows, widths: [12, 18, 17, 17, 15, 17, 7] },
+    { name: 'Sets', head: sHead, rows: sRows, widths: [12, 8, 16, 30, 6, 12, 7].concat(hasRest ? [9] : [], hasRir ? [6] : [], [10]) }
+  ];
+  if (eRows.length) sheets.push({ name: 'Exercises', head: ['Exercise', 'Body part', 'Category'], rows: eRows, widths: [32, 16, 16] });
+  return { sheets, count: wk.length + sets.length };
+}
+function buildMeasurementsExport(from, to){
+  const list = bodyList().filter(e => inRange(e.ts, from, to)).slice().reverse();
+  if (!list.length) return null;
+  const known = BF.map(f => f[0]), skip = new Set(['id', 'ts', 'note', 'data', 'kind', 't']);
+  const extra = []; list.forEach(e => Object.keys(e).forEach(k => { if (!known.includes(k) && !skip.has(k) && !extra.includes(k) && has(e[k]) && !isNaN(parseFloat(e[k]))) extra.push(k); }));
+  const cols = BF.filter(f => list.some(e => has(e[f[0]]))).map(f => [f[0], `${f[1]} (${f[2]})`]).concat(extra.map(k => [k, k]));
+  const hasNote = list.some(e => has(e.note));
+  const rows = list.map(e => [{ v: xday(e.ts), s: 2 }, /\d{2}:\d{2}/.test(String(normTs(e.ts))) ? { v: xtime(e.ts), s: 3 } : ''].concat(cols.map(([k]) => has(e[k]) && !isNaN(parseFloat(e[k])) ? num(e[k]) : ''), hasNote ? [e.note || ''] : []));
+  return { sheets: [{ name: 'Measurements', head: ['Date', 'Time'].concat(cols.map(c => c[1]), hasNote ? ['Note'] : []), rows, widths: [12, 8].concat(cols.map(c => Math.max(10, c[1].length + 2)), hasNote ? [24] : []) }], count: list.length };
+}
+let xp = { what: 'workouts', range: 'all', from: '', to: '' };
+function xpDefaults(){ const t = new Date(), f = new Date(t); f.setDate(f.getDate() - 30); xp.to = xp.to || todayKey(); xp.from = xp.from || f.getFullYear() + '-' + pad(f.getMonth() + 1) + '-' + pad(f.getDate()); }
+function exportFileName(what, from, to){ return `liftlog-${what === 'meas' ? 'measurements' : 'workouts'}-${todayKey()}${from || to ? '_' + (from || 'start') + '_to_' + (to || 'now') : ''}.xlsx`; }
+function exportBuild(what, from, to){
+  const r = what === 'meas' ? buildMeasurementsExport(from, to) : buildWorkoutsExport(from, to);
+  if (!r) return null;
+  return { name: exportFileName(what, from, to), bytes: buildXlsx(r.sheets), count: r.count, sheets: r.sheets };
+}
+async function exportRun(share){
+  const f = $('xpf'), t = $('xpt'); if (f) xp.from = f.value; if (t) xp.to = t.value;
+  let from = '', to = '';
+  if (xp.range === 'date') {
+    from = xp.from; to = xp.to;
+    if (!from || !to) { toast('Pick both dates'); return; }
+    if (from > to) { toast('"From" must be on or before "To"'); return; }
+  }
+  if (!boot) { toast('Still loading your data. Needs signal once.'); return; }
+  const r = exportBuild(xp.what, from, to);
+  if (!r) { toast('Nothing to export for that range'); return; }
+  const type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  try {
+    const file = new File([r.bytes], r.name, { type });
+    if (share && navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: r.name }); toast('Shared'); return; }
+    const url = URL.createObjectURL(file), a = document.createElement('a');
+    a.href = url; a.download = r.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
+    toast('Exported ' + r.name, 3500);
+  } catch (e) { if (!(e && e.name === 'AbortError')) toast('Export failed: ' + (e && e.message || e), 4000); }
+}
+function renderExport(){
+  xpDefaults();
+  $('hd').innerHTML = `<div class="tb"><button class="ib" data-act="xpback" aria-label="Back">${IC2.back}</button><div class="ttl">Export data</div></div>`;
+  const opt = (g, v, l, sub) => `<button class="srow" data-act="${g}" data-v="${v}"><span>${l}${sub ? `<small>${sub}</small>` : ''}</span><span class="sv" style="color:var(--acc,#4da3ff);font-weight:700">${(g === 'xpw' ? xp.what : xp.range) === v ? '✓' : ''}</span></button>`;
+  const canShare = !!(navigator.canShare);
+  $('app').innerHTML = `<div class="shd first">What to export</div>${opt('xpw', 'workouts', 'Workout data', 'Workouts, sets and exercises')}${opt('xpw', 'meas', 'Measurements', 'Body weight, body fat, calories and other metrics')}
+    <div class="shd">Range</div>${opt('xpr', 'all', 'All data')}${opt('xpr', 'date', 'By date', 'Inclusive of both dates')}
+    ${xp.range === 'date' ? `<div style="display:flex;gap:10px;margin:8px 0"><div style="flex:1"><div class="muted" style="margin-bottom:6px">From</div><input class="sq" id="xpf" type="date" value="${esc(xp.from)}"></div><div style="flex:1"><div class="muted" style="margin-bottom:6px">To</div><input class="sq" id="xpt" type="date" value="${esc(xp.to)}"></div></div>` : ''}
+    <div class="shd">Format</div><div class="srow"><span>Excel (.xlsx)</span><span class="sv" style="color:var(--acc,#4da3ff);font-weight:700">✓</span></div>
+    <button class="startbtn" data-act="xpgo" style="margin-top:18px">Export</button>${canShare ? '<button class="bluebtn" data-act="xpshare" style="margin-top:10px">Share file</button>' : ''}`;
+}
 const savePrefs = () => syncSave('prefs');
 
 // ---- bottom sheets (add chart, add body value, exercise picker)
@@ -1415,6 +1552,7 @@ function renderSettings(){
     <button class="srow" data-act="ppr" data-k="plates"><span>Available plates</span><span class="sv">${esc(prefs.plates)}</span></button>
     <div class="shd">Rest timer</div>${rowT('Workout notification', 'notif', 'Lockscreen timer with Pause, Skip, +30 sec (Android Chrome)')}${rowT('Rest buzz', 'buzz', 'Three short buzzes then one long buzz as the rest ends')}${rowT('Simple Timers', 'simple')}
     <button class="srow" data-act="ppr" data-k="rest"><span>Default Values</span><span class="sv">${prefs.rest} s</span></button>
+    <div class="shd">Export data</div><button class="srow" data-act="xp"><span>Export<small>Workouts or measurements to Excel, all or by date</small></span></button>
     <div class="shd">Sync</div><button class="srow" data-act="syncmode"><span>Sync mode<small>${store.get('syncMode', 'live') === 'live' ? 'Live: each set syncs right after you log it' : 'Sets stay on this phone until you tap Finish'}</small></span></button>
     <button class="srow" data-act="cfg"><span>Script URL and secret<small>Change which sheet this app talks to</small></span></button>`;
 }
@@ -1542,6 +1680,12 @@ function moreActs(a, D, t, e){
   else if (a === 'exrhback') go('exd', false);
   else if (a === 'settings') go('settings');
   else if (a === 'setback') go('prof');
+  else if (a === 'xp') go('export');
+  else if (a === 'xpback') go('settings');
+  else if (a === 'xpw') { xp.what = D.v; render(); }
+  else if (a === 'xpr') { const f = $('xpf'), t = $('xpt'); if (f) xp.from = f.value; if (t) xp.to = t.value; xp.range = D.v; render(); }
+  else if (a === 'xpgo') exportRun(false);
+  else if (a === 'xpshare') exportRun(true);
   else if (a === 'ptog') { prefs[D.k] = !prefs[D.k]; savePrefs(); if (D.k === 'notif' && prefs.notif) askNotif(); notifKey = ''; render(); }
   else if (a === 'pcyc') { const o = D.k === 'prevset' ? ['template', 'all'] : ['ask', 'complete', 'discard']; prefs[D.k] = o[(o.indexOf(prefs[D.k]) + 1) % o.length]; savePrefs(); render(); }
   else if (a === 'ppr') { const cur = prefs[D.k], v = prompt(D.k === 'rest' ? 'Default rest (seconds)' : D.k === 'bars' ? 'Available bars in kg, comma separated' : 'Available plates in kg, comma separated', cur); if (v !== null) { if (D.k === 'rest') { const n = parseInt(v, 10); if (n > 0) prefs.rest = n; } else prefs[D.k] = v.trim(); savePrefs(); render(); } }

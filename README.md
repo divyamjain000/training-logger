@@ -26,5 +26,11 @@ Rows may carry JSON that the client parses (relations such as supersets, per-exe
 ## Planning with Claude
 A Claude chat with the Google Sheets connector can edit Template, Targets and Settings directly; the app picks the changes up on next sync/refresh.
 
-## Workout notification and rest buzz
-Android Chrome only, best effort: a persistent notification (Pause / Skip rest / +30 sec) updated every second while the app is open, plus a vibration pattern (3 short, 1 long) ending when the rest ends. A screen wake lock keeps the page alive during a workout. Both can be turned off in Settings. A PWA cannot run timers when the screen is off or the app is killed.
+## Export to Excel
+
+Settings > Export data. Choose **Workout data** or **Measurements**, **All data** or **By date** (inclusive, defaults to the last 30 days), format Excel (.xlsx). The file is built on the phone (no libraries, works offline) and downloaded; "Share file" appears where the browser supports sharing files.
+
+- Workout data file: sheets `Workouts` (date, workout, start, end, duration, volume, sets), `Sets` (date, time, workout, exercise, set, weight, reps, est. 1RM; Rest and RIR columns appear only when the data has them) and `Exercises` (body part, category). Sets inside a session follow the order you performed them where the session is loaded in History.
+- Measurements file: one wide `Measurements` sheet, a column per metric present (including calories and any extra metrics), sorted oldest to newest.
+- Dates are real Excel dates, numbers are numbers, header row is bold and frozen.
+- The export uses what the app has loaded. With the Apps Script backend, measurements are the latest 60 entries; the Supabase backend returns the full history.
