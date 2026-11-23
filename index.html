@@ -1253,11 +1253,28 @@ const IC2 = {
 };
 const trophyChip = c => `<span class="pc">${IC.trophy}${c}</span>`;
 const letterAv = n => `<div class="av">${esc((n.trim()[0] || '?').toUpperCase())}</div>`;
-function histOf(k){ return ((boot && boot.history) || []).find(x => x.ts + '|' + x.day === k); }
+function histList(){
+  const base = (boot && boot.history) || [], have = new Set(base.map(w => String(normTs(w.ts)) + '|' + String(w.day).trim()));
+  const pend = {}, fins = {};
+  queue.forEach(x => {
+    if (x.kind === 'finish') fins[String(normTs(x.start)) + '|' + String(x.day).trim()] = x;
+    else if (x.kind === 'set') { const k = String(normTs(x.ts)) + '|' + String(x.day).trim(); (pend[k] = pend[k] || { ts: x.ts, day: x.day, sets: [] }).sets.push([x.ex, x.set, x.w, x.reps]); }
+  });
+  const live = running() && sess ? String(normTs(sess.ts)) + '|' + String(sess.day).trim() : null;
+  const extra = Object.keys(pend).filter(k => !have.has(k) && k !== live).map(k => { const f = fins[k], w = pend[k]; if (f) { w.dur = f.durMin; w.prs = f.prs ? String(f.prs).split(' | ').length : 0; } return w; });
+  const a = extra.concat(base).map((w, i) => ({ w, i, t: String(normTs(w.ts)) }));
+  a.sort((x, y) => x.t < y.t ? 1 : x.t > y.t ? -1 : x.i - y.i);
+  return a.map(x => x.w);
+}
+function histOf(k){ return histList().find(x => x.ts + '|' + x.day === k); }
+// Consecutive sets of the same exercise form one run; a later return to an exercise starts a new run (performed order).
+function setRuns(sets){
+  const runs = [];
+  sets.forEach(s => { const r = runs[runs.length - 1]; if (r && r.ex === s[0]) r.sets.push(s); else runs.push({ ex: s[0], sets: [s] }); });
+  return runs;
+}
 function histText(w){
-  const by = {}, order = [];
-  w.sets.forEach(s => { if (!by[s[0]]) { by[s[0]] = []; order.push(s[0]); } by[s[0]].push(s); });
-  return label(String(w.day).trim()) + '\n' + fmtFull(w.ts) + '\n\n' + order.map(ex => ex + '\n' + by[ex].map((s, i) => (i + 1) + '  ' + (num(s[2]) > 0 ? fmtW(num(s[2])) + ' kg × ' + s[3] : s[3] + ' reps')).join('\n')).join('\n\n');
+  return label(String(w.day).trim()) + '\n' + fmtFull(w.ts) + '\n\n' + setRuns(w.sets).map(r => r.ex + '\n' + r.sets.map((s, i) => (s[1] || (i + 1)) + '  ' + (num(s[2]) > 0 ? fmtW(num(s[2])) + ' kg × ' + s[3] : s[3] + ' reps')).join('\n')).join('\n\n');
 }
 function performAgain(d){
   d = String(d).trim();
@@ -1299,7 +1316,7 @@ function renderSheet(){
   else if (sheet.step === 'settings') h = `<div class="ht">Settings</div>
     <button class="sopt" data-act="syncmode">Sync mode<small>${store.get('syncMode', 'live') === 'live' ? 'Live: each set syncs right after you log it' : 'Sets stay on this phone until you tap Finish'} · tap to change</small></button>
     <button class="sopt" data-act="cfg">Script URL and secret<small>Change which sheet this app talks to</small></button>`;
-  else if (sheet.step === 'months') { const seen = []; ((boot && boot.history) || []).forEach(w => { const k = String(normTs(w.ts)).slice(0, 7); if (!seen.includes(k)) seen.push(k); }); h = `<div class="ht">Jump to month</div>` + seen.map(k => { const [y, m] = k.split('-'); return `<button class="sopt" data-act="mjump" data-k="${k}">${MONF[+m - 1]} ${y}</button>`; }).join(''); }
+  else if (sheet.step === 'months') { const seen = []; histList().forEach(w => { const k = String(normTs(w.ts)).slice(0, 7); if (!seen.includes(k)) seen.push(k); }); h = `<div class="ht">Jump to month</div>` + seen.map(k => { const [y, m] = k.split('-'); return `<button class="sopt" data-act="mjump" data-k="${k}">${MONF[+m - 1]} ${y}</button>`; }).join(''); }
   else if (sheet.step === 'hmenu') h = `<div class="ht">Workout</div><button class="sopt" data-act="hagain" data-d="${esc(String((histOf(hsel) || {}).day || '').trim())}">Perform again</button><button class="sopt" data-act="hshare">Copy summary</button>`;
   else if (sheet.step === 'exfilter') h = `<div class="ht">Filter exercises</div><div class="muted" style="margin-bottom:6px">Body part</div><div class="rng">${['', ...BPARTS].map(b => `<button class="chip ${exFilter.bp === b ? 'on' : ''}" data-act="exf" data-k="bp" data-v="${esc(b)}">${b || 'All'}</button>`).join('')}</div><div class="muted" style="margin:10px 0 6px">Category</div><div class="rng">${['', ...CATS].map(b => `<button class="chip ${exFilter.cat === b ? 'on' : ''}" data-act="exf" data-k="cat" data-v="${esc(b)}">${b || 'All'}</button>`).join('')}</div>`;
   else if (sheet.step === 'exsort') h = `<div class="ht">Sort by</div>${[['az', 'Name (A–Z)'], ['used', 'Most used'], ['recent', 'Most recent']].map(([k, l]) => `<button class="sopt" data-act="exs" data-v="${k}">${exSort === k ? '✓ ' : ''}${l}</button>`).join('')}`;
@@ -1328,8 +1345,8 @@ function addExerciseTo(ex){
 }
 function renderHist(){
   $('hd').innerHTML = `<div class="row"><button class="sync" id="sync" data-act="sync"></button><button class="ib" style="margin-left:auto" data-act="hcal" aria-label="Jump to month">${IC2.cal}</button></div><div class="ttl big">History</div>`;
-  const h = boot && boot.history;
   if (!boot) { $('app').innerHTML = '<p class="muted">Loading… (needs signal once)</p>'; return; }
+  const h = boot.history ? histList() : null;
   if (!h) { $('app').innerHTML = '<p class="muted">History needs the updated script. Redeploy Code.gs in Apps Script, then reopen the app.</p>'; return; }
   if (!h.length) { $('app').innerHTML = '<p class="muted">No workouts yet.</p>'; return; }
   const wk = allWorkouts(), months = [];
@@ -1341,14 +1358,13 @@ function renderHist(){
     const [y, m] = k.split('-');
     const title = new Date(+y, +m - 1, 1).toLocaleDateString('en-US', { month: 'long', year: +y === new Date().getFullYear() ? undefined : 'numeric' });
     return `<div class="mh" id="m-${k}"><span style="font-size:26px;font-weight:600">${title}</span><span>${n} workout${n === 1 ? '' : 's'}</span></div>` + groups[k].map(w => {
-      const by = {}, order = [];
-      w.sets.forEach(s => { if (!by[s[0]]) { by[s[0]] = []; order.push(s[0]); } by[s[0]].push(s); });
+      const runs = setRuns(w.sets);
       const vol = w.sets.reduce((a, x) => a + num(x[2]) * num(x[3]), 0);
       const dur = w.dur > 0 ? (w.dur >= 60 ? Math.floor(w.dur / 60) + 'h ' + pad(Math.round(w.dur % 60)) + 'm' : Math.round(w.dur) + ' min') : '–';
       const prs = w.prs == null ? '–' : w.prs;
-      const sm = ssMap(order.map(ex => ({ ex })), String(w.day).trim());
+      const sm = ssMap(runs, String(w.day).trim());
       return `<div class="hc click" data-act="hopen" data-k="${esc(w.ts + '|' + w.day)}"><div class="ht">${esc(label(String(w.day).trim()))}</div><div class="hdt">${esc(fmtWhen(w.ts))}</div>
-        <div class="hg"><div class="hh"><span>Sets</span><span>Best set</span></div>${order.map((ex, i) => `<div class="hr ${sm[i] ? 'ss' : ''}" ${sm[i] ? `style="--c:${sm[i].color}"` : ''}><span class="hn">${by[ex].length} × ${esc(ex)}</span><span class="hv">${esc(bestSet(by[ex]))}</span></div>`).join('')}</div>
+        <div class="hg"><div class="hh"><span>Sets</span><span>Best set</span></div>${runs.map((r, i) => `<div class="hr ${sm[i] ? 'ss' : ''}" ${sm[i] ? `style="--c:${sm[i].color}"` : ''}><span class="hn">${r.sets.length} × ${esc(r.ex)}</span><span class="hv">${esc(bestSet(r.sets))}</span></div>`).join('')}</div>
         <div class="hfoot"><div>${IC.clock}<b>${dur}</b></div><div>${IC.weight}<b>${fmtVol(vol)} kg</b></div><div>${IC.trophy}<b>${prs} ${prs === 1 ? 'PR' : 'PRs'}</b></div></div></div>`;
     }).join('');
   }).join('');
@@ -1357,17 +1373,19 @@ function renderHDet(){
   const w = histOf(hsel);
   if (!w) { view = 'hist'; return render(); }
   $('hd').innerHTML = `<div class="tb"><button class="ib" data-act="hback" aria-label="Back">${IC2.back}</button><span style="flex:1"></span><button class="sync" id="sync" data-act="sync"></button><button class="ib" data-act="hshare" aria-label="Share">${IC2.share}</button><button class="ib" data-act="hmenu" aria-label="More">${IC2.dots}</button></div>`;
-  const by = {}, order = [];
-  w.sets.forEach(s => { if (!by[s[0]]) { by[s[0]] = []; order.push(s[0]); } by[s[0]].push(s); });
-  const sm = ssMap(order.map(ex => ({ ex })), String(w.day).trim());
+  const runs = setRuns(w.sets), sm = ssMap(runs, String(w.day).trim());
+  const allBy = {}, flags = {}, cur = {};
+  w.sets.forEach(x => { (allBy[x[0]] = allBy[x[0]] || []).push([x[1], x[2], x[3]]); });
+  Object.keys(allBy).forEach(ex => { flags[ex] = prFor(ex, w.ts, allBy[ex]); cur[ex] = 0; });
   let body = '';
-  order.forEach((ex, i) => {
-    const sets = by[ex].map(s => [s[1], s[2], s[3]]), fl = prFor(ex, w.ts, sets), m = sm[i];
+  runs.forEach((r, i) => {
+    const sets = r.sets.map(x => [x[1], x[2], x[3]]), m = sm[i], fl = flags[r.ex].slice(cur[r.ex], cur[r.ex] + sets.length);
+    cur[r.ex] += sets.length;
     if (m && m.first) body += `<div class="hsg" style="--c:${m.color}">`;
-    body += `<div class="dxh"><span>${esc(ex)}</span><span>1RM</span></div>` + sets.map((t, j) => {
-      const wt = num(t[1]), r = num(t[2]), e = Math.round(e1rm(wt, r)), ch = fl[j];
-      const txt = wt > 0 ? `${fmtW(wt)} kg × ${r}` : `${r} reps`;
-      return `<div class="dsr"><span class="no">${j + 1}</span><span>${txt}</span>${ch.length === 1 ? trophyChip(ch[0]) : ''}<span class="e">${e || ''}</span></div>` + (ch.length > 1 ? `<div class="pcs" style="padding-left:46px">${ch.map(trophyChip).join('')}</div>` : '');
+    body += `<div class="dxh"><span>${esc(r.ex)}</span><span>1RM</span></div>` + sets.map((t, j) => {
+      const wt = num(t[1]), rp = num(t[2]), e = Math.round(e1rm(wt, rp)), ch = fl[j];
+      const txt = wt > 0 ? `${fmtW(wt)} kg × ${rp}` : `${rp} reps`;
+      return `<div class="dsr"><span class="no">${esc(t[0] || (j + 1))}</span><span>${txt}</span>${ch.length === 1 ? trophyChip(ch[0]) : ''}<span class="e">${e || ''}</span></div>` + (ch.length > 1 ? `<div class="pcs" style="padding-left:46px">${ch.map(trophyChip).join('')}</div>` : '');
     }).join('');
     if (m && m.last) body += '</div>';
   });
